@@ -1,0 +1,6 @@
+@ThiepMoiAPI_HostAddress = http://localhost:5263
+
+GET {{ThiepMoiAPI_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
