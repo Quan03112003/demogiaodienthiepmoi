@@ -1,194 +1,1053 @@
+// ...existing code...
 <!DOCTYPE html>
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Thiệp Mừng Online - Demo</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <link href="style.css" rel="stylesheet">
+    <title>Thiệp Mừng Online - Tạo thiệp & gửi lời chúc kèm lì xì</title>
+    <meta name="description" content="Thiệp Mừng Online - Tạo thiệp mừng trực tuyến, gửi lời chúc kèm tiền mừng, mẫu cưới, sinh nhật, Tết. Nhiều mẫu đẹp, dễ dùng, chia sẻ nhanh.">
+    <meta name="keywords" content="thiệp, thiệp mừng, thiệp cưới, thiệp sinh nhật, thiệp Tết, lì xì online">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root{
+            --primary:#ff4da6; /* nổi bật tông hồng */
+            --primary-dark:#e33a8f;
+            --accent:#ffd6ea;
+            --bg:#fff7fb;
+            --card:#ffffff;
+            --muted:#666;
+            --max-width:1200px;
+            --base-font:16px;
+        }
+        *{box-sizing:border-box;margin:0;padding:0}
+        html{font-size:var(--base-font)}
+        body{font-family:Inter, Arial, Helvetica, sans-serif;background:linear-gradient(180deg,var(--bg),#fff);color:#222;line-height:1.6}
+        a{color:inherit;text-decoration:none}
+        /* Header */
+        header{position:fixed;top:0;left:0;right:0;background:linear-gradient(90deg,#fff,#fff);box-shadow:0 4px 20px rgba(255,77,166,0.08);z-index:1000;border-bottom:2px solid rgba(255,77,166,0.06)}
+        .container{max-width:var(--max-width);margin:0 auto;padding:0 20px}
+        .nav-wrap{display:flex;align-items:center;justify-content:space-between;height:70px}
+        .logo{display:flex;align-items:center;gap:10px;font-weight:800}
+        .logo img{height:42px;width:42px;border-radius:10px;object-fit:cover;border:2px solid rgba(255,77,166,0.1)}
+        nav ul{display:flex;gap:8px;align-items:center;list-style:none;padding:0;margin:0}
+        nav ul li a{padding:8px 14px;border-radius:20px;font-weight:500;color:#555;font-size:0.9rem;transition:all 0.3s;white-space:nowrap}
+        nav ul li a:hover{background:rgba(255,77,166,0.1);color:var(--primary);transform:translateY(-1px)}
+        nav ul li a.active{background:rgba(255,77,166,0.15);color:var(--primary);font-weight:600}
+        .actions{display:flex;gap:8px;align-items:center}
+        .btn{background:var(--primary);color:#fff;padding:9px 18px;border-radius:20px;border:none;cursor:pointer;font-weight:700;font-size:0.9rem;box-shadow:0 4px 15px rgba(227,58,143,0.15);transition:all 0.3s;white-space:nowrap}
+        .btn:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(227,58,143,0.25)}
+        .btn.ghost{background:transparent;color:var(--primary);border:2px solid var(--primary);font-weight:600;font-size:0.9rem;padding:9px 18px}
+        .btn.ghost:hover{background:rgba(255,77,166,0.05)}
+        .hamburger{display:none;background:transparent;border:none;font-size:24px;cursor:pointer;color:#333;padding:8px}
+        /* Hero */
+        .hero{margin-top:82px;background-image:linear-gradient(180deg, rgba(255,77,166,0.12), rgba(255,77,166,0.04)), linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);background-size:cover;background-position:center;color:#fff;padding:80px 20px;border-radius:16px}
+        .hero-inner{max-width:1200px;margin:0 auto;display:flex;gap:30px;align-items:center}
+        .hero-copy{flex:1}
+        .hero h1{font-size:3rem;margin-bottom:14px;line-height:1.05;letter-spacing:-0.5px;text-shadow:0 4px 18px rgba(0,0,0,0.25)}
+        .hero p{color:#ffeaf3;margin-bottom:20px;font-size:1.1rem}
+        .hero-cta{display:flex;gap:14px;flex-wrap:wrap}
+        .hero-cta .btn{padding:14px 22px;font-size:16px}
+        .hero-preview{width:420px;min-width:280px;background:linear-gradient(180deg,rgba(255,255,255,0.12),rgba(255,255,255,0.06));padding:18px;border-radius:16px;backdrop-filter: blur(6px);border:1px solid rgba(255,255,166,0.03)}
+        .preview-card{background:var(--card);border-radius:12px;overflow:hidden;color:#222;box-shadow:0 12px 30px rgba(227,58,143,0.06)}
+        .preview-card img{width:100%;height:220px;object-fit:cover}
+        .preview-card .body{padding:14px}
+        /* Sections */
+        section{padding:48px 20px}
+        .section-title{max-width:var(--max-width);margin:0 auto 20px;padding:0 20px;display:flex;justify-content:space-between;align-items:center}
+        .section-title h2{font-size:1.6rem;color:#333}
+        .grid{display:grid;gap:20px}
+        /* Packages */
+        .packages{max-width:var(--max-width);margin:0 auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:20px;padding:0 20px}
+        .card{background:var(--card);padding:20px;border-radius:14px;box-shadow:0 8px 30px rgba(0,0,0,.04)}
+        .card h3{margin-bottom:8px;font-size:1.1rem}
+        .price{font-size:1.6rem;color:var(--primary);font-weight:900}
+        .features{margin-top:12px;color:var(--muted);font-size:.98rem}
+        /* Templates grid */
+        .templates{max-width:var(--max-width);margin:0 auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:18px;padding:0 20px}
+        .template{background:linear-gradient(180deg,var(--card),#fff);border-radius:14px;overflow:hidden;box-shadow:0 10px 30px rgba(0,0,0,.04);display:flex;flex-direction:column;transition:transform .28s}
+        .template:hover{transform:translateY(-6px)}
+        .template img{width:100%;height:180px;object-fit:cover}
+        .template .meta{padding:14px;flex:1;display:flex;flex-direction:column;gap:8px}
+        .tags{display:flex;gap:8px;flex-wrap:wrap}
+        .tag{background:var(--accent);color:var(--primary-dark);padding:6px 8px;border-radius:12px;font-weight:800;font-size:.78rem}
+        /* Gallery */
+        .gallery{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px}
+        .gallery img{width:100%;height:160px;object-fit:cover;border-radius:10px;box-shadow:0 8px 20px rgba(227,58,143,0.06)}
+        /* Testimonials */
+        .testimonials{max-width:var(--max-width);margin:0 auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:18px;padding:0 20px}
+        .testimonial{background:linear-gradient(180deg,#fff,#fff);padding:18px;border-radius:12px;box-shadow:0 8px 24px rgba(227,58,143,0.04)}
+        .testimonial p{color:var(--muted);margin-bottom:8px;font-size:0.98rem}
+        .testimonial .name{font-weight:800;color:#333}
+        /* FAQ & contact */
+        .faq{max-width:var(--max-width);margin:0 auto;padding:0 20px}
+        .faq-item{background:linear-gradient(180deg,#fff,#fff);padding:16px;border-radius:12px;margin-bottom:12px;border-left:4px solid rgba(255,77,166,0.14)}
+        .contact-form{max-width:720px;margin:0 auto;background:var(--card);padding:30px;border-radius:20px;box-shadow:0 10px 40px rgba(0,0,0,.08);border:1px solid rgba(255,77,166,0.08)}
+        .form-row{display:flex;gap:15px;margin-bottom:18px}
+        .form-row .field{flex:1;display:flex;flex-direction:column;gap:8px}
+        .contact-info-card{background:linear-gradient(135deg,#fff 0%,#fff7fb 100%);padding:30px;border-radius:20px;box-shadow:0 10px 40px rgba(0,0,0,.08);border:1px solid rgba(255,77,166,0.08);height:100%}
+        .contact-info-card h3{margin-bottom:20px;color:var(--primary);font-size:1.4rem;display:flex;align-items:center;gap:10px}
+        .contact-info-item{display:flex;align-items:flex-start;gap:15px;margin-bottom:20px;padding:15px;background:rgba(255,255,255,0.6);border-radius:12px;transition:all 0.3s}
+        .contact-info-item:hover{background:rgba(255,77,166,0.05);transform:translateX(5px)}
+        .contact-info-item .icon{width:45px;height:45px;border-radius:12px;background:linear-gradient(135deg,var(--primary),var(--primary-dark));color:#fff;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
+        .contact-info-item .content h4{margin:0 0 5px 0;font-size:1rem;color:#333}
+        .contact-info-item .content p{margin:0;color:var(--muted);font-size:0.9rem}
+        .social-buttons{display:flex;gap:12px;margin-top:20px;flex-wrap:wrap}
+        .social-btn{width:50px;height:50px;border-radius:12px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:22px;text-decoration:none;transition:all 0.3s;box-shadow:0 4px 15px rgba(0,0,0,0.1)}
+        .social-btn:hover{transform:translateY(-3px);box-shadow:0 6px 20px rgba(0,0,0,0.15)}
+        .social-btn.facebook{background:linear-gradient(135deg,#1877f2,#0866ff)}
+        .social-btn.zalo{background:linear-gradient(135deg,#0068ff,#0052cc)}
+        .social-btn.instagram{background:linear-gradient(135deg,#f09433 0%,#e6683c 25%,#dc2743 50%,#cc2366 75%,#bc1888 100%)}
+        .contact-form label{display:block;font-weight:600;color:#333;margin-bottom:8px;font-size:0.95rem}
+        input,textarea,select{padding:14px 16px;border-radius:12px;border:2px solid #e0e0e0;font-size:15px;background:#fff;transition:all 0.3s;font-family:inherit;width:100%}
+        input:focus,textarea:focus,select:focus{outline:none;border-color:var(--primary);box-shadow:0 0 0 4px rgba(255,77,166,0.1);background:#fff}
+        input::placeholder,textarea::placeholder{color:#bbb}
+        textarea{min-height:140px;resize:vertical}
+        select{cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23666' d='M6 9L1 4h10z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center;padding-right:40px}
+        /* Footer */
+        footer{margin-top:20px;padding:40px 20px;background:linear-gradient(90deg,#fff,#fff);border-top:1px solid #ffe6f3}
+        .footer-inner{max-width:var(--max-width);margin:0 auto;display:flex;gap:20px;flex-wrap:wrap;align-items:flex-start;justify-content:space-between}
+        .socials{display:flex;gap:12px}
+        .muted{color:var(--muted)}
+        /* Modal */
+        .modal-backdrop{position:fixed;inset:0;background:rgba(0,0,0,.55);backdrop-filter:blur(4px);display:none;align-items:center;justify-content:center;z-index:1500}
+        .modal{background:var(--card);padding:30px;border-radius:20px;width:100%;max-width:520px;max-height:90vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,0.3);position:relative}
+        .close-x{background:transparent;border:none;font-weight:800;font-size:24px;cursor:pointer;color:#999;position:absolute;top:15px;right:15px;width:35px;height:35px;display:flex;align-items:center;justify-content:center;border-radius:50%;transition:all 0.3s}
+        .close-x:hover{background:#f0f0f0;color:#333}
+        /* Auth Modal Styling */
+        .auth-modal{background:linear-gradient(135deg,#fff 0%,#fff7fb 100%);}
+        .auth-modal h2{margin-bottom:8px;font-size:1.8rem;color:var(--primary)}
+        .auth-modal .subtitle{color:var(--muted);margin-bottom:25px;font-size:0.95rem}
+        .form-group{margin-bottom:18px}
+        .form-group label{display:block;margin-bottom:8px;font-weight:600;color:#333;font-size:0.95rem}
+        .form-group input,.form-group textarea{width:100%;padding:14px;border-radius:10px;border:2px solid #e0e0e0;font-size:15px;transition:all 0.3s;background:#fff}
+        .form-group input:focus,.form-group textarea:focus{outline:none;border-color:var(--primary);box-shadow:0 0 0 3px rgba(255,77,166,0.1)}
+        .form-group input::placeholder{color:#bbb}
+        .auth-divider{display:flex;align-items:center;margin:25px 0;text-align:center}
+        .auth-divider::before,.auth-divider::after{content:'';flex:1;height:1px;background:#e0e0e0}
+        .auth-divider span{padding:0 15px;color:var(--muted);font-size:0.9rem}
+        /* Card Builder Modal */
+        .card-builder-modal{max-width:900px;width:95%}
+        .card-builder-form{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+        .upload-area{border:2px dashed #ddd;border-radius:10px;padding:30px;text-align:center;cursor:pointer;transition:all 0.3s}
+        .upload-area:hover{border-color:var(--primary);background:rgba(255,77,166,0.05)}
+        .upload-area img{max-width:100%;max-height:200px;margin-top:10px;border-radius:8px}
+        .preview-thumbnail{width:100px;height:100px;object-fit:cover;border-radius:8px;margin:5px}
+        .card-preview-section{background:#f8f9fa;padding:20px;border-radius:10px;min-height:300px}
+        .final-card{background:linear-gradient(135deg,#ff9a9e 0%,#fecfef 100%);padding:40px;border-radius:16px;color:#fff;text-align:center;min-height:400px;display:flex;flex-direction:column;justify-content:center;box-shadow:0 10px 30px rgba(0,0,0,0.2)}
+        .final-card img{max-width:100%;max-height:300px;border-radius:10px;margin:15px 0}
+        .final-card .qr-preview{width:150px;height:150px;background:#fff;padding:10px;border-radius:8px;margin:15px auto}
+        /* Responsive */
+        @media (max-width:980px){
+            .hero h1{font-size:2.2rem}
+            .hero-preview{width:320px}
+        }
+        @media (max-width:760px){
+            nav ul{display:none}
+            .hamburger{display:block}
+            .hero-inner{flex-direction:column;align-items:stretch}
+            .hero-preview{order:-1;width:100%}
+            .hero h1{font-size:1.8rem}
+            .card-builder-form{grid-template-columns:1fr}
+            #contact .container{grid-template-columns:1fr;gap:20px}
+            .contact-info-card,.contact-form{padding:20px}
+            .form-row{flex-direction:column;gap:15px}
+        }
+    </style>
 </head>
 <body>
-    <!-- Header -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-        <div class="container">
-            <a class="navbar-brand" href="#">
-                <i class="fas fa-gift me-2"></i>Thiệp Mừng Online
-            </a>
+    <header>
+        <div class="container nav-wrap" role="navigation" aria-label="Main navigation">
+            <div class="logo">
+                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Crect fill='%23ff4da6' width='160' height='160'/%3E%3Ctext x='50%25' y='50%25' text-anchor='middle' fill='white' font-size='48' font-family='Arial'%3E💝%3C/text%3E%3C/svg%3E" alt="Logo" onerror="this.src='https://via.placeholder.com/160x160/ff4da6/ffffff?text=Thiệp'">
+                <div>
+                    <div style="font-size:18px;color:var(--primary)">Thiệp Mừng Online</div>
+                    <div class="muted" style="font-size:12px">Gửi yêu thương — Nhận niềm vui</div>
+                </div>
+            </div>
+            <nav>
+                <ul id="mainNav">
+                    <li><a href="#home">Trang chủ</a></li>
+                    <li><a href="#intro">Giới thiệu</a></li>
+                    <li><a href="#packages">Gói & Giá</a></li>
+                    <li><a href="#templates">Mẫu</a></li>
+                    <li><a href="#gallery">Thư viện</a></li>
+                    <li><a href="#testimonials">Khách hàng</a></li>
+                    <li><a href="#faq">FAQ</a></li>
+                    <li><a href="#contact">Liên hệ</a></li>
+                </ul>
+            </nav>
+            <div class="actions">
+                <button class="btn ghost" id="loginBtn" aria-haspopup="dialog">Đăng nhập</button>
+                <button class="btn" id="registerBtn">Đăng ký</button>
+                <button class="hamburger" id="menuToggle" aria-label="Mở menu">☰</button>
+            </div>
         </div>
-    </nav>
+    </header>
 
-    <!-- Hero Section -->
-    <section class="hero-section">
-        <div class="container text-center">
-            <h1 class="display-4 mb-4">🎉 Tạo Thiệp Mừng Đẹp</h1>
-            <p class="lead mb-4">Chọn mẫu thiệp, nhập lời chúc, thanh toán và gửi ngay!</p>
-            <a href="#templates" class="btn btn-primary btn-lg">Bắt Đầu Tạo Thiệp</a>
-        </div>
-    </section>
+    <main>
+        <!-- Hero -->
+        <section class="hero" id="home" aria-labelledby="hero-heading" style="background-image:linear-gradient(180deg, rgba(255,77,166,0.12), rgba(255,77,166,0.04)), linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);">
+            <div class="hero-inner container">
+                <div class="hero-copy">
+                    <h1 id="hero-heading">Tạo thiệp đẹp, chia sẻ yêu thương — Nhanh chóng & Sang trọng</h1>
+                    <p>Tùy chỉnh mẫu, chèn nhạc/video, thêm lời chúc cá nhân và gửi kèm lì xì mã / link thanh toán. Giao diện tiếng Việt, responsive và bảo mật.</p>
+                    <div class="hero-cta">
+                        <button class="btn" id="createBtn">Tạo Thiệp Ngay</button>
+                        <a href="#templates" class="btn btn-ghost btn ghost" style="background:transparent;border:2px solid rgba(255,77,166,0.12);color:#fff">Xem Mẫu</a>
+                    </div>
+                    <ul style="margin-top:14px;color:#fff5f5;list-style:disc;padding-left:22px">
+                        <li>Hơn 200 mẫu chuyên nghiệp cho mọi dịp</li>
+                        <li>Tùy chỉnh dễ dàng: ảnh, video, nhạc, animation</li>
+                        <li>Chia sẻ nhanh qua link, Zalo, Messenger, QR</li>
+                    </ul>
+                </div>
 
-    <!-- Templates Section -->
-    <section id="templates" class="py-5">
-        <div class="container">
-            <h2 class="text-center mb-5">Chọn Mẫu Thiệp</h2>
-            <div class="row">
-                <!-- Template 1: Sinh Nhật Cơ Bản -->
-                <div class="col-md-6 col-lg-4 mb-4">
-                    <div class="card template-card" data-template="birthday-basic">
-                        <div class="card-preview birthday-basic">
-                            <div class="preview-content">
-                                <h3>Chúc Mừng Sinh Nhật!</h3>
-                                <p>Chúc bạn một tuổi mới tràn đầy hạnh phúc!</p>
-                                <div class="preview-name">Tên người nhận</div>
+                <aside class="hero-preview" aria-hidden="false">
+                    <div class="preview-card">
+                        <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='900' height='600'%3E%3Crect fill='%23ff9a9e' width='900' height='600'/%3E%3Ctext x='50%25' y='50%25' text-anchor='middle' fill='white' font-size='48' font-family='Arial'%3E💝 Thiệp Mừng%3C/text%3E%3C/svg%3E" alt="Mẫu thiệp nổi bật" onerror="this.src='https://via.placeholder.com/900x600/ff9a9e/ffffff?text=Thiệp+Mừng'">
+                        <div class="body">
+                            <h4 style="margin-bottom:6px;color:var(--primary)">Mẫu: Hồng Ngọt Ngào</h4>
+                            <p style="font-size:13px;color:var(--muted)">Phù hợp đám cưới, sinh nhật; hỗ trợ nhạc nền, RSVP và chia sẻ mã QR.</p>
+                            <div style="display:flex;gap:8px;margin-top:12px">
+                                <button class="btn" style="flex:1">Chọn mẫu</button>
+                                <button class="btn ghost" style="flex:1">Xem trước</button>
                             </div>
                         </div>
-                        <div class="card-body text-center">
-                            <h5 class="card-title">Sinh Nhật Cơ Bản</h5>
-                            <p class="text-muted">Thiết kế đơn giản, dễ thương</p>
-                            <div class="price">50.000đ</div>
-                            <button class="btn btn-primary btn-sm">Chọn Mẫu</button>
+                    </div>
+                    <div style="margin-top:12px;background:linear-gradient(90deg,#fff,#fff);padding:10px;border-radius:10px">
+                        <strong style="display:block;margin-bottom:8px">Video demo</strong>
+                        <div style="width:100%;border-radius:8px;overflow:hidden;background:#000">
+                            <iframe width="100%" height="200" src="https://www.youtube.com/embed/dQw4w9WgXcQ" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="display:block"></iframe>
+                        </div>
+                    </div>
+                </aside>
+            </div>
+        </section>
+
+        <!-- Giới thiệu -->
+        <section id="intro" style="background:linear-gradient(180deg,#fff7fb,#fff)">
+            <div class="section-title container">
+                <h2>Giới thiệu</h2>
+                <small class="muted">Thuận tiện — An toàn — Cá nhân hóa</small>
+            </div>
+            <div class="container card" style="margin-top:12px">
+                <p>Thiệp Mừng Online giúp hàng chục nghìn người tạo thiệp trực tuyến chuyên nghiệp. Từ thiệp cưới, sinh nhật, Tết đến thiệp doanh nghiệp — mỗi mẫu đều có tuỳ chọn nhạc nền, video chúc mừng, RSVP và tính năng gửi kèm lì xì (chuyển khoản hoặc mã quà tặng).</p>
+                <ul style="margin-top:10px;color:var(--muted);padding-left:18px">
+                    <li>Hơn 200+ mẫu thiết kế sẵn, cập nhật liên tục</li>
+                    <li>Tích hợp chia sẻ nhanh: Zalo, Messenger, QR, email</li>
+                    <li>Bảo mật dữ liệu & hỗ trợ 24/7 cho gói Premium</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Packages -->
+        <section id="packages">
+            <div class="section-title">
+                <h2>Gói & Giá</h2>
+                <small class="muted">Chọn gói phù hợp với nhu cầu</small>
+            </div>
+            <div class="packages">
+                <div class="card">
+                    <h3>Cơ Bản</h3>
+                    <div class="price">Miễn phí</div>
+                    <div class="features">
+                        - 30 mẫu cơ bản<br>
+                        - Hỗ trợ văn bản & ảnh<br>
+                        - Link công khai & QR cơ bản
+                    </div>
+                    <div style="margin-top:12px"><button class="btn ghost" style="width:100%">Bắt đầu</button></div>
+                </div>
+                <div class="card">
+                    <h3>Nâng Cao</h3>
+                    <div class="price">50.000₫ / thiệp</div>
+                    <div class="features">
+                        - 100+ mẫu premium<br>
+                        - Nhạc & hiệu ứng động<br>
+                        - Mã QR tuỳ chỉnh & RSVP
+                    </div>
+                    <div style="margin-top:12px"><button class="btn" style="width:100%">Chọn gói</button></div>
+                </div>
+                <div class="card">
+                    <h3>Cao Cấp</h3>
+                    <div class="price">Từ 2.000.000₫ / tháng</div>
+                    <div class="features">
+                        - Gói doanh nghiệp, API & in ấn<br>
+                        - Hiệu ứng 3D, video dài, hỗ trợ thiết kế<br>
+                        - Hỗ trợ 24/7 và quản lý sự kiện
+                    </div>
+                    <div style="margin-top:12px"><button class="btn" style="width:100%">Liên hệ</button></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Templates -->
+        <section id="templates" style="background:linear-gradient(180deg,#fff,#fff7fb)">
+            <div class="section-title container">
+                <h2>Mẫu Thiệp Nổi Bật</h2>
+                <small class="muted">200+ mẫu cho mọi dịp</small>
+            </div>
+            <div class="container" style="padding:0 20px;margin-bottom:20px">
+                <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center">
+                    <label style="font-weight:600;color:#333">Lọc theo loại:</label>
+                    <select id="templateFilter" style="padding:10px 15px;border-radius:20px;border:2px solid #e0e0e0;font-size:0.9rem;background:#fff;cursor:pointer;color:#555;font-weight:500;transition:all 0.3s">
+                        <option value="all">Tất cả</option>
+                        <option value="Cưới">Cưới Hỏi</option>
+                        <option value="Sinh nhật">Sinh Nhật</option>
+                        <option value="Tết">Tết</option>
+                        <option value="Tốt nghiệp">Tốt Nghiệp</option>
+                        <option value="Doanh nghiệp">Doanh Nghiệp</option>
+                        <option value="Anniversary">Tình Yêu</option>
+                    </select>
+                </div>
+            </div>
+            <div class="templates" id="templatesContainer" aria-live="polite">
+                <div class="template" data-category="Cưới">
+                    <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='600'%3E%3Crect fill='%23ff9a9e' width='800' height='600'/%3E%3Ctext x='50%25' y='50%25' text-anchor='middle' fill='white' font-size='48' font-family='Arial'%3E💒 Cưới Hỏi%3C/text%3E%3C/svg%3E" alt="Thiệp cưới mẫu 1" onerror="this.src='https://via.placeholder.com/800x600/ff9a9e/ffffff?text=Cưới+Hỏi'">
+                    <div class="meta">
+                        <h4>Romance Bloom</h4>
+                        <div class="muted">Thiệp cưới — Lãng mạn</div>
+                        <div class="tags" aria-hidden="true">
+                            <span class="tag">Cưới</span><span class="tag">RSVP</span><span class="tag">Nhạc</span>
+                        </div>
+                        <div style="margin-top:auto;display:flex;gap:8px">
+                            <button class="btn btn-choose-template" data-template="Romance Bloom" style="flex:1">Chọn</button>
+                            <button class="btn ghost btn-preview-template" style="flex:1">Xem trước</button>
                         </div>
                     </div>
                 </div>
 
-                <!-- Template 2: Cưới Hỏi Nâng Cao -->
-                <div class="col-md-6 col-lg-4 mb-4">
-                    <div class="card template-card" data-template="wedding-advanced">
-                        <div class="card-preview wedding-advanced">
-                            <div class="preview-content">
-                                <h3>Chúc Mừng Hôn Lễ!</h3>
-                                <p>Chúc hai bạn trăm năm hạnh phúc!</p>
-                                <div class="preview-name">Tên cặp đôi</div>
-                            </div>
+                <div class="template" data-category="Sinh nhật">
+                    <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='600'%3E%3Crect fill='%23ffd6ea' width='800' height='600'/%3E%3Ctext x='50%25' y='50%25' text-anchor='middle' fill='%23e33a8f' font-size='48' font-family='Arial'%3E🎂 Sinh Nhật%3C/text%3E%3C/svg%3E" alt="Thiệp sinh nhật" onerror="this.src='https://via.placeholder.com/800x600/ffd6ea/e33a8f?text=Sinh+Nhật'">
+                    <div class="meta">
+                        <h4>Birthday Joy</h4>
+                        <div class="muted">Thiệp sinh nhật — Vui nhộn</div>
+                        <div class="tags">
+                            <span class="tag">Sinh nhật</span><span class="tag">Animation</span>
                         </div>
-                        <div class="card-body text-center">
-                            <h5 class="card-title">Cưới Hỏi Nâng Cao</h5>
-                            <p class="text-muted">Thiết kế sang trọng, lộng lẫy</p>
-                            <div class="price">100.000đ</div>
-                            <button class="btn btn-primary btn-sm">Chọn Mẫu</button>
+                        <div style="margin-top:auto;display:flex;gap:8px">
+                            <button class="btn btn-choose-template" data-template="Birthday Joy" style="flex:1">Chọn</button>
+                            <button class="btn ghost btn-preview-template" style="flex:1">Xem trước</button>
                         </div>
                     </div>
                 </div>
 
-                <!-- Template 3: Tết Cao Cấp -->
-                <div class="col-md-6 col-lg-4 mb-4">
-                    <div class="card template-card" data-template="tet-luxury">
-                        <div class="card-preview tet-luxury">
-                            <div class="preview-content">
-                                <h3>Chúc Mừng Năm Mới!</h3>
-                                <p>An khang thịnh vượng, vạn sự như ý!</p>
-                                <div class="preview-name">Gia đình thân yêu</div>
-                            </div>
+                <div class="template" data-category="Tết">
+                    <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='600'%3E%3Crect fill='%23ff6b6b' width='800' height='600'/%3E%3Ctext x='50%25' y='50%25' text-anchor='middle' fill='white' font-size='48' font-family='Arial'%3E🏮 Tết%3C/text%3E%3C/svg%3E" alt="Thiệp Tết" onerror="this.src='https://via.placeholder.com/800x600/ff6b6b/ffffff?text=Tết'">
+                    <div class="meta">
+                        <h4>Xuân Ấm Áp</h4>
+                        <div class="muted">Thiệp Tết — Truyền thống</div>
+                        <div class="tags">
+                            <span class="tag">Tết</span><span class="tag">Red Pack</span>
                         </div>
-                        <div class="card-body text-center">
-                            <h5 class="card-title">Tết Cao Cấp</h5>
-                            <p class="text-muted">Thiết kế vàng kim, cầu kỳ</p>
-                            <div class="price">200.000đ</div>
-                            <button class="btn btn-primary btn-sm">Chọn Mẫu</button>
+                        <div style="margin-top:auto;display:flex;gap:8px">
+                            <button class="btn btn-choose-template" data-template="Xuân Ấm Áp" style="flex:1">Chọn</button>
+                            <button class="btn ghost btn-preview-template" style="flex:1">Xem trước</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="template" data-category="Tốt nghiệp">
+                    <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='600'%3E%3Crect fill='%234ecdc4' width='800' height='600'/%3E%3Ctext x='50%25' y='50%25' text-anchor='middle' fill='white' font-size='48' font-family='Arial'%3E🎓 Tốt Nghiệp%3C/text%3E%3C/svg%3E" alt="Thiệp tốt nghiệp" onerror="this.src='https://via.placeholder.com/800x600/4ecdc4/ffffff?text=Tốt+Nghiệp'">
+                    <div class="meta">
+                        <h4>Congrats Grad</h4>
+                        <div class="muted">Tốt nghiệp — Sang trọng</div>
+                        <div class="tags">
+                            <span class="tag">Tốt nghiệp</span><span class="tag">Video</span>
+                        </div>
+                        <div style="margin-top:auto;display:flex;gap:8px">
+                            <button class="btn btn-choose-template" data-template="Congrats Grad" style="flex:1">Chọn</button>
+                            <button class="btn ghost btn-preview-template" style="flex:1">Xem trước</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="template" data-category="Doanh nghiệp">
+                    <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='600'%3E%3Crect fill='%2395a5a6' width='800' height='600'/%3E%3Ctext x='50%25' y='50%25' text-anchor='middle' fill='white' font-size='48' font-family='Arial'%3E💼 Doanh Nghiệp%3C/text%3E%3C/svg%3E" alt="Thiệp doanh nghiệp" onerror="this.src='https://via.placeholder.com/800x600/95a5a6/ffffff?text=Doanh+Nghiệp'">
+                    <div class="meta">
+                        <h4>Elegant Corporate</h4>
+                        <div class="muted">Doanh nghiệp — Chuyên nghiệp</div>
+                        <div class="tags">
+                            <span class="tag">Doanh nghiệp</span><span class="tag">Printable</span>
+                        </div>
+                        <div style="margin-top:auto;display:flex;gap:8px">
+                            <button class="btn btn-choose-template" data-template="Elegant Corporate" style="flex:1">Chọn</button>
+                            <button class="btn ghost btn-preview-template" style="flex:1">Xem trước</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="template" data-category="Anniversary">
+                    <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='600'%3E%3Crect fill='%23f8bbd9' width='800' height='600'/%3E%3Ctext x='50%25' y='50%25' text-anchor='middle' fill='%23e33a8f' font-size='48' font-family='Arial'%3E💕 Tình Yêu%3C/text%3E%3C/svg%3E" alt="Thiệp tình yêu" onerror="this.src='https://via.placeholder.com/800x600/f8bbd9/e33a8f?text=Tình+Yêu'">
+                    <div class="meta">
+                        <h4>Sweet Love</h4>
+                        <div class="muted">Tình yêu — Lãng mạn</div>
+                        <div class="tags">
+                            <span class="tag">Anniversary</span><span class="tag">Music</span>
+                        </div>
+                        <div style="margin-top:auto;display:flex;gap:8px">
+                            <button class="btn btn-choose-template" data-template="Sweet Love" style="flex:1">Chọn</button>
+                            <button class="btn ghost btn-preview-template" style="flex:1">Xem trước</button>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <!-- Card Builder Modal -->
-    <div class="modal fade" id="cardBuilderModal" tabindex="-1">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Tạo Thiệp Mừng</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        <!-- Gallery -->
+        <section id="gallery">
+            <div class="section-title container">
+                <h2>Thư viện mẫu & ý tưởng</h2>
+                <small class="muted">Hình ảnh thực tế từ khách hàng</small>
+            </div>
+            <div class="container" style="max-width:1100px">
+                <div class="gallery">
+                    <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='600' height='400'%3E%3Crect fill='%23ff9a9e' width='600' height='400'/%3E%3Ctext x='50%25' y='50%25' text-anchor='middle' fill='white' font-size='32'%3E💐 Mẫu 1%3C/text%3E%3C/svg%3E" alt="Mẫu thiệp 1" onerror="this.src='https://via.placeholder.com/600x400/ff9a9e/ffffff?text=Mẫu+1'">
+                    <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='600' height='400'%3E%3Crect fill='%23ffd6ea' width='600' height='400'/%3E%3Ctext x='50%25' y='50%25' text-anchor='middle' fill='%23e33a8f' font-size='32'%3E🎈 Mẫu 2%3C/text%3E%3C/svg%3E" alt="Mẫu thiệp 2" onerror="this.src='https://via.placeholder.com/600x400/ffd6ea/e33a8f?text=Mẫu+2'">
+                    <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='600' height='400'%3E%3Crect fill='%23fecfef' width='600' height='400'/%3E%3Ctext x='50%25' y='50%25' text-anchor='middle' fill='%23e33a8f' font-size='32'%3E💒 Mẫu 3%3C/text%3E%3C/svg%3E" alt="Mẫu thiệp 3" onerror="this.src='https://via.placeholder.com/600x400/fecfef/e33a8f?text=Mẫu+3'">
+                    <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='600' height='400'%3E%3Crect fill='%23ff6b6b' width='600' height='400'/%3E%3Ctext x='50%25' y='50%25' text-anchor='middle' fill='white' font-size='32'%3E🎉 Mẫu 4%3C/text%3E%3C/svg%3E" alt="Mẫu thiệp 4" onerror="this.src='https://via.placeholder.com/600x400/ff6b6b/ffffff?text=Mẫu+4'">
+                    <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='600' height='400'%3E%3Crect fill='%23f8bbd9' width='600' height='400'/%3E%3Ctext x='50%25' y='50%25' text-anchor='middle' fill='%23e33a8f' font-size='32'%3E🎁 Mẫu 5%3C/text%3E%3C/svg%3E" alt="Mẫu thiệp 5" onerror="this.src='https://via.placeholder.com/600x400/f8bbd9/e33a8f?text=Mẫu+5'">
+                    <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='600' height='400'%3E%3Crect fill='%23ff9a9e' width='600' height='400'/%3E%3Ctext x='50%25' y='50%25' text-anchor='middle' fill='white' font-size='32'%3E🌹 Mẫu 6%3C/text%3E%3C/svg%3E" alt="Mẫu thiệp 6" onerror="this.src='https://via.placeholder.com/600x400/ff9a9e/ffffff?text=Mẫu+6'">
                 </div>
-                <div class="modal-body">
-                    <form id="cardForm">
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="mb-3">
-                                    <label class="form-label">Tên người gửi</label>
-                                    <input type="text" class="form-control" id="senderName" required>
-                                </div>
-                                <div class="mb-3">
-                                    <label class="form-label">Tên người nhận</label>
-                                    <input type="text" class="form-control" id="recipientName" required>
-                                </div>
-                                <div class="mb-3">
-                                    <label class="form-label">Lời chúc</label>
-                                    <textarea class="form-control" id="message" rows="4" required></textarea>
-                                </div>
-                                <div class="mb-3">
-                                    <label class="form-label">Ngày sự kiện</label>
-                                    <input type="date" class="form-control" id="eventDate">
-                                </div>
+            </div>
+        </section>
+
+        <!-- Steps -->
+        <section id="howto" style="background:linear-gradient(180deg,#fff7fb,#fff)">
+            <div class="section-title container">
+                <h2>Hướng dẫn 3 bước</h2>
+                <small class="muted">Nhanh chóng & trực quan</small>
+            </div>
+            <div class="container grid" style="grid-template-columns:repeat(auto-fit,minmax(220px,1fr));margin-top:12px">
+                <div class="card">
+                    <h3>Bước 1 — Chọn mẫu</h3>
+                    <p class="muted">Lựa chọn từ bộ sưu tập hoặc tải lên ảnh riêng.</p>
+                </div>
+                <div class="card">
+                    <h3>Bước 2 — Tùy chỉnh</h3>
+                    <p class="muted">Viết lời chúc, thêm nhạc, video, chọn hiệu ứng và màu sắc.</p>
+                </div>
+                <div class="card">
+                    <h3>Bước 3 — Gửi & quản lý</h3>
+                    <p class="muted">Gửi link, in mã QR, theo dõi lượt mở và phản hồi.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Testimonials -->
+        <section id="testimonials">
+            <div class="section-title container">
+                <h2>Khách hàng nói gì</h2>
+                <small class="muted">Một vài feedback thực tế</small>
+            </div>
+            <div class="testimonials">
+                <div class="testimonial">
+                    <p>"Tạo thiệp cưới rất nhanh, khách mời RSVP tiện lợi. Giao diện dễ dùng và đẹp mắt."</p>
+                    <div class="name">— Lan, Hà Nội</div>
+                </div>
+                <div class="testimonial">
+                    <p>"Mẫu Tết sáng, phần thêm âm nhạc và QR giúp mình gửi lì xì tiện hơn rất nhiều."</p>
+                    <div class="name">— Minh, TP.HCM</div>
+                </div>
+                <div class="testimonial">
+                    <p>"Mình sử dụng gói doanh nghiệp để gửi thiệp khách hàng, chuyên nghiệp và dễ quản lý."</p>
+                    <div class="name">— Huy, Đà Nẵng</div>
+                </div>
+                <div class="testimonial">
+                    <p>"Hỗ trợ nhanh, mình đã nhận tư vấn thiết kế riêng cho sự kiện công ty."</p>
+                    <div class="name">— Thu, Hải Phòng</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- FAQ -->
+        <section id="faq">
+            <div class="section-title container">
+                <h2>FAQ — Câu hỏi thường gặp</h2>
+                <small class="muted">Trợ giúp nhanh</small>
+            </div>
+            <div class="faq">
+                <div class="faq-item">
+                    <strong>1. Tôi có thể gửi kèm tiền mừng như thế nào?</strong>
+                    <p class="muted">Bạn có thể gửi link kèm thông tin chuyển khoản, hoặc sử dụng tính năng mã quà tặng / ví điện tử (tùy gói). Hỗ trợ VNPAY/QR và thẻ ngân hàng.</p>
+                </div>
+                <div class="faq-item">
+                    <strong>2. Có chính sách hoàn tiền không?</strong>
+                    <p class="muted">Với gói trả phí, liên hệ hỗ trợ trong 48 giờ để được xem xét hoàn tiền theo điều khoản.</p>
+                </div>
+                <div class="faq-item">
+                    <strong>3. Có hỗ trợ in thiệp không?</strong>
+                    <p class="muted">Chúng tôi có đối tác in ấn — báo giá tùy số lượng, chất liệu và xử lý giao hàng.</p>
+                </div>
+                <div class="faq-item">
+                    <strong>4. Tôi có thể tải video lên không?</strong>
+                    <p class="muted">Có, với gói Nâng Cao trở lên bạn có thể tải video tối đa 200MB và nhúng YouTube/Vimeo.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact -->
+        <section id="contact" style="background:linear-gradient(180deg,#fff7fb,#fff);padding:60px 20px">
+            <div class="section-title container">
+                <h2>Liên hệ / Hỗ trợ</h2>
+                <small class="muted">Chúng tôi luôn sẵn sàng hỗ trợ bạn 24/7</small>
+            </div>
+            <div class="container" style="max-width:var(--max-width);margin:30px auto 0;display:grid;grid-template-columns:1fr 1.5fr;gap:30px">
+                <div class="contact-info-card">
+                    <h3>📞 Thông tin liên hệ</h3>
+                    
+                    <div class="contact-info-item">
+                        <div class="icon">📧</div>
+                        <div class="content">
+                            <h4>Email</h4>
+                            <p>support@thiepmungonline.vn</p>
+                        </div>
+                    </div>
+
+                    <div class="contact-info-item">
+                        <div class="icon">📱</div>
+                        <div class="content">
+                            <h4>Hotline</h4>
+                            <p>1900-1234<br><small style="color:var(--muted);font-size:0.85rem">8:00 - 21:00 hàng ngày</small></p>
+                        </div>
+                    </div>
+
+                    <div class="contact-info-item">
+                        <div class="icon">📍</div>
+                        <div class="content">
+                            <h4>Địa chỉ</h4>
+                            <p>123 Đường Vui, Quận Vui<br>TP. Hồ Chí Minh, Việt Nam</p>
+                        </div>
+                    </div>
+
+                    <div class="contact-info-item">
+                        <div class="icon">⏰</div>
+                        <div class="content">
+                            <h4>Thời gian làm việc</h4>
+                            <p>Thứ 2 - Chủ nhật<br>8:00 - 21:00</p>
+                        </div>
+                    </div>
+
+                    <div style="margin-top:25px">
+                        <h4 style="margin-bottom:12px;color:#333;font-size:1rem">Kết nối với chúng tôi</h4>
+                        <div class="social-buttons">
+                            <a href="#" class="social-btn facebook" target="_blank" aria-label="Facebook">f</a>
+                            <a href="#" class="social-btn zalo" target="_blank" aria-label="Zalo">Z</a>
+                            <a href="#" class="social-btn instagram" target="_blank" aria-label="Instagram">📷</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div>
+                    <form id="contactForm" class="contact-form" aria-label="Form liên hệ">
+                        <h3 style="margin-bottom:20px;color:var(--primary);font-size:1.3rem">📝 Gửi yêu cầu hỗ trợ</h3>
+                        
+                        <div class="form-row">
+                            <div class="field">
+                                <label for="name">Họ & tên *</label>
+                                <input id="name" name="name" required placeholder="Nguyễn Văn A">
                             </div>
-                            <div class="col-md-6">
-                                <div class="card-preview-container">
-                                    <div id="cardPreview" class="card-preview">
-                                        <!-- Preview sẽ được cập nhật bằng JS -->
-                                    </div>
-                                </div>
+                            <div class="field">
+                                <label for="email">Email *</label>
+                                <input id="email" name="email" type="email" required placeholder="email@domain.com">
+                            </div>
+                        </div>
+
+                        <div class="form-group" style="margin-bottom:18px">
+                            <label for="phone">Số điện thoại *</label>
+                            <input id="phone" name="phone" type="tel" required placeholder="0901234567" pattern="[0-9]{10,11}">
+                        </div>
+
+                        <div class="form-group" style="margin-bottom:18px">
+                            <label for="subject">Chủ đề</label>
+                            <select id="subject" name="subject">
+                                <option>Hỗ trợ kỹ thuật</option>
+                                <option>Gói & giá</option>
+                                <option>Đặt in thiệp</option>
+                                <option>Hợp tác & Doanh nghiệp</option>
+                                <option>Khác</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group" style="margin-bottom:20px">
+                            <label for="message">Nội dung *</label>
+                            <textarea id="message" name="message" required placeholder="Mô tả chi tiết vấn đề hoặc yêu cầu của bạn..."></textarea>
+                        </div>
+
+                        <div style="display:flex;gap:15px;align-items:center;flex-wrap:wrap">
+                            <button type="submit" class="btn" style="padding:14px 28px;font-size:1rem">✉️ Gửi yêu cầu</button>
+                            <div class="muted" style="font-size:0.9rem;flex:1">
+                                <span style="color:#4caf50">✓</span> Phản hồi trong 24-48 giờ
                             </div>
                         </div>
                     </form>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
-                    <button type="button" class="btn btn-primary" id="proceedToPayment">Tiếp Tục Thanh Toán</button>
-                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="footer-inner">
+            <div>
+                <div style="font-weight:800;color:var(--primary)">Thiệp Mừng Online</div>
+                <div class="muted" style="margin-top:6px">© 2025 Thiệp Mừng Online. All rights reserved.</div>
+            </div>
+            <div style="text-align:right" class="muted">Chính sách bảo mật · Điều khoản sử dụng</div>
+        </div>
+    </footer>
+
+    <!-- Modals -->
+    <div class="modal-backdrop" id="modalBackdrop" aria-hidden="true">
+        <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+                <div id="modalTitle" style="font-weight:800">Đăng nhập</div>
+                <button class="close-x" id="closeModal" aria-label="Đóng">✕</button>
+            </div>
+            <div id="modalBody">
+                <!-- login form injected here -->
+                <form id="loginForm">
+                    <div style="margin-bottom:10px">
+                        <label for="uemail">Email</label>
+                        <input id="uemail" name="uemail" type="email" required placeholder="email@domain.com">
+                    </div>
+                    <div style="margin-bottom:10px">
+                        <label for="upass">Mật khẩu</label>
+                        <input id="upass" name="upass" type="password" required placeholder="Mật khẩu">
+                    </div>
+                    <div style="display:flex;gap:8px;align-items:center">
+                        <button class="btn" type="submit">Đăng nhập</button>
+                        <button class="btn ghost" type="button" id="toRegister">Chuyển sang Đăng ký</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
 
-    <!-- Payment Modal -->
-    <div class="modal fade" id="paymentModal" tabindex="-1">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Thanh Toán</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body text-center">
-                    <div class="mb-3">
-                        <h4 id="paymentAmount">50.000đ</h4>
-                        <p class="text-muted">Quét QR code để thanh toán</p>
+    <!-- Card Builder Modal -->
+    <div class="modal-backdrop" id="cardBuilderModal" style="display:none">
+        <div class="modal card-builder-modal" role="dialog" aria-modal="true">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px">
+                <h2 id="cardBuilderTitle" style="font-weight:800;color:var(--primary)">Tạo Thiệp Mừng</h2>
+                <button class="close-x" id="closeCardBuilder" aria-label="Đóng">✕</button>
+            </div>
+            <form id="cardBuilderForm" class="card-builder-form">
+                <div>
+                    <div style="margin-bottom:15px">
+                        <label style="display:block;margin-bottom:5px;font-weight:600">Mẫu thiệp đã chọn</label>
+                        <div id="selectedTemplateName" style="padding:10px;background:#f0f0f0;border-radius:8px;font-weight:600;color:var(--primary)"></div>
                     </div>
-                    <div class="qr-code-container mb-3">
-                        <div id="qrCode" class="qr-placeholder">
-                            <i class="fas fa-qrcode fa-5x text-muted"></i>
-                            <p class="mt-2">QR Code sẽ hiển thị ở đây</p>
+                    <div style="margin-bottom:15px">
+                        <label style="display:block;margin-bottom:5px;font-weight:600">Tên người gửi *</label>
+                        <input type="text" id="senderName" required placeholder="Nguyễn Văn A" style="width:100%;padding:12px;border-radius:8px;border:1px solid #ddd">
+                    </div>
+                    <div style="margin-bottom:15px">
+                        <label style="display:block;margin-bottom:5px;font-weight:600">Tên người nhận *</label>
+                        <input type="text" id="recipientName" required placeholder="Nguyễn Thị B" style="width:100%;padding:12px;border-radius:8px;border:1px solid #ddd">
+                    </div>
+                    <div style="margin-bottom:15px">
+                        <label style="display:block;margin-bottom:5px;font-weight:600">Lời chúc *</label>
+                        <textarea id="message" required rows="5" placeholder="Chúc mừng..." style="width:100%;padding:12px;border-radius:8px;border:1px solid #ddd;resize:vertical"></textarea>
+                    </div>
+                    <div style="margin-bottom:15px">
+                        <label style="display:block;margin-bottom:5px;font-weight:600">Ngày sự kiện</label>
+                        <input type="date" id="eventDate" style="width:100%;padding:12px;border-radius:8px;border:1px solid #ddd">
+                    </div>
+                    <div style="margin-bottom:15px">
+                        <label style="display:block;margin-bottom:5px;font-weight:600">Upload ảnh</label>
+                        <div class="upload-area" id="imageUploadArea" onclick="document.getElementById('imageInput').click()">
+                            <div>📷 Click để chọn ảnh</div>
+                            <div id="imagePreview"></div>
+                            <input type="file" id="imageInput" accept="image/*" style="display:none">
                         </div>
                     </div>
-                    <div class="payment-info">
-                        <p><strong>Ngân hàng:</strong> Vietcombank</p>
-                        <p><strong>STK:</strong> 1234567890</p>
-                        <p><strong>Nội dung:</strong> <span id="paymentContent">THIEP MUNG 001</span></p>
-                    </div>
-                    <div class="mt-4">
-                        <button class="btn btn-success" id="mockPayment">Mock Thanh Toán (Demo)</button>
+                    <div style="margin-bottom:15px">
+                        <label style="display:block;margin-bottom:5px;font-weight:600">Upload QR Code</label>
+                        <div class="upload-area" id="qrUploadArea" onclick="document.getElementById('qrInput').click()">
+                            <div>🔲 Click để chọn QR Code</div>
+                            <div id="qrPreview"></div>
+                            <input type="file" id="qrInput" accept="image/*" style="display:none">
+                        </div>
                     </div>
                 </div>
+                <div>
+                    <label style="display:block;margin-bottom:10px;font-weight:600">Preview thiệp</label>
+                    <div class="card-preview-section" id="cardPreviewContainer">
+                        <div style="text-align:center;color:#999;padding:40px">Preview sẽ hiển thị ở đây...</div>
+                    </div>
+                </div>
+            </form>
+            <div style="display:flex;gap:10px;margin-top:20px;justify-content:flex-end">
+                <button class="btn ghost" id="cancelCardBuilder">Hủy</button>
+                <button class="btn" id="createCardBtn">Tạo Thiệp</button>
             </div>
         </div>
     </div>
 
-    <!-- Success Modal -->
-    <div class="modal fade" id="successModal" tabindex="-1">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-body text-center py-5">
-                    <i class="fas fa-check-circle fa-5x text-success mb-3"></i>
-                    <h3>Thanh toán thành công!</h3>
-                    <p class="text-muted">Thiệp mừng của bạn đã được tạo</p>
-                    <div class="mt-4">
-                        <button class="btn btn-primary" id="downloadCard">Tải Thiệp PDF</button>
-                        <button class="btn btn-outline-primary ms-2" id="shareCard">Chia Sẻ Link</button>
-                    </div>
-                </div>
+    <!-- Final Card Preview Modal -->
+    <div class="modal-backdrop" id="finalCardModal" style="display:none">
+        <div class="modal" role="dialog" aria-modal="true" style="max-width:600px">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px">
+                <h2 style="font-weight:800;color:var(--primary)">Thiệp Mừng Của Bạn</h2>
+                <button class="close-x" id="closeFinalCard" aria-label="Đóng">✕</button>
+            </div>
+            <div id="finalCardContainer" class="final-card">
+                <!-- Final card will be rendered here -->
+            </div>
+            <div style="display:flex;gap:10px;margin-top:20px;justify-content:center">
+                <button class="btn" id="downloadCardBtn">📥 Tải Thiệp</button>
+                <button class="btn ghost" id="shareCardBtn">🔗 Chia Sẻ</button>
             </div>
         </div>
     </div>
+    <!-- Floating social buttons -->
+<div id="floatingSocials" style="position:fixed;bottom:20px;right:20px;display:flex;flex-direction:column;gap:12px;z-index:2000">
+    <a href="https://www.facebook.com/YourPage" target="_blank" aria-label="Facebook" style="display:flex;align-items:center;justify-content:center;width:50px;height:50px;border-radius:50%;background:#1877f2;color:#fff;font-size:24px;text-decoration:none;box-shadow:0 6px 18px rgba(0,0,0,0.2)">
+        f
+    </a>
+    <a href="https://zalo.me/YourZaloID" target="_blank" aria-label="Zalo" style="display:flex;align-items:center;justify-content:center;width:50px;height:50px;border-radius:50%;background:#0068ff;color:#fff;font-size:24px;text-decoration:none;box-shadow:0 6px 18px rgba(0,0,0,0.2)">
+        Z
+    </a>
+</div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="script.js"></script>
+
+    <script>
+        // Basic interactivity: menu, modal, contact form
+        const menuToggle = document.getElementById('menuToggle');
+        const mainNav = document.getElementById('mainNav');
+        menuToggle?.addEventListener('click', () => {
+            if (mainNav.style.display === 'flex') {
+                mainNav.style.display = '';
+            } else {
+                mainNav.style.display = 'flex';
+                mainNav.style.flexDirection = 'column';
+                mainNav.style.background = '#fff';
+                mainNav.style.position = 'absolute';
+                mainNav.style.top = '72px';
+                mainNav.style.right = '20px';
+                mainNav.style.padding = '12px';
+                mainNav.style.borderRadius = '8px';
+                mainNav.style.boxShadow = '0 10px 30px rgba(227,58,143,0.08)';
+            }
+        });
+
+        // Modal logic
+        const modalBackdrop = document.getElementById('modalBackdrop');
+        const loginBtn = document.getElementById('loginBtn');
+        const registerBtn = document.getElementById('registerBtn');
+        const closeModal = document.getElementById('closeModal');
+        const modalTitle = document.getElementById('modalTitle');
+        const modalBody = document.getElementById('modalBody');
+
+        function openModal(mode='login'){
+            modalBackdrop.style.display = 'flex';
+            modalBackdrop.setAttribute('aria-hidden','false');
+            const modalElement = modalBackdrop.querySelector('.modal');
+            modalElement.classList.add('auth-modal');
+            
+            if(mode==='login'){
+                modalTitle.textContent = 'Đăng nhập';
+                modalBody.innerHTML = `
+                    <h2>Đăng nhập</h2>
+                    <p class="subtitle">Chào mừng trở lại! 👋</p>
+                    <form id="loginForm">
+                        <div class="form-group">
+                            <label for="uemail">Email *</label>
+                            <input id="uemail" name="uemail" type="email" required placeholder="email@domain.com">
+                        </div>
+                        <div class="form-group">
+                            <label for="upass">Mật khẩu *</label>
+                            <input id="upass" name="upass" type="password" required placeholder="Nhập mật khẩu">
+                        </div>
+                        <div style="margin-bottom:20px;text-align:right">
+                            <a href="#" style="color:var(--primary);font-size:0.9rem;text-decoration:none">Quên mật khẩu?</a>
+                        </div>
+                        <button class="btn" type="submit" style="width:100%;padding:14px;margin-bottom:15px">Đăng nhập</button>
+                        <div class="auth-divider">
+                            <span>hoặc</span>
+                        </div>
+                        <button class="btn ghost" type="button" id="toRegisterBtn" style="width:100%;padding:14px">Tạo tài khoản mới</button>
+                    </form>`;
+                document.getElementById('toRegisterBtn').addEventListener('click', ()=>openModal('register'));
+                document.getElementById('loginForm').addEventListener('submit', (e)=>{
+                    e.preventDefault();
+                    alert('Đăng nhập demo — tính năng thực tế chưa được triển khai.');
+                    closeModalFunc();
+                });
+            } else {
+                modalTitle.textContent = 'Đăng ký';
+                modalBody.innerHTML = `
+                    <h2>Đăng ký</h2>
+                    <p class="subtitle">Tạo tài khoản mới để bắt đầu! 🎉</p>
+                    <form id="registerForm">
+                        <div class="form-group">
+                            <label for="rname">Họ & tên *</label>
+                            <input id="rname" name="rname" required placeholder="Nguyễn Văn A">
+                        </div>
+                        <div class="form-group">
+                            <label for="remail">Email *</label>
+                            <input id="remail" name="remail" type="email" required placeholder="email@domain.com">
+                        </div>
+                        <div class="form-group">
+                            <label for="rphone">Số điện thoại *</label>
+                            <input id="rphone" name="rphone" type="tel" required placeholder="0901234567" pattern="[0-9]{10,11}">
+                        </div>
+                        <div class="form-group">
+                            <label for="rpass">Mật khẩu *</label>
+                            <input id="rpass" name="rpass" type="password" required placeholder="Tối thiểu 6 ký tự">
+                        </div>
+                        <button class="btn" type="submit" style="width:100%;padding:14px;margin-bottom:15px">Đăng ký</button>
+                        <div class="auth-divider">
+                            <span>hoặc</span>
+                        </div>
+                        <button class="btn ghost" type="button" id="toLoginBtn" style="width:100%;padding:14px">Đã có tài khoản? Đăng nhập</button>
+                    </form>`;
+                document.getElementById('toLoginBtn').addEventListener('click', ()=>openModal('login'));
+                document.getElementById('registerForm').addEventListener('submit', (e)=>{
+                    e.preventDefault();
+                    alert('Đăng ký demo — tính năng thực tế chưa được triển khai.');
+                    closeModalFunc();
+                });
+            }
+        }
+        function closeModalFunc(){
+            modalBackdrop.style.display = 'none';
+            modalBackdrop.setAttribute('aria-hidden','true');
+        }
+        loginBtn?.addEventListener('click', ()=>openModal('login'));
+        registerBtn?.addEventListener('click', ()=>openModal('register'));
+        closeModal?.addEventListener('click', closeModalFunc);
+        modalBackdrop?.addEventListener('click', (e)=>{ if(e.target===modalBackdrop) closeModalFunc(); });
+
+        // CTA buttons
+        document.getElementById('createBtn')?.addEventListener('click', ()=> {
+            location.hash = '#templates';
+            const target = document.querySelector('#templates');
+            if(target) window.scrollTo({top: target.offsetTop - 80, behavior:'smooth'});
+        });
+
+        // Contact form (demo validation)
+        document.getElementById('contactForm')?.addEventListener('submit', (e)=>{
+            e.preventDefault();
+            const name = document.getElementById('name').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const phone = document.getElementById('phone').value.trim();
+            const message = document.getElementById('message').value.trim();
+            if(!name || !email || !phone || !message){
+                alert('Vui lòng điền đầy đủ thông tin (họ tên, email, số điện thoại, nội dung).');
+                return;
+            }
+            if(!/^[0-9]{10,11}$/.test(phone)){
+                alert('Số điện thoại không hợp lệ. Vui lòng nhập 10-11 chữ số.');
+                return;
+            }
+            alert('Cảm ơn ' + name + '! Yêu cầu của bạn đã được gửi. Chúng tôi sẽ liên hệ qua số ' + phone + ' trong 24-48 giờ.');
+            e.target.reset();
+        });
+
+        // Template Filter Function
+        function filterTemplates(category){
+            const templates = document.querySelectorAll('.template');
+            templates.forEach(template => {
+                if(category === 'all' || template.getAttribute('data-category') === category){
+                    template.style.display = 'flex';
+                    template.style.animation = 'fadeInUp 0.4s ease-out';
+                } else {
+                    template.style.display = 'none';
+                }
+            });
+        }
+
+        // Add event listener for template filter
+        document.getElementById('templateFilter')?.addEventListener('change', function(){
+            filterTemplates(this.value);
+        });
+
+        // Accessibility: close nav on resize large
+        window.addEventListener('resize', ()=> {
+            if(window.innerWidth > 760) mainNav.style.display = '';
+        });
+
+        // Card Builder Logic
+        let selectedTemplate = '';
+        let uploadedImage = null;
+        let uploadedQR = null;
+
+        // Open card builder when clicking "Chọn" button
+        document.querySelectorAll('.btn-choose-template').forEach(btn => {
+            btn.addEventListener('click', function() {
+                selectedTemplate = this.getAttribute('data-template');
+                document.getElementById('selectedTemplateName').textContent = selectedTemplate;
+                document.getElementById('cardBuilderModal').style.display = 'flex';
+                // Reset form
+                document.getElementById('senderName').value = '';
+                document.getElementById('recipientName').value = '';
+                document.getElementById('message').value = '';
+                document.getElementById('eventDate').value = '';
+                uploadedImage = null;
+                uploadedQR = null;
+                document.getElementById('imagePreview').innerHTML = '';
+                document.getElementById('qrPreview').innerHTML = '';
+                // Update preview after modal is shown
+                setTimeout(() => updatePreview(), 100);
+            });
+        });
+
+        // Close card builder
+        document.getElementById('closeCardBuilder')?.addEventListener('click', () => {
+            document.getElementById('cardBuilderModal').style.display = 'none';
+        });
+        document.getElementById('cancelCardBuilder')?.addEventListener('click', () => {
+            document.getElementById('cardBuilderModal').style.display = 'none';
+        });
+
+        // Image upload
+        document.getElementById('imageInput')?.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if(file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    uploadedImage = e.target.result;
+                    document.getElementById('imagePreview').innerHTML = `<img src="${uploadedImage}" class="preview-thumbnail" alt="Uploaded image">`;
+                    updatePreview();
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // QR upload
+        document.getElementById('qrInput')?.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if(file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    uploadedQR = e.target.result;
+                    document.getElementById('qrPreview').innerHTML = `<img src="${uploadedQR}" class="preview-thumbnail" alt="QR Code">`;
+                    updatePreview();
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // Real-time preview update
+        function updatePreview() {
+            const senderName = document.getElementById('senderName')?.value || 'Tên người gửi';
+            const recipientName = document.getElementById('recipientName')?.value || 'Tên người nhận';
+            const message = document.getElementById('message')?.value || 'Lời chúc...';
+            const eventDate = document.getElementById('eventDate')?.value;
+
+            const preview = document.getElementById('cardPreviewContainer');
+            if(!preview) return;
+
+            let previewHTML = `
+                <div class="final-card" style="min-height:300px">
+                    <h2 style="font-size:2rem;margin-bottom:15px">Chúc Mừng!</h2>
+                    ${uploadedImage ? `<img src="${uploadedImage}" style="max-width:100%;max-height:200px;border-radius:10px;margin:10px 0">` : ''}
+                    <p style="font-size:1.2rem;margin:15px 0;line-height:1.6">${message}</p>
+                    <div style="font-size:1.1rem;margin-top:20px;font-weight:600">${recipientName}</div>
+                    ${eventDate ? `<div style="font-size:0.9rem;margin-top:10px;opacity:0.8">${new Date(eventDate).toLocaleDateString('vi-VN')}</div>` : ''}
+                    ${uploadedQR ? `<div style="margin-top:20px"><strong>QR Code:</strong><br><img src="${uploadedQR}" style="width:120px;height:120px;margin-top:10px"></div>` : ''}
+                    <div style="margin-top:20px;font-size:0.9rem;opacity:0.8">Từ: ${senderName}</div>
+                </div>
+            `;
+            preview.innerHTML = previewHTML;
+        }
+
+        // Listen to form inputs
+        ['senderName', 'recipientName', 'message', 'eventDate'].forEach(id => {
+            document.getElementById(id)?.addEventListener('input', updatePreview);
+        });
+
+        // Create card
+        document.getElementById('createCardBtn')?.addEventListener('click', function() {
+            const form = document.getElementById('cardBuilderForm');
+            if(!form.checkValidity()) {
+                form.reportValidity();
+                return;
+            }
+
+            const senderName = document.getElementById('senderName').value;
+            const recipientName = document.getElementById('recipientName').value;
+            const message = document.getElementById('message').value;
+            const eventDate = document.getElementById('eventDate').value;
+
+            // Generate final card
+            let finalCardHTML = `
+                <h1 style="font-size:2.5rem;margin-bottom:20px">🎉 Chúc Mừng!</h1>
+                ${uploadedImage ? `<img src="${uploadedImage}" style="max-width:100%;max-height:300px;border-radius:12px;margin:15px 0">` : ''}
+                <p style="font-size:1.4rem;margin:20px 0;line-height:1.8">${message}</p>
+                <div style="font-size:1.5rem;margin-top:30px;font-weight:700">${recipientName}</div>
+                ${eventDate ? `<div style="font-size:1.1rem;margin-top:15px;opacity:0.9">${new Date(eventDate).toLocaleDateString('vi-VN', {year:'numeric', month:'long', day:'numeric'})}</div>` : ''}
+                ${uploadedQR ? `<div class="qr-preview"><img src="${uploadedQR}" style="width:100%;height:auto"></div>` : ''}
+                <div style="margin-top:30px;font-size:1rem;opacity:0.8">Từ: ${senderName}</div>
+            `;
+
+            document.getElementById('finalCardContainer').innerHTML = finalCardHTML;
+            
+            // Close builder, show final card
+            document.getElementById('cardBuilderModal').style.display = 'none';
+            document.getElementById('finalCardModal').style.display = 'flex';
+        });
+
+        // Close final card modal
+        document.getElementById('closeFinalCard')?.addEventListener('click', () => {
+            document.getElementById('finalCardModal').style.display = 'none';
+        });
+
+        // Download card
+        document.getElementById('downloadCardBtn')?.addEventListener('click', function() {
+            const cardHTML = `
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Thiệp Mừng - ${selectedTemplate}</title>
+    <style>
+        body { 
+            margin: 0; padding: 40px; font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);
+            color: white;
+            display: flex; justify-content: center; align-items: center;
+            min-height: 100vh;
+        }
+        .card { 
+            background: rgba(255,255,255,0.1); 
+            padding: 40px; border-radius: 20px;
+            text-align: center; max-width: 600px;
+            backdrop-filter: blur(10px);
+        }
+        img { max-width: 100%; border-radius: 12px; margin: 15px 0; }
+        .qr-preview { background: white; padding: 15px; border-radius: 10px; display: inline-block; margin: 20px 0; }
+        @media print { body { background: white; } .card { background: white; color: black; } }
+    </style>
+</head>
+<body>
+    <div class="card">
+        ${document.getElementById('finalCardContainer').innerHTML}
+    </div>
 </body>
 </html>
+            `;
+            const blob = new Blob([cardHTML], {type: 'text/html'});
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `thiep-mung-${Date.now()}.html`;
+            a.click();
+            URL.revokeObjectURL(url);
+            alert('Thiệp đã được tải xuống! Mở file HTML và in thành PDF hoặc chia sẻ.');
+        });
+
+        // Share card
+        document.getElementById('shareCardBtn')?.addEventListener('click', function() {
+            const shareText = `Tôi vừa tạo thiệp mừng "${selectedTemplate}" trên Thiệp Mừng Online! 🎉`;
+            if(navigator.share) {
+                navigator.share({title: 'Thiệp Mừng', text: shareText, url: window.location.href});
+            } else {
+                navigator.clipboard.writeText(shareText + ' ' + window.location.href).then(() => {
+                    alert('Đã copy link chia sẻ vào clipboard!');
+                });
+            }
+        });
+    </script>
+</body>
+</html>
+// ...existing code...
