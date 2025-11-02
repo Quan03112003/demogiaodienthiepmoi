@@ -1,0 +1,1524 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trang Quản Trị - Thiệp Mừng Online</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #ff4da6;
+            --primary-dark: #e33a8f;
+            --accent: #ffd6ea;
+            --bg: #fff7fb;
+            --card: #ffffff;
+            --muted: #666;
+            --success: #4caf50;
+            --danger: #f44336;
+            --warning: #ff9800;
+            --info: #2196f3;
+            --sidebar-width: 260px;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        html, body { font-family: Inter, Arial, sans-serif; height: 100%; background: #f5f5f5; }
+        
+        /* Layout */
+        .admin-container { display: flex; height: 100vh; }
+        
+        /* Sidebar */
+        .sidebar { width: var(--sidebar-width); background: linear-gradient(180deg, #fff, #fff7fb); box-shadow: 2px 0 10px rgba(0,0,0,0.05); position: fixed; height: 100vh; overflow-y: auto; z-index: 100; }
+        .sidebar-header { padding: 20px; border-bottom: 2px solid var(--accent); }
+        .sidebar-header h2 { color: var(--primary); font-size: 1.3rem; }
+        .sidebar-header .subtitle { color: var(--muted); font-size: 0.85rem; margin-top: 4px; }
+        
+        .sidebar-nav { padding: 10px 0; }
+        .nav-item { display: block; padding: 12px 20px; color: #555; text-decoration: none; transition: all 0.3s; border-left: 3px solid transparent; }
+        .nav-item:hover { background: rgba(255,77,166,0.08); color: var(--primary); border-left-color: var(--primary); }
+        .nav-item.active { background: rgba(255,77,166,0.12); color: var(--primary); border-left-color: var(--primary); font-weight: 600; }
+        .nav-item i { margin-right: 10px; width: 20px; display: inline-block; }
+        .nav-submenu { padding-left: 30px; display: none; }
+        .nav-submenu.active { display: block; }
+        .nav-submenu .nav-item { padding: 8px 20px; font-size: 0.9rem; }
+        
+        /* Main Content */
+        .main-content { margin-left: var(--sidebar-width); flex: 1; padding: 20px; overflow-y: auto; }
+        .content-header { background: var(--card); padding: 20px; border-radius: 12px; margin-bottom: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); display: flex; justify-content: space-between; align-items: center; }
+        .content-header h1 { color: #333; font-size: 1.8rem; }
+        .user-info { display: flex; align-items: center; gap: 15px; }
+        .user-avatar { width: 40px; height: 40px; border-radius: 50%; background: var(--primary); color: white; display: flex; align-items: center; justify-content: center; font-weight: bold; }
+        .logout-btn { padding: 8px 16px; background: var(--danger); color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; }
+        
+        /* Dashboard Stats */
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 20px; margin-bottom: 20px; }
+        .stat-card { background: var(--card); padding: 20px; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
+        .stat-card .icon { font-size: 2.5rem; margin-bottom: 10px; }
+        .stat-card .value { font-size: 2rem; font-weight: 800; color: var(--primary); }
+        .stat-card .label { color: var(--muted); font-size: 0.9rem; margin-top: 5px; }
+        .stat-card .trend { font-size: 0.85rem; margin-top: 8px; }
+        .stat-card .trend.up { color: var(--success); }
+        .stat-card .trend.down { color: var(--danger); }
+        
+        /* Table */
+        .data-table { background: var(--card); border-radius: 12px; overflow: hidden; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
+        .table-header { padding: 15px 20px; background: var(--accent); display: flex; justify-content: space-between; align-items: center; }
+        .table-header h3 { color: var(--primary-dark); font-size: 1.1rem; }
+        .table-controls { display: flex; gap: 10px; align-items: center; }
+        .search-box { padding: 8px 12px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 0.9rem; width: 250px; }
+        .btn { padding: 10px 18px; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 0.9rem; transition: all 0.3s; }
+        .btn-primary { background: var(--primary); color: white; }
+        .btn-primary:hover { background: var(--primary-dark); transform: translateY(-2px); box-shadow: 0 4px 12px rgba(227,58,143,0.3); }
+        .btn-secondary { background: #e0e0e0; color: #555; }
+        .btn-secondary:hover { background: #d0d0d0; }
+        .btn-success { background: var(--success); color: white; }
+        .btn-danger { background: var(--danger); color: white; }
+        .btn-warning { background: var(--warning); color: white; }
+        .btn-info { background: var(--info); color: white; }
+        .btn-sm { padding: 6px 12px; font-size: 0.85rem; }
+        
+        table { width: 100%; border-collapse: collapse; }
+        th, td { padding: 12px 15px; text-align: left; border-bottom: 1px solid #f0f0f0; }
+        th { background: #f8f8f8; font-weight: 600; color: #333; font-size: 0.9rem; }
+        tr:hover { background: #fafafa; }
+        .action-btns { display: flex; gap: 6px; }
+        .action-btns .btn { padding: 6px 10px; }
+        
+        /* Modal */
+        .modal-backdrop { position: fixed; inset: 0; background: rgba(0,0,0,0.6); backdrop-filter: blur(4px); display: none; align-items: center; justify-content: center; z-index: 2000; }
+        .modal-backdrop.active { display: flex; }
+        .modal { background: var(--card); padding: 30px; border-radius: 16px; width: 90%; max-width: 700px; max-height: 90vh; overflow-y: auto; box-shadow: 0 20px 60px rgba(0,0,0,0.3); position: relative; }
+        .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .modal-header h2 { color: var(--primary); font-size: 1.5rem; }
+        .close-btn { background: transparent; border: none; font-size: 28px; cursor: pointer; color: #999; width: 35px; height: 35px; display: flex; align-items: center; justify-content: center; border-radius: 50%; }
+        .close-btn:hover { background: #f0f0f0; color: #333; }
+        .form-group { margin-bottom: 18px; }
+        .form-group label { display: block; margin-bottom: 8px; font-weight: 600; color: #333; font-size: 0.95rem; }
+        .form-group input, .form-group textarea, .form-group select { width: 100%; padding: 12px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 0.95rem; font-family: inherit; transition: all 0.3s; }
+        .form-group input:focus, .form-group textarea:focus, .form-group select:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(255,77,166,0.1); }
+        .form-group textarea { resize: vertical; min-height: 100px; }
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        .form-actions { display: flex; gap: 10px; justify-content: flex-end; margin-top: 20px; }
+        
+        /* Badges */
+        .badge { display: inline-block; padding: 4px 10px; border-radius: 12px; font-size: 0.8rem; font-weight: 600; }
+        .badge-success { background: rgba(76,175,80,0.15); color: var(--success); }
+        .badge-danger { background: rgba(244,67,54,0.15); color: var(--danger); }
+        .badge-warning { background: rgba(255,152,0,0.15); color: var(--warning); }
+        .badge-info { background: rgba(33,150,243,0.15); color: var(--info); }
+        .badge-primary { background: rgba(255,77,166,0.15); color: var(--primary-dark); }
+        
+        /* Empty State */
+        .empty-state { text-align: center; padding: 60px 20px; color: var(--muted); }
+        .empty-state .icon { font-size: 4rem; margin-bottom: 15px; }
+        .empty-state h3 { font-size: 1.2rem; margin-bottom: 8px; }
+        
+        /* Pagination */
+        .pagination { display: flex; justify-content: center; gap: 8px; margin-top: 20px; padding: 20px; }
+        .pagination .btn { min-width: 40px; }
+        .pagination .btn.active { background: var(--primary); color: white; }
+        
+        /* Responsive */
+        @media (max-width: 980px) {
+            .sidebar { width: 220px; }
+            .main-content { margin-left: 220px; }
+            .form-row { grid-template-columns: 1fr; }
+        }
+        @media (max-width: 768px) {
+            .sidebar { transform: translateX(-100%); transition: transform 0.3s; }
+            .sidebar.active { transform: translateX(0); }
+            .main-content { margin-left: 0; }
+            .mobile-menu-toggle { display: block; position: fixed; top: 15px; left: 15px; z-index: 1001; background: var(--primary); color: white; border: none; padding: 10px; border-radius: 8px; font-size: 20px; }
+            .stats-grid { grid-template-columns: 1fr; }
+        }
+        
+        .mobile-menu-toggle { display: none; }
+        .hidden { display: none; }
+    </style>
+</head>
+<body>
+    <div class="admin-container">
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <h2>🎛️ Quản Trị</h2>
+                <div class="subtitle">Thiệp Mừng Online</div>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="#" class="nav-item active" data-section="dashboard">
+                    <span>📊</span> Dashboard
+                </a>
+                <a href="#" class="nav-item" data-section="templates">
+                    <span>🎨</span> Quản lý Mẫu Thiệp
+                </a>
+                <a href="#" class="nav-item" data-section="categories">
+                    <span>📁</span> Quản lý Danh Mục
+                </a>
+                <a href="#" class="nav-item" data-section="cards">
+                    <span>💝</span> Quản lý Thiệp
+                </a>
+                <a href="#" class="nav-item" data-section="users">
+                    <span>👥</span> Quản lý Người Dùng
+                </a>
+                <a href="#" class="nav-item" data-section="packages">
+                    <span>💰</span> Quản lý Gói & Giá
+                </a>
+                <a href="#" class="nav-item" data-section="testimonials">
+                    <span>💬</span> Quản lý Phản Hồi
+                </a>
+                <a href="#" class="nav-item" data-section="faqs">
+                    <span>❓</span> Quản lý FAQ
+                </a>
+                <a href="#" class="nav-item" data-section="contacts">
+                    <span>📧</span> Yêu Cầu Liên Hệ
+                </a>
+                <a href="#" class="nav-item" data-section="analytics">
+                    <span>📈</span> Thống Kê
+                </a>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <button class="mobile-menu-toggle" id="mobileMenuToggle">☰</button>
+            
+            <div class="content-header">
+                <h1 id="pageTitle">Dashboard</h1>
+                <div class="user-info">
+                    <div class="user-avatar">A</div>
+                    <div>
+                        <div style="font-weight: 600;">Admin</div>
+                        <div style="font-size: 0.85rem; color: var(--muted);">admin@thiepmung.vn</div>
+                    </div>
+                    <button class="logout-btn" onclick="window.location.href='index.html'">Đăng xuất</button>
+                </div>
+            </div>
+
+            <!-- Dashboard Section -->
+            <section id="dashboard" class="content-section active">
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="icon">💝</div>
+                        <div class="value" id="statCards">0</div>
+                        <div class="label">Thiệp đã tạo</div>
+                        <div class="trend up">↑ 12% so với tháng trước</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="icon">👥</div>
+                        <div class="value" id="statUsers">0</div>
+                        <div class="label">Người dùng</div>
+                        <div class="trend up">↑ 8% so với tháng trước</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="icon">🎨</div>
+                        <div class="value" id="statTemplates">0</div>
+                        <div class="label">Mẫu thiệp</div>
+                        <div class="trend">Giữ nguyên</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="icon">💰</div>
+                        <div class="value" id="statRevenue">0₫</div>
+                        <div class="label">Doanh thu tháng này</div>
+                        <div class="trend up">↑ 25% so với tháng trước</div>
+                    </div>
+                </div>
+                <div class="data-table">
+                    <div class="table-header">
+                        <h3>Hoạt động gần đây</h3>
+                    </div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Thời gian</th>
+                                <th>Hoạt động</th>
+                                <th>Người dùng</th>
+                                <th>Trạng thái</th>
+                            </tr>
+                        </thead>
+                        <tbody id="recentActivities">
+                            <!-- Loaded dynamically -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Templates Section -->
+            <section id="templates" class="content-section hidden">
+                <div class="data-table">
+                    <div class="table-header">
+                        <h3>Quản lý Mẫu Thiệp</h3>
+                        <div class="table-controls">
+                            <input type="text" class="search-box" id="templateSearch" placeholder="Tìm kiếm mẫu...">
+                            <button class="btn btn-primary" onclick="openTemplateModal()">+ Thêm Mẫu</button>
+                        </div>
+                    </div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Tên mẫu</th>
+                                <th>Danh mục</th>
+                                <th>Hình ảnh</th>
+                                <th>Tags</th>
+                                <th>Trạng thái</th>
+                                <th>Thao tác</th>
+                            </tr>
+                        </thead>
+                        <tbody id="templatesTable">
+                            <!-- Loaded dynamically -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Categories Section -->
+            <section id="categories" class="content-section hidden">
+                <div class="data-table">
+                    <div class="table-header">
+                        <h3>Quản lý Danh Mục</h3>
+                        <div class="table-controls">
+                            <button class="btn btn-primary" onclick="openCategoryModal()">+ Thêm Danh Mục</button>
+                        </div>
+                    </div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Tên danh mục</th>
+                                <th>Mô tả</th>
+                                <th>Icon</th>
+                                <th>Số mẫu</th>
+                                <th>Thứ tự</th>
+                                <th>Thao tác</th>
+                            </tr>
+                        </thead>
+                        <tbody id="categoriesTable">
+                            <!-- Loaded dynamically -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Cards Section -->
+            <section id="cards" class="content-section hidden">
+                <div class="data-table">
+                    <div class="table-header">
+                        <h3>Quản lý Thiệp</h3>
+                        <div class="table-controls">
+                            <input type="text" class="search-box" id="cardSearch" placeholder="Tìm kiếm thiệp...">
+                            <select class="search-box" id="cardFilter" style="width: 150px;">
+                                <option value="">Tất cả</option>
+                                <option value="active">Đang hoạt động</option>
+                                <option value="inactive">Đã ẩn</option>
+                            </select>
+                        </div>
+                    </div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Người gửi</th>
+                                <th>Người nhận</th>
+                                <th>Mẫu</th>
+                                <th>Ngày tạo</th>
+                                <th>Lượt xem</th>
+                                <th>Trạng thái</th>
+                                <th>Thao tác</th>
+                            </tr>
+                        </thead>
+                        <tbody id="cardsTable">
+                            <!-- Loaded dynamically -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Users Section -->
+            <section id="users" class="content-section hidden">
+                <div class="data-table">
+                    <div class="table-header">
+                        <h3>Quản lý Người Dùng</h3>
+                        <div class="table-controls">
+                            <input type="text" class="search-box" id="userSearch" placeholder="Tìm kiếm người dùng...">
+                            <select class="search-box" id="userFilter" style="width: 150px;">
+                                <option value="">Tất cả</option>
+                                <option value="free">Gói miễn phí</option>
+                                <option value="premium">Gói nâng cao</option>
+                                <option value="enterprise">Gói doanh nghiệp</option>
+                            </select>
+                        </div>
+                    </div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Họ tên</th>
+                                <th>Email</th>
+                                <th>Số điện thoại</th>
+                                <th>Gói</th>
+                                <th>Ngày đăng ký</th>
+                                <th>Số thiệp</th>
+                                <th>Thao tác</th>
+                            </tr>
+                        </thead>
+                        <tbody id="usersTable">
+                            <!-- Loaded dynamically -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Packages Section -->
+            <section id="packages" class="content-section hidden">
+                <div class="data-table">
+                    <div class="table-header">
+                        <h3>Quản lý Gói & Giá</h3>
+                        <div class="table-controls">
+                            <button class="btn btn-primary" onclick="openPackageModal()">+ Thêm Gói</button>
+                        </div>
+                    </div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Tên gói</th>
+                                <th>Giá</th>
+                                <th>Thời hạn</th>
+                                <th>Mô tả</th>
+                                <th>Số tính năng</th>
+                                <th>Trạng thái</th>
+                                <th>Thao tác</th>
+                            </tr>
+                        </thead>
+                        <tbody id="packagesTable">
+                            <!-- Loaded dynamically -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Testimonials Section -->
+            <section id="testimonials" class="content-section hidden">
+                <div class="data-table">
+                    <div class="table-header">
+                        <h3>Quản lý Phản Hồi Khách Hàng</h3>
+                        <div class="table-controls">
+                            <button class="btn btn-primary" onclick="openTestimonialModal()">+ Thêm Phản Hồi</button>
+                        </div>
+                    </div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Tên khách hàng</th>
+                                <th>Địa chỉ</th>
+                                <th>Nội dung</th>
+                                <th>Đánh giá</th>
+                                <th>Trạng thái</th>
+                                <th>Thao tác</th>
+                            </tr>
+                        </thead>
+                        <tbody id="testimonialsTable">
+                            <!-- Loaded dynamically -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- FAQs Section -->
+            <section id="faqs" class="content-section hidden">
+                <div class="data-table">
+                    <div class="table-header">
+                        <h3>Quản lý Câu Hỏi Thường Gặp</h3>
+                        <div class="table-controls">
+                            <button class="btn btn-primary" onclick="openFAQModal()">+ Thêm FAQ</button>
+                        </div>
+                    </div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Câu hỏi</th>
+                                <th>Câu trả lời</th>
+                                <th>Thứ tự</th>
+                                <th>Trạng thái</th>
+                                <th>Thao tác</th>
+                            </tr>
+                        </thead>
+                        <tbody id="faqsTable">
+                            <!-- Loaded dynamically -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Contacts Section -->
+            <section id="contacts" class="content-section hidden">
+                <div class="data-table">
+                    <div class="table-header">
+                        <h3>Yêu Cầu Liên Hệ</h3>
+                        <div class="table-controls">
+                            <select class="search-box" id="contactFilter" style="width: 180px;">
+                                <option value="">Tất cả</option>
+                                <option value="pending">Chưa xử lý</option>
+                                <option value="processing">Đang xử lý</option>
+                                <option value="completed">Đã xử lý</option>
+                            </select>
+                        </div>
+                    </div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Họ tên</th>
+                                <th>Email</th>
+                                <th>Số điện thoại</th>
+                                <th>Chủ đề</th>
+                                <th>Nội dung</th>
+                                <th>Ngày gửi</th>
+                                <th>Trạng thái</th>
+                                <th>Thao tác</th>
+                            </tr>
+                        </thead>
+                        <tbody id="contactsTable">
+                            <!-- Loaded dynamically -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Analytics Section -->
+            <section id="analytics" class="content-section hidden">
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="icon">📊</div>
+                        <div class="value">15,234</div>
+                        <div class="label">Tổng lượt xem thiệp</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="icon">👁️</div>
+                        <div class="value">2,341</div>
+                        <div class="label">Lượt xem trung bình/thiệp</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="icon">🔗</div>
+                        <div class="value">8,567</div>
+                        <div class="label">Lượt chia sẻ</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="icon">💌</div>
+                        <div class="value">1,234</div>
+                        <div class="label">Thiệp được tạo hôm nay</div>
+                    </div>
+                </div>
+                <div class="data-table" style="margin-top: 20px;">
+                    <div class="table-header">
+                        <h3>Biểu đồ thống kê</h3>
+                    </div>
+                    <div style="padding: 40px; text-align: center; color: var(--muted);">
+                        <div style="font-size: 3rem; margin-bottom: 15px;">📈</div>
+                        <p>Biểu đồ thống kê sẽ được tích hợp tại đây</p>
+                        <p style="font-size: 0.9rem; margin-top: 8px;">Có thể sử dụng Chart.js, ApexCharts, hoặc Google Charts</p>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Modal Template -->
+    <div class="modal-backdrop" id="templateModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h2 id="templateModalTitle">Thêm Mẫu Thiệp</h2>
+                <button class="close-btn" onclick="closeModal('templateModal')">✕</button>
+            </div>
+            <form id="templateForm">
+                <input type="hidden" id="templateId">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Tên mẫu *</label>
+                        <input type="text" id="templateName" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Danh mục *</label>
+                        <select id="templateCategory" required>
+                            <option value="">Chọn danh mục</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>URL hình ảnh *</label>
+                    <input type="text" id="templateImage" required placeholder="https://example.com/image.jpg">
+                </div>
+                <div class="form-group">
+                    <label>Tags (phân cách bằng dấu phẩy)</label>
+                    <input type="text" id="templateTags" placeholder="Cưới, RSVP, Nhạc">
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Trạng thái</label>
+                        <select id="templateStatus">
+                            <option value="active">Hoạt động</option>
+                            <option value="inactive">Ẩn</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Thứ tự hiển thị</label>
+                        <input type="number" id="templateOrder" value="0" min="0">
+                    </div>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" onclick="closeModal('templateModal')">Hủy</button>
+                    <button type="submit" class="btn btn-primary">Lưu</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal Category -->
+    <div class="modal-backdrop" id="categoryModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h2 id="categoryModalTitle">Thêm Danh Mục</h2>
+                <button class="close-btn" onclick="closeModal('categoryModal')">✕</button>
+            </div>
+            <form id="categoryForm">
+                <input type="hidden" id="categoryId">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Tên danh mục *</label>
+                        <input type="text" id="categoryName" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Icon</label>
+                        <input type="text" id="categoryIcon" placeholder="💒">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Mô tả</label>
+                    <textarea id="categoryDescription"></textarea>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Thứ tự hiển thị</label>
+                        <input type="number" id="categoryOrder" value="0" min="0">
+                    </div>
+                    <div class="form-group">
+                        <label>Trạng thái</label>
+                        <select id="categoryStatus">
+                            <option value="active">Hoạt động</option>
+                            <option value="inactive">Ẩn</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" onclick="closeModal('categoryModal')">Hủy</button>
+                    <button type="submit" class="btn btn-primary">Lưu</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal Package -->
+    <div class="modal-backdrop" id="packageModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h2 id="packageModalTitle">Thêm Gói</h2>
+                <button class="close-btn" onclick="closeModal('packageModal')">✕</button>
+            </div>
+            <form id="packageForm">
+                <input type="hidden" id="packageId">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Tên gói *</label>
+                        <input type="text" id="packageName" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Giá (VNĐ) *</label>
+                        <input type="number" id="packagePrice" required min="0">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Thời hạn (tháng)</label>
+                        <input type="number" id="packageDuration" value="1" min="1">
+                    </div>
+                    <div class="form-group">
+                        <label>Trạng thái</label>
+                        <select id="packageStatus">
+                            <option value="active">Hoạt động</option>
+                            <option value="inactive">Ẩn</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Mô tả tính năng (mỗi dòng một tính năng)</label>
+                    <textarea id="packageFeatures" rows="6" placeholder="- Tính năng 1&#10;- Tính năng 2"></textarea>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" onclick="closeModal('packageModal')">Hủy</button>
+                    <button type="submit" class="btn btn-primary">Lưu</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal Testimonial -->
+    <div class="modal-backdrop" id="testimonialModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h2 id="testimonialModalTitle">Thêm Phản Hồi</h2>
+                <button class="close-btn" onclick="closeModal('testimonialModal')">✕</button>
+            </div>
+            <form id="testimonialForm">
+                <input type="hidden" id="testimonialId">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Tên khách hàng *</label>
+                        <input type="text" id="testimonialName" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Địa chỉ</label>
+                        <input type="text" id="testimonialLocation" placeholder="Hà Nội">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Nội dung phản hồi *</label>
+                    <textarea id="testimonialContent" required rows="4"></textarea>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Đánh giá (sao)</label>
+                        <input type="number" id="testimonialRating" min="1" max="5" value="5">
+                    </div>
+                    <div class="form-group">
+                        <label>Trạng thái</label>
+                        <select id="testimonialStatus">
+                            <option value="active">Hiển thị</option>
+                            <option value="inactive">Ẩn</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" onclick="closeModal('testimonialModal')">Hủy</button>
+                    <button type="submit" class="btn btn-primary">Lưu</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal FAQ -->
+    <div class="modal-backdrop" id="faqModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h2 id="faqModalTitle">Thêm FAQ</h2>
+                <button class="close-btn" onclick="closeModal('faqModal')">✕</button>
+            </div>
+            <form id="faqForm">
+                <input type="hidden" id="faqId">
+                <div class="form-group">
+                    <label>Câu hỏi *</label>
+                    <input type="text" id="faqQuestion" required>
+                </div>
+                <div class="form-group">
+                    <label>Câu trả lời *</label>
+                    <textarea id="faqAnswer" required rows="5"></textarea>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Thứ tự hiển thị</label>
+                        <input type="number" id="faqOrder" value="0" min="0">
+                    </div>
+                    <div class="form-group">
+                        <label>Trạng thái</label>
+                        <select id="faqStatus">
+                            <option value="active">Hiển thị</option>
+                            <option value="inactive">Ẩn</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" onclick="closeModal('faqModal')">Hủy</button>
+                    <button type="submit" class="btn btn-primary">Lưu</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Data Storage (In real app, this would be API calls)
+        let data = {
+            templates: [],
+            categories: [],
+            cards: [],
+            users: [],
+            packages: [],
+            testimonials: [],
+            faqs: [],
+            contacts: []
+        };
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            loadSampleData();
+            setupNavigation();
+            setupForms();
+            renderAllTables();
+            updateDashboardStats();
+            
+            // Mobile menu toggle
+            document.getElementById('mobileMenuToggle')?.addEventListener('click', function() {
+                document.getElementById('sidebar').classList.toggle('active');
+            });
+        });
+
+        // Load Sample Data
+        function loadSampleData() {
+            // Categories
+            data.categories = [
+                { id: 1, name: 'Cưới Hỏi', description: 'Thiệp mời đám cưới', icon: '💒', order: 1, status: 'active', templateCount: 25 },
+                { id: 2, name: 'Sinh Nhật', description: 'Thiệp chúc mừng sinh nhật', icon: '🎂', order: 2, status: 'active', templateCount: 30 },
+                { id: 3, name: 'Tết', description: 'Thiệp chúc Tết', icon: '🏮', order: 3, status: 'active', templateCount: 20 },
+                { id: 4, name: 'Tốt Nghiệp', description: 'Thiệp chúc mừng tốt nghiệp', icon: '🎓', order: 4, status: 'active', templateCount: 15 },
+                { id: 5, name: 'Doanh Nghiệp', description: 'Thiệp doanh nghiệp', icon: '💼', order: 5, status: 'active', templateCount: 18 },
+                { id: 6, name: 'Tình Yêu', description: 'Thiệp kỷ niệm tình yêu', icon: '💕', order: 6, status: 'active', templateCount: 22 }
+            ];
+
+            // Templates
+            data.templates = [
+                { id: 1, name: 'Romance Bloom', category: 'Cưới Hỏi', image: 'https://via.placeholder.com/300x200/ff9a9e/ffffff?text=Romance+Bloom', tags: ['Cưới', 'RSVP', 'Nhạc'], status: 'active', order: 1 },
+                { id: 2, name: 'Birthday Joy', category: 'Sinh Nhật', image: 'https://via.placeholder.com/300x200/ffd6ea/e33a8f?text=Birthday+Joy', tags: ['Sinh nhật', 'Animation'], status: 'active', order: 2 },
+                { id: 3, name: 'Xuân Ấm Áp', category: 'Tết', image: 'https://via.placeholder.com/300x200/ff6b6b/ffffff?text=Xuân+Ấm+Áp', tags: ['Tết', 'Red Pack'], status: 'active', order: 3 }
+            ];
+
+            // Cards
+            data.cards = [
+                { id: 1, sender: 'Nguyễn Văn A', recipient: 'Nguyễn Thị B', template: 'Romance Bloom', created: '2025-01-15', views: 245, status: 'active' },
+                { id: 2, sender: 'Trần Văn C', recipient: 'Lê Thị D', template: 'Birthday Joy', created: '2025-01-16', views: 189, status: 'active' },
+                { id: 3, sender: 'Phạm Văn E', recipient: 'Hoàng Thị F', template: 'Xuân Ấm Áp', created: '2025-01-17', views: 312, status: 'active' }
+            ];
+
+            // Users
+            data.users = [
+                { id: 1, name: 'Nguyễn Văn A', email: 'a@example.com', phone: '0901234567', package: 'premium', registered: '2024-12-01', cardCount: 15 },
+                { id: 2, name: 'Trần Thị B', email: 'b@example.com', phone: '0902345678', package: 'free', registered: '2024-12-15', cardCount: 3 },
+                { id: 3, name: 'Lê Văn C', email: 'c@example.com', phone: '0903456789', package: 'enterprise', registered: '2024-11-20', cardCount: 89 }
+            ];
+
+            // Packages
+            data.packages = [
+                { id: 1, name: 'Cơ Bản', price: 0, duration: 0, features: '30 mẫu cơ bản\nHỗ trợ văn bản & ảnh\nLink công khai & QR cơ bản', status: 'active', featureCount: 3 },
+                { id: 2, name: 'Nâng Cao', price: 50000, duration: 1, features: '100+ mẫu premium\nNhạc & hiệu ứng động\nMã QR tuỳ chỉnh & RSVP', status: 'active', featureCount: 3 },
+                { id: 3, name: 'Cao Cấp', price: 2000000, duration: 12, features: 'Gói doanh nghiệp, API & in ấn\nHiệu ứng 3D, video dài\nHỗ trợ 24/7 và quản lý sự kiện', status: 'active', featureCount: 3 }
+            ];
+
+            // Testimonials
+            data.testimonials = [
+                { id: 1, name: 'Lan', location: 'Hà Nội', content: 'Tạo thiệp cưới rất nhanh, khách mời RSVP tiện lợi. Giao diện dễ dùng và đẹp mắt.', rating: 5, status: 'active' },
+                { id: 2, name: 'Minh', location: 'TP.HCM', content: 'Mẫu Tết sáng, phần thêm âm nhạc và QR giúp mình gửi lì xì tiện hơn rất nhiều.', rating: 5, status: 'active' }
+            ];
+
+            // FAQs
+            data.faqs = [
+                { id: 1, question: 'Tôi có thể gửi kèm tiền mừng như thế nào?', answer: 'Bạn có thể gửi link kèm thông tin chuyển khoản, hoặc sử dụng tính năng mã quà tặng / ví điện tử (tùy gói).', order: 1, status: 'active' },
+                { id: 2, question: 'Có chính sách hoàn tiền không?', answer: 'Với gói trả phí, liên hệ hỗ trợ trong 48 giờ để được xem xét hoàn tiền theo điều khoản.', order: 2, status: 'active' }
+            ];
+
+            // Contacts
+            data.contacts = [
+                { id: 1, name: 'Nguyễn Văn X', email: 'x@example.com', phone: '0901111111', subject: 'Hỗ trợ kỹ thuật', content: 'Tôi không thể tải ảnh lên thiệp', sent: '2025-01-17', status: 'pending' },
+                { id: 2, name: 'Trần Thị Y', email: 'y@example.com', phone: '0902222222', subject: 'Gói & giá', content: 'Tôi muốn biết về gói doanh nghiệp', sent: '2025-01-16', status: 'processing' }
+            ];
+        }
+
+        // Navigation
+        function setupNavigation() {
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const section = this.getAttribute('data-section');
+                    showSection(section);
+                    
+                    // Update active nav
+                    document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    // Close mobile menu
+                    document.getElementById('sidebar')?.classList.remove('active');
+                });
+            });
+        }
+
+        function showSection(sectionId) {
+            document.querySelectorAll('.content-section').forEach(section => {
+                section.classList.add('hidden');
+            });
+            const targetSection = document.getElementById(sectionId);
+            if (targetSection) {
+                targetSection.classList.remove('hidden');
+                updatePageTitle(sectionId);
+            }
+        }
+
+        function updatePageTitle(sectionId) {
+            const titles = {
+                'dashboard': 'Dashboard',
+                'templates': 'Quản lý Mẫu Thiệp',
+                'categories': 'Quản lý Danh Mục',
+                'cards': 'Quản lý Thiệp',
+                'users': 'Quản lý Người Dùng',
+                'packages': 'Quản lý Gói & Giá',
+                'testimonials': 'Quản lý Phản Hồi',
+                'faqs': 'Quản lý FAQ',
+                'contacts': 'Yêu Cầu Liên Hệ',
+                'analytics': 'Thống Kê'
+            };
+            document.getElementById('pageTitle').textContent = titles[sectionId] || 'Dashboard';
+        }
+
+        // Render Tables
+        function renderAllTables() {
+            renderTemplatesTable();
+            renderCategoriesTable();
+            renderCardsTable();
+            renderUsersTable();
+            renderPackagesTable();
+            renderTestimonialsTable();
+            renderFAQsTable();
+            renderContactsTable();
+            renderRecentActivities();
+        }
+
+        function renderTemplatesTable() {
+            const tbody = document.getElementById('templatesTable');
+            if (!tbody) return;
+            
+            if (data.templates.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="7" class="empty-state"><div class="icon">🎨</div><h3>Chưa có mẫu thiệp nào</h3><p>Hãy thêm mẫu thiệp đầu tiên!</p></td></tr>';
+                return;
+            }
+            
+            tbody.innerHTML = data.templates.map(t => `
+                <tr>
+                    <td>${t.id}</td>
+                    <td><strong>${t.name}</strong></td>
+                    <td>${t.category}</td>
+                    <td><img src="${t.image}" style="width: 60px; height: 40px; object-fit: cover; border-radius: 4px;" alt="${t.name}"></td>
+                    <td>${t.tags.map(tag => `<span class="badge badge-primary">${tag}</span>`).join(' ')}</td>
+                    <td><span class="badge ${t.status === 'active' ? 'badge-success' : 'badge-danger'}">${t.status === 'active' ? 'Hoạt động' : 'Ẩn'}</span></td>
+                    <td class="action-btns">
+                        <button class="btn btn-info btn-sm" onclick="editTemplate(${t.id})">Sửa</button>
+                        <button class="btn btn-danger btn-sm" onclick="deleteTemplate(${t.id})">Xóa</button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function renderCategoriesTable() {
+            const tbody = document.getElementById('categoriesTable');
+            if (!tbody) return;
+            
+            if (data.categories.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="7" class="empty-state"><div class="icon">📁</div><h3>Chưa có danh mục nào</h3></td></tr>';
+                return;
+            }
+            
+            tbody.innerHTML = data.categories.map(c => `
+                <tr>
+                    <td>${c.id}</td>
+                    <td><strong>${c.icon} ${c.name}</strong></td>
+                    <td>${c.description || '-'}</td>
+                    <td>${c.icon}</td>
+                    <td>${c.templateCount}</td>
+                    <td>${c.order}</td>
+                    <td class="action-btns">
+                        <button class="btn btn-info btn-sm" onclick="editCategory(${c.id})">Sửa</button>
+                        <button class="btn btn-danger btn-sm" onclick="deleteCategory(${c.id})">Xóa</button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function renderCardsTable() {
+            const tbody = document.getElementById('cardsTable');
+            if (!tbody) return;
+            
+            if (data.cards.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="8" class="empty-state"><div class="icon">💝</div><h3>Chưa có thiệp nào</h3></td></tr>';
+                return;
+            }
+            
+            tbody.innerHTML = data.cards.map(c => `
+                <tr>
+                    <td>${c.id}</td>
+                    <td>${c.sender}</td>
+                    <td>${c.recipient}</td>
+                    <td>${c.template}</td>
+                    <td>${formatDate(c.created)}</td>
+                    <td>${c.views}</td>
+                    <td><span class="badge ${c.status === 'active' ? 'badge-success' : 'badge-danger'}">${c.status === 'active' ? 'Hoạt động' : 'Ẩn'}</span></td>
+                    <td class="action-btns">
+                        <button class="btn btn-info btn-sm" onclick="viewCard(${c.id})">Xem</button>
+                        <button class="btn btn-danger btn-sm" onclick="deleteCard(${c.id})">Xóa</button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function renderUsersTable() {
+            const tbody = document.getElementById('usersTable');
+            if (!tbody) return;
+            
+            if (data.users.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="8" class="empty-state"><div class="icon">👥</div><h3>Chưa có người dùng nào</h3></td></tr>';
+                return;
+            }
+            
+            tbody.innerHTML = data.users.map(u => `
+                <tr>
+                    <td>${u.id}</td>
+                    <td><strong>${u.name}</strong></td>
+                    <td>${u.email}</td>
+                    <td>${u.phone}</td>
+                    <td><span class="badge badge-primary">${u.package}</span></td>
+                    <td>${formatDate(u.registered)}</td>
+                    <td>${u.cardCount}</td>
+                    <td class="action-btns">
+                        <button class="btn btn-info btn-sm" onclick="viewUser(${u.id})">Xem</button>
+                        <button class="btn btn-warning btn-sm" onclick="editUser(${u.id})">Sửa</button>
+                        <button class="btn btn-danger btn-sm" onclick="deleteUser(${u.id})">Xóa</button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function renderPackagesTable() {
+            const tbody = document.getElementById('packagesTable');
+            if (!tbody) return;
+            
+            tbody.innerHTML = data.packages.map(p => `
+                <tr>
+                    <td>${p.id}</td>
+                    <td><strong>${p.name}</strong></td>
+                    <td>${p.price === 0 ? 'Miễn phí' : formatCurrency(p.price)}</td>
+                    <td>${p.duration === 0 ? 'Vĩnh viễn' : p.duration + ' tháng'}</td>
+                    <td>${p.features.split('\n')[0]}...</td>
+                    <td>${p.featureCount}</td>
+                    <td><span class="badge ${p.status === 'active' ? 'badge-success' : 'badge-danger'}">${p.status === 'active' ? 'Hoạt động' : 'Ẩn'}</span></td>
+                    <td class="action-btns">
+                        <button class="btn btn-info btn-sm" onclick="editPackage(${p.id})">Sửa</button>
+                        <button class="btn btn-danger btn-sm" onclick="deletePackage(${p.id})">Xóa</button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function renderTestimonialsTable() {
+            const tbody = document.getElementById('testimonialsTable');
+            if (!tbody) return;
+            
+            tbody.innerHTML = data.testimonials.map(t => `
+                <tr>
+                    <td>${t.id}</td>
+                    <td><strong>${t.name}</strong></td>
+                    <td>${t.location}</td>
+                    <td>${t.content.substring(0, 50)}...</td>
+                    <td>${'⭐'.repeat(t.rating)}</td>
+                    <td><span class="badge ${t.status === 'active' ? 'badge-success' : 'badge-danger'}">${t.status === 'active' ? 'Hiển thị' : 'Ẩn'}</span></td>
+                    <td class="action-btns">
+                        <button class="btn btn-info btn-sm" onclick="editTestimonial(${t.id})">Sửa</button>
+                        <button class="btn btn-danger btn-sm" onclick="deleteTestimonial(${t.id})">Xóa</button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function renderFAQsTable() {
+            const tbody = document.getElementById('faqsTable');
+            if (!tbody) return;
+            
+            tbody.innerHTML = data.faqs.map(f => `
+                <tr>
+                    <td>${f.id}</td>
+                    <td><strong>${f.question}</strong></td>
+                    <td>${f.answer.substring(0, 60)}...</td>
+                    <td>${f.order}</td>
+                    <td><span class="badge ${f.status === 'active' ? 'badge-success' : 'badge-danger'}">${f.status === 'active' ? 'Hiển thị' : 'Ẩn'}</span></td>
+                    <td class="action-btns">
+                        <button class="btn btn-info btn-sm" onclick="editFAQ(${f.id})">Sửa</button>
+                        <button class="btn btn-danger btn-sm" onclick="deleteFAQ(${f.id})">Xóa</button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function renderContactsTable() {
+            const tbody = document.getElementById('contactsTable');
+            if (!tbody) return;
+            
+            tbody.innerHTML = data.contacts.map(c => `
+                <tr>
+                    <td>${c.id}</td>
+                    <td>${c.name}</td>
+                    <td>${c.email}</td>
+                    <td>${c.phone}</td>
+                    <td>${c.subject}</td>
+                    <td>${c.content.substring(0, 40)}...</td>
+                    <td>${formatDate(c.sent)}</td>
+                    <td><span class="badge ${getContactStatusBadge(c.status)}">${getContactStatusText(c.status)}</span></td>
+                    <td class="action-btns">
+                        <button class="btn btn-info btn-sm" onclick="viewContact(${c.id})">Xem</button>
+                        <button class="btn btn-warning btn-sm" onclick="updateContactStatus(${c.id})">Cập nhật</button>
+                        <button class="btn btn-danger btn-sm" onclick="deleteContact(${c.id})">Xóa</button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function renderRecentActivities() {
+            const tbody = document.getElementById('recentActivities');
+            if (!tbody) return;
+            
+            const activities = [
+                { time: '2 phút trước', activity: 'Tạo thiệp mới', user: 'Nguyễn Văn A', status: 'success' },
+                { time: '15 phút trước', activity: 'Đăng ký tài khoản', user: 'Trần Thị B', status: 'success' },
+                { time: '1 giờ trước', activity: 'Cập nhật mẫu thiệp', user: 'Admin', status: 'info' },
+                { time: '2 giờ trước', activity: 'Gửi yêu cầu liên hệ', user: 'Lê Văn C', status: 'warning' }
+            ];
+            
+            tbody.innerHTML = activities.map(a => `
+                <tr>
+                    <td>${a.time}</td>
+                    <td>${a.activity}</td>
+                    <td>${a.user}</td>
+                    <td><span class="badge ${getStatusBadgeClass(a.status)}">${a.status}</span></td>
+                </tr>
+            `).join('');
+        }
+
+        // Update Dashboard Stats
+        function updateDashboardStats() {
+            document.getElementById('statCards').textContent = data.cards.length;
+            document.getElementById('statUsers').textContent = data.users.length;
+            document.getElementById('statTemplates').textContent = data.templates.length;
+            document.getElementById('statRevenue').textContent = formatCurrency(data.cards.length * 50000);
+        }
+
+        // Modal Functions
+        function openTemplateModal(id = null) {
+            const modal = document.getElementById('templateModal');
+            const form = document.getElementById('templateForm');
+            const title = document.getElementById('templateModalTitle');
+            
+            // Load categories to select
+            const categorySelect = document.getElementById('templateCategory');
+            categorySelect.innerHTML = '<option value="">Chọn danh mục</option>' + 
+                data.categories.map(c => `<option value="${c.name}">${c.name}</option>`).join('');
+            
+            if (id) {
+                const template = data.templates.find(t => t.id === id);
+                if (template) {
+                    title.textContent = 'Sửa Mẫu Thiệp';
+                    document.getElementById('templateId').value = template.id;
+                    document.getElementById('templateName').value = template.name;
+                    document.getElementById('templateCategory').value = template.category;
+                    document.getElementById('templateImage').value = template.image;
+                    document.getElementById('templateTags').value = template.tags.join(', ');
+                    document.getElementById('templateStatus').value = template.status;
+                    document.getElementById('templateOrder').value = template.order;
+                }
+            } else {
+                title.textContent = 'Thêm Mẫu Thiệp';
+                form.reset();
+                document.getElementById('templateId').value = '';
+            }
+            
+            modal.classList.add('active');
+        }
+
+        function openCategoryModal(id = null) {
+            const modal = document.getElementById('categoryModal');
+            const form = document.getElementById('categoryForm');
+            const title = document.getElementById('categoryModalTitle');
+            
+            if (id) {
+                const category = data.categories.find(c => c.id === id);
+                if (category) {
+                    title.textContent = 'Sửa Danh Mục';
+                    document.getElementById('categoryId').value = category.id;
+                    document.getElementById('categoryName').value = category.name;
+                    document.getElementById('categoryIcon').value = category.icon;
+                    document.getElementById('categoryDescription').value = category.description || '';
+                    document.getElementById('categoryOrder').value = category.order;
+                    document.getElementById('categoryStatus').value = category.status;
+                }
+            } else {
+                title.textContent = 'Thêm Danh Mục';
+                form.reset();
+                document.getElementById('categoryId').value = '';
+            }
+            
+            modal.classList.add('active');
+        }
+
+        function openPackageModal(id = null) {
+            const modal = document.getElementById('packageModal');
+            const form = document.getElementById('packageForm');
+            const title = document.getElementById('packageModalTitle');
+            
+            if (id) {
+                const pkg = data.packages.find(p => p.id === id);
+                if (pkg) {
+                    title.textContent = 'Sửa Gói';
+                    document.getElementById('packageId').value = pkg.id;
+                    document.getElementById('packageName').value = pkg.name;
+                    document.getElementById('packagePrice').value = pkg.price;
+                    document.getElementById('packageDuration').value = pkg.duration;
+                    document.getElementById('packageFeatures').value = pkg.features;
+                    document.getElementById('packageStatus').value = pkg.status;
+                }
+            } else {
+                title.textContent = 'Thêm Gói';
+                form.reset();
+                document.getElementById('packageId').value = '';
+            }
+            
+            modal.classList.add('active');
+        }
+
+        function openTestimonialModal(id = null) {
+            const modal = document.getElementById('testimonialModal');
+            const form = document.getElementById('testimonialForm');
+            const title = document.getElementById('testimonialModalTitle');
+            
+            if (id) {
+                const testimonial = data.testimonials.find(t => t.id === id);
+                if (testimonial) {
+                    title.textContent = 'Sửa Phản Hồi';
+                    document.getElementById('testimonialId').value = testimonial.id;
+                    document.getElementById('testimonialName').value = testimonial.name;
+                    document.getElementById('testimonialLocation').value = testimonial.location;
+                    document.getElementById('testimonialContent').value = testimonial.content;
+                    document.getElementById('testimonialRating').value = testimonial.rating;
+                    document.getElementById('testimonialStatus').value = testimonial.status;
+                }
+            } else {
+                title.textContent = 'Thêm Phản Hồi';
+                form.reset();
+                document.getElementById('testimonialId').value = '';
+            }
+            
+            modal.classList.add('active');
+        }
+
+        function openFAQModal(id = null) {
+            const modal = document.getElementById('faqModal');
+            const form = document.getElementById('faqForm');
+            const title = document.getElementById('faqModalTitle');
+            
+            if (id) {
+                const faq = data.faqs.find(f => f.id === id);
+                if (faq) {
+                    title.textContent = 'Sửa FAQ';
+                    document.getElementById('faqId').value = faq.id;
+                    document.getElementById('faqQuestion').value = faq.question;
+                    document.getElementById('faqAnswer').value = faq.answer;
+                    document.getElementById('faqOrder').value = faq.order;
+                    document.getElementById('faqStatus').value = faq.status;
+                }
+            } else {
+                title.textContent = 'Thêm FAQ';
+                form.reset();
+                document.getElementById('faqId').value = '';
+            }
+            
+            modal.classList.add('active');
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('active');
+        }
+
+        // Setup Forms
+        function setupForms() {
+            // Template Form
+            document.getElementById('templateForm')?.addEventListener('submit', function(e) {
+                e.preventDefault();
+                const id = document.getElementById('templateId').value;
+                const template = {
+                    id: id ? parseInt(id) : data.templates.length + 1,
+                    name: document.getElementById('templateName').value,
+                    category: document.getElementById('templateCategory').value,
+                    image: document.getElementById('templateImage').value,
+                    tags: document.getElementById('templateTags').value.split(',').map(t => t.trim()).filter(t => t),
+                    status: document.getElementById('templateStatus').value,
+                    order: parseInt(document.getElementById('templateOrder').value) || 0
+                };
+                
+                if (id) {
+                    const index = data.templates.findIndex(t => t.id === parseInt(id));
+                    if (index !== -1) data.templates[index] = template;
+                } else {
+                    data.templates.push(template);
+                }
+                
+                renderTemplatesTable();
+                closeModal('templateModal');
+                updateDashboardStats();
+            });
+
+            // Category Form
+            document.getElementById('categoryForm')?.addEventListener('submit', function(e) {
+                e.preventDefault();
+                const id = document.getElementById('categoryId').value;
+                const category = {
+                    id: id ? parseInt(id) : data.categories.length + 1,
+                    name: document.getElementById('categoryName').value,
+                    description: document.getElementById('categoryDescription').value,
+                    icon: document.getElementById('categoryIcon').value || '📁',
+                    order: parseInt(document.getElementById('categoryOrder').value) || 0,
+                    status: document.getElementById('categoryStatus').value,
+                    templateCount: 0
+                };
+                
+                if (id) {
+                    const index = data.categories.findIndex(c => c.id === parseInt(id));
+                    if (index !== -1) {
+                        category.templateCount = data.categories[index].templateCount;
+                        data.categories[index] = category;
+                    }
+                } else {
+                    data.categories.push(category);
+                }
+                
+                renderCategoriesTable();
+                closeModal('categoryModal');
+            });
+
+            // Package Form
+            document.getElementById('packageForm')?.addEventListener('submit', function(e) {
+                e.preventDefault();
+                const id = document.getElementById('packageId').value;
+                const features = document.getElementById('packageFeatures').value;
+                const packageData = {
+                    id: id ? parseInt(id) : data.packages.length + 1,
+                    name: document.getElementById('packageName').value,
+                    price: parseInt(document.getElementById('packagePrice').value) || 0,
+                    duration: parseInt(document.getElementById('packageDuration').value) || 1,
+                    features: features,
+                    status: document.getElementById('packageStatus').value,
+                    featureCount: features.split('\n').filter(f => f.trim()).length
+                };
+                
+                if (id) {
+                    const index = data.packages.findIndex(p => p.id === parseInt(id));
+                    if (index !== -1) data.packages[index] = packageData;
+                } else {
+                    data.packages.push(packageData);
+                }
+                
+                renderPackagesTable();
+                closeModal('packageModal');
+            });
+
+            // Testimonial Form
+            document.getElementById('testimonialForm')?.addEventListener('submit', function(e) {
+                e.preventDefault();
+                const id = document.getElementById('testimonialId').value;
+                const testimonial = {
+                    id: id ? parseInt(id) : data.testimonials.length + 1,
+                    name: document.getElementById('testimonialName').value,
+                    location: document.getElementById('testimonialLocation').value,
+                    content: document.getElementById('testimonialContent').value,
+                    rating: parseInt(document.getElementById('testimonialRating').value) || 5,
+                    status: document.getElementById('testimonialStatus').value
+                };
+                
+                if (id) {
+                    const index = data.testimonials.findIndex(t => t.id === parseInt(id));
+                    if (index !== -1) data.testimonials[index] = testimonial;
+                } else {
+                    data.testimonials.push(testimonial);
+                }
+                
+                renderTestimonialsTable();
+                closeModal('testimonialModal');
+            });
+
+            // FAQ Form
+            document.getElementById('faqForm')?.addEventListener('submit', function(e) {
+                e.preventDefault();
+                const id = document.getElementById('faqId').value;
+                const faq = {
+                    id: id ? parseInt(id) : data.faqs.length + 1,
+                    question: document.getElementById('faqQuestion').value,
+                    answer: document.getElementById('faqAnswer').value,
+                    order: parseInt(document.getElementById('faqOrder').value) || 0,
+                    status: document.getElementById('faqStatus').value
+                };
+                
+                if (id) {
+                    const index = data.faqs.findIndex(f => f.id === parseInt(id));
+                    if (index !== -1) data.faqs[index] = faq;
+                } else {
+                    data.faqs.push(faq);
+                }
+                
+                renderFAQsTable();
+                closeModal('faqModal');
+            });
+        }
+
+        // CRUD Operations
+        function editTemplate(id) { openTemplateModal(id); }
+        function editCategory(id) { openCategoryModal(id); }
+        function editPackage(id) { openPackageModal(id); }
+        function editTestimonial(id) { openTestimonialModal(id); }
+        function editFAQ(id) { openFAQModal(id); }
+
+        function deleteTemplate(id) {
+            if (confirm('Bạn có chắc muốn xóa mẫu thiệp này?')) {
+                data.templates = data.templates.filter(t => t.id !== id);
+                renderTemplatesTable();
+                updateDashboardStats();
+            }
+        }
+
+        function deleteCategory(id) {
+            if (confirm('Bạn có chắc muốn xóa danh mục này?')) {
+                data.categories = data.categories.filter(c => c.id !== id);
+                renderCategoriesTable();
+            }
+        }
+
+        function deleteCard(id) {
+            if (confirm('Bạn có chắc muốn xóa thiệp này?')) {
+                data.cards = data.cards.filter(c => c.id !== id);
+                renderCardsTable();
+                updateDashboardStats();
+            }
+        }
+
+        function deleteUser(id) {
+            if (confirm('Bạn có chắc muốn xóa người dùng này?')) {
+                data.users = data.users.filter(u => u.id !== id);
+                renderUsersTable();
+                updateDashboardStats();
+            }
+        }
+
+        function deletePackage(id) {
+            if (confirm('Bạn có chắc muốn xóa gói này?')) {
+                data.packages = data.packages.filter(p => p.id !== id);
+                renderPackagesTable();
+            }
+        }
+
+        function deleteTestimonial(id) {
+            if (confirm('Bạn có chắc muốn xóa phản hồi này?')) {
+                data.testimonials = data.testimonials.filter(t => t.id !== id);
+                renderTestimonialsTable();
+            }
+        }
+
+        function deleteFAQ(id) {
+            if (confirm('Bạn có chắc muốn xóa FAQ này?')) {
+                data.faqs = data.faqs.filter(f => f.id !== id);
+                renderFAQsTable();
+            }
+        }
+
+        function deleteContact(id) {
+            if (confirm('Bạn có chắc muốn xóa yêu cầu liên hệ này?')) {
+                data.contacts = data.contacts.filter(c => c.id !== id);
+                renderContactsTable();
+            }
+        }
+
+        function viewCard(id) {
+            const card = data.cards.find(c => c.id === id);
+            if (card) {
+                alert(`Xem thiệp:\nNgười gửi: ${card.sender}\nNgười nhận: ${card.recipient}\nMẫu: ${card.template}\nLượt xem: ${card.views}`);
+            }
+        }
+
+        function viewUser(id) {
+            const user = data.users.find(u => u.id === id);
+            if (user) {
+                alert(`Thông tin người dùng:\nHọ tên: ${user.name}\nEmail: ${user.email}\nSố điện thoại: ${user.phone}\nGói: ${user.package}\nSố thiệp: ${user.cardCount}`);
+            }
+        }
+
+        function viewContact(id) {
+            const contact = data.contacts.find(c => c.id === id);
+            if (contact) {
+                alert(`Yêu cầu liên hệ:\nHọ tên: ${contact.name}\nEmail: ${contact.email}\nSố điện thoại: ${contact.phone}\nChủ đề: ${contact.subject}\nNội dung: ${contact.content}`);
+            }
+        }
+
+        function editUser(id) {
+            alert('Chức năng sửa người dùng sẽ được tích hợp với API backend.');
+        }
+
+        function updateContactStatus(id) {
+            const contact = data.contacts.find(c => c.id === id);
+            if (contact) {
+                const statuses = ['pending', 'processing', 'completed'];
+                const currentIndex = statuses.indexOf(contact.status);
+                contact.status = statuses[(currentIndex + 1) % statuses.length];
+                renderContactsTable();
+            }
+        }
+
+        // Helper Functions
+        function formatDate(dateStr) {
+            if (!dateStr) return '-';
+            const date = new Date(dateStr);
+            return date.toLocaleDateString('vi-VN');
+        }
+
+        function formatCurrency(amount) {
+            return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(amount);
+        }
+
+        function getStatusBadgeClass(status) {
+            const classes = {
+                'success': 'badge-success',
+                'warning': 'badge-warning',
+                'info': 'badge-info',
+                'danger': 'badge-danger'
+            };
+            return classes[status] || 'badge-primary';
+        }
+
+        function getContactStatusBadge(status) {
+            const badges = {
+                'pending': 'badge-warning',
+                'processing': 'badge-info',
+                'completed': 'badge-success'
+            };
+            return badges[status] || 'badge-primary';
+        }
+
+        function getContactStatusText(status) {
+            const texts = {
+                'pending': 'Chưa xử lý',
+                'processing': 'Đang xử lý',
+                'completed': 'Đã xử lý'
+            };
+            return texts[status] || status;
+        }
+
+        // Close modal on backdrop click
+        document.querySelectorAll('.modal-backdrop').forEach(backdrop => {
+            backdrop.addEventListener('click', function(e) {
+                if (e.target === this) {
+                    this.classList.remove('active');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
+
+
+
+
