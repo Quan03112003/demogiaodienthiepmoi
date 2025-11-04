@@ -71,7 +71,7 @@
         .payment-method.selected div{color:#fff!important}
         /* Header */
         header{position:fixed;top:0;left:0;right:0;background:rgba(255,255,255,0.95);backdrop-filter:blur(10px);box-shadow:0 4px 20px rgba(255,77,166,0.08);z-index:1000;border-bottom:2px solid rgba(255,77,166,0.06);animation:slideInDown 0.5s ease-out}
-        body{padding-top:70px}
+        body{padding-top:10px}
         @keyframes slideInDown{from{transform:translateY(-100%)}to{transform:translateY(0)}}
         .container{max-width:var(--max-width);margin:0 auto;padding:0 20px}
         .nav-wrap{display:flex;align-items:center;justify-content:space-between;height:70px}
@@ -234,7 +234,7 @@
         @media (max-width:760px){
             /* Header & Navigation */
             header{position:fixed!important;top:0!important;left:0!important;right:0!important;z-index:1000!important}
-            body{padding-top:70px}
+            body{padding-top:10px}
             nav ul{display:none}
             nav ul.mobile-open{display:flex;flex-direction:column;position:fixed;top:0;left:0;bottom:0;width:280px;max-width:80vw;background:#fff;padding:80px 0 20px 0;box-shadow:4px 0 20px rgba(0,0,0,0.15);z-index:999;gap:0;margin:0;transform:translateX(0);transition:transform 0.3s ease-out;overflow-y:auto;animation:slideInLeft 0.3s ease-out}
             @keyframes slideInLeft{from{transform:translateX(-100%)}to{transform:translateX(0)}}
@@ -398,12 +398,10 @@
             <nav>
                 <ul id="mainNav">
                     <li><a href="#home">Trang chủ</a></li>
-                    <li><a href="#intro">Giới thiệu</a></li>
-                    <li><a href="#packages">Gói & Giá</a></li>
-                    <li><a href="#templates">Mẫu</a></li>
-                    <li><a href="#gallery">Thư viện</a></li>
-                    <li><a href="#testimonials">Khách hàng</a></li>                    <li><a href="#faq">FAQ</a></li>
+                    <li><a href="packages.html">Gói & Giá</a></li>
+                    <li><a href="free-templates.html">Mẫu Thiệp</a></li>            
                     <li><a href="#contact">Liên hệ</a></li>
+                    <li><a href="admin.html">Quản trị</a></li>
                 </ul>
             </nav>
             <div class="actions">
@@ -540,7 +538,7 @@
                         - Hỗ trợ văn bản & ảnh<br>
                         - Link công khai & QR cơ bản
                     </div>
-                    <div style="margin-top:12px"><button class="btn ghost" style="width:100%">Bắt đầu</button></div>
+                    <div style="margin-top:12px"><a href="free-templates.html" class="btn ghost" style="width:100%;display:block;text-align:center">Bắt đầu</a></div>
                 </div>
                 <div class="card">
                     <h3>Nâng Cao</h3>
@@ -550,7 +548,7 @@
                         - Nhạc & hiệu ứng động<br>
                         - Mã QR tuỳ chỉnh & RSVP
                     </div>
-                    <div style="margin-top:12px"><button class="btn" style="width:100%">Chọn gói</button></div>
+                    <div style="margin-top:12px"><a href="packages.html" class="btn" style="width:100%;display:block;text-align:center">Chọn gói</a></div>
                 </div>
                 <div class="card">
                     <h3>Cao Cấp</h3>
@@ -560,7 +558,7 @@
                         - Hiệu ứng 3D, video dài, hỗ trợ thiết kế<br>
                         - Hỗ trợ 24/7 và quản lý sự kiện
                     </div>
-                    <div style="margin-top:12px"><button class="btn" style="width:100%">Liên hệ</button></div>
+                    <div style="margin-top:12px"><a href="packages.html" class="btn" style="width:100%;display:block;text-align:center">Xem chi tiết</a></div>
                 </div>
             </div>
         </section>

@@ -1,471 +1,2131 @@
+
 <!DOCTYPE html>
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Thiệp Mừng Online - Trang Chủ</title>
+    <title>Thiệp Mừng Online - Tạo thiệp & gửi lời chúc kèm lì xì</title>
+    <meta name="description" content="Thiệp Mừng Online - Tạo thiệp mừng trực tuyến, gửi lời chúc kèm tiền mừng, mẫu cưới, sinh nhật, Tết. Nhiều mẫu đẹp, dễ dùng, chia sẻ nhanh.">
+    <meta name="keywords" content="thiệp, thiệp mừng, thiệp cưới, thiệp sinh nhật, thiệp Tết, lì xì online">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
     <style>
-        /* Reset cơ bản */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+        :root{
+            --primary:#ff4da6; /* nổi bật tông hồng */
+            --primary-dark:#e33a8f;
+            --accent:#ffd6ea;
+            --bg:#fff7fb;
+            --card:#ffffff;
+            --muted:#666;
+            --max-width:1200px;
+            --base-font:16px;
         }
-        body {
-            font-family: 'Arial', sans-serif;
-            line-height: 1.6;
-            color: #333;
-            background-color: #f9f9f9;
+        *{box-sizing:border-box;margin:0;padding:0}
+        html{font-size:var(--base-font);scroll-behavior:smooth}
+        body{font-family:Inter, Arial, Helvetica, sans-serif;background:linear-gradient(180deg,var(--bg),#fff);color:#222;line-height:1.6;overflow-x:hidden}
+        a{color:inherit;text-decoration:none}
+        
+        /* Animations */
+        @keyframes fadeInUp{
+            from{opacity:0;transform:translateY(30px)}
+            to{opacity:1;transform:translateY(0)}
         }
-        /* Header cố định */
-        header {
-            position: fixed;
-            top: 0;
-            width: 100%;
-            background-color: #fff;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-            z-index: 1000;
-            padding: 10px 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+        @keyframes fadeIn{
+            from{opacity:0}
+            to{opacity:1}
         }
-        nav ul {
-            list-style: none;
-            display: flex;
-            gap: 20px;
+        @keyframes slideInRight{
+            from{opacity:0;transform:translateX(30px)}
+            to{opacity:1;transform:translateX(0)}
         }
-        nav ul li a {
-            text-decoration: none;
-            color: #333;
-            font-weight: bold;
-            transition: color 0.3s;
+        @keyframes slideOutRight{
+            from{opacity:1;transform:translateX(0)}
+            to{opacity:0;transform:translateX(30px)}
         }
-        nav ul li a:hover {
-            color: #e74c3c;
+        @keyframes float{
+            0%,100%{transform:translateY(0)}
+            50%{transform:translateY(-10px)}
         }
-        .auth {
-            display: flex;
-            gap: 10px;
+        @keyframes pulse{
+            0%,100%{transform:scale(1)}
+            50%{transform:scale(1.05)}
         }
-        .auth button {
-            padding: 5px 10px;
-            border: none;
-            background-color: #e74c3c;
-            color: white;
-            cursor: pointer;
-            border-radius: 5px;
+        .animate-on-scroll{opacity:0;transform:translateY(30px);transition:all 0.6s ease-out}
+        .animate-on-scroll.animated{opacity:1;transform:translateY(0)}
+        
+        /* Voucher Banner Styles */
+        .voucher-particles{position:absolute;top:0;left:0;right:0;bottom:0;pointer-events:none;overflow:hidden}
+        .voucher-particle{position:absolute;width:6px;height:6px;background:rgba(255,255,255,0.7);border-radius:50%;animation:particleFloat 20s linear infinite;box-shadow:0 0 10px rgba(255,255,255,0.5)}
+        @keyframes particleFloat{
+            0%{transform:translateY(100vh) translateX(0) scale(0.5);opacity:0}
+            10%{opacity:0.8}
+            50%{transform:translateY(50vh) translateX(30px) scale(1);opacity:1}
+            90%{opacity:0.8}
+            100%{transform:translateY(-20vh) translateX(60px) scale(0.5);opacity:0}
         }
-        /* Section chào mừng với video */
-        .welcome-section {
-            background-color: #fff;
-            padding: 30px 20px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 20px;
-            max-width: 1200px;
-            margin: 70px auto 0; /* Dưới header */
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
-        .welcome-text {
-            flex: 1;
-            font-size: 1.2em;
-            color: #555;
-        }
-        .welcome-video {
-            flex: 1;
-            text-align: center;
-        }
-        .welcome-video iframe {
-            width: 100%;
-            max-width: 500px;
-            height: 280px;
-            border: none;
-            border-radius: 10px;
-        }
-        /* Banner */
-        .banner {
-            background-image: url('https://source.unsplash.com/1600x600/?greeting-card'); /* Ảnh placeholder */
-            background-size: cover;
-            background-position: center;
-            height: 60vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            color: white;
-            margin-top: 20px; /* Khoảng cách từ welcome-section */
-        }
-        .banner h1 {
-            font-size: 3em;
-            margin-bottom: 20px;
-        }
-        .cta-button {
-            padding: 15px 30px;
-            background-color: #e74c3c;
-            color: white;
-            border: none;
-            font-size: 1.2em;
-            cursor: pointer;
-            border-radius: 5px;
-            transition: background-color 0.3s;
-        }
-        .cta-button:hover {
-            background-color: #c0392b;
-        }
-        /* Sections còn lại */
-        section {
-            padding: 50px 20px;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-        .intro {
-            text-align: center;
-        }
-        .packages {
-            display: flex;
-            justify-content: space-around;
-            flex-wrap: wrap;
-            gap: 20px;
-        }
-        .package {
-            background-color: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            width: 30%;
-            text-align: center;
-        }
-        /* Danh mục thiệp (clickable) */
-        .categories {
-            text-align: center;
-        }
-        .category-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-        }
-        .category {
-            background-color: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            text-align: center;
-            cursor: pointer;
-            transition: transform 0.3s;
-        }
-        .category:hover {
-            transform: scale(1.05);
-        }
-        .category h3 {
-            margin-bottom: 10px;
-        }
-        /* Testimonial (feedback khách hàng) */
-        .testimonials {
-            text-align: center;
-        }
-        .testimonial-grid {
-            display: flex;
-            justify-content: space-around;
-            flex-wrap: wrap;
-            gap: 20px;
-        }
-        .testimonial {
-            background-color: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            width: 30%;
-            text-align: center;
-        }
-        .testimonial .stars {
-            color: #ffd700;
-            font-size: 1.5em;
-            margin-bottom: 10px;
-        }
-        .testimonial p {
-            font-style: italic;
-            color: #666;
-        }
-        .testimonial .author {
-            font-weight: bold;
-            margin-top: 10px;
-        }
-        /* Hướng dẫn 3 bước */
-        .steps {
-            display: flex;
-            justify-content: space-around;
-            flex-wrap: wrap;
-        }
-        .step {
-            width: 30%;
-            text-align: center;
-            padding: 20px;
-        }
-        .step h3 {
-            margin-bottom: 10px;
-        }
-        /* Mẫu thiệp nổi bật */
-        .featured-cards {
-            text-align: center;
-        }
-        .filters {
-            margin-bottom: 20px;
-        }
-        .filters button {
-            padding: 10px 20px;
-            margin: 0 5px;
-            border: none;
-            background-color: #ddd;
-            cursor: pointer;
-            border-radius: 5px;
-        }
-        .filters button.active {
-            background-color: #e74c3c;
-            color: white;
-        }
-        .card-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-        }
-        .card {
-            background-color: white;
-            border-radius: 10px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            overflow: hidden;
-            transition: transform 0.3s;
-        }
-        .card:hover {
-            transform: scale(1.05);
-        }
-        .card img {
-            width: 100%;
-            height: 200px;
-            object-fit: cover;
-        }
-        .card-content {
-            padding: 15px;
-            text-align: center;
-        }
-        .card-content h4 {
-            margin-bottom: 10px;
-        }
-        .card-content p {
-            font-size: 0.9em;
-            color: #666;
-            margin-bottom: 10px;
-        }
-        .card-content .price {
-            font-weight: bold;
-            color: #e74c3c;
-            margin-bottom: 10px;
-        }
-        .card-content button {
-            padding: 10px 15px;
-            background-color: #e74c3c;
-            color: white;
-            border: none;
-            cursor: pointer;
-            border-radius: 5px;
-        }
+        
+        /* Payment Modal Styles */
+        .package-option:hover{border-color:var(--primary)!important;transform:translateY(-5px);box-shadow:0 10px 30px rgba(255,77,166,0.15)}
+        .package-option.selected{border-color:var(--primary)!important;background:linear-gradient(135deg,#fff7fb,#fff)!important;box-shadow:0 10px 30px rgba(255,77,166,0.2)}
+        .payment-method:hover{border-color:var(--primary)!important;transform:translateY(-3px);box-shadow:0 6px 20px rgba(255,77,166,0.15)}
+        .payment-method.selected{border-color:var(--primary)!important;background:linear-gradient(135deg,var(--primary),var(--primary-dark))!important;color:#fff;box-shadow:0 8px 25px rgba(255,77,166,0.3)}
+        .payment-method.selected div{color:#fff!important}
+        /* Header */
+        header{position:fixed;top:0;left:0;right:0;background:rgba(255,255,255,0.95);backdrop-filter:blur(10px);box-shadow:0 4px 20px rgba(255,77,166,0.08);z-index:1000;border-bottom:2px solid rgba(255,77,166,0.06);animation:slideInDown 0.5s ease-out}
+        body{padding-top:10px}
+        @keyframes slideInDown{from{transform:translateY(-100%)}to{transform:translateY(0)}}
+        .container{max-width:var(--max-width);margin:0 auto;padding:0 20px}
+        .nav-wrap{display:flex;align-items:center;justify-content:space-between;height:70px}
+        .logo{display:flex;align-items:center;gap:10px;font-weight:800;transition:transform 0.3s}
+        .logo:hover{transform:scale(1.05)}
+        .logo img{height:42px;width:42px;border-radius:12px;object-fit:cover;border:2px solid rgba(255,77,166,0.2);box-shadow:0 2px 8px rgba(255,77,166,0.15);transition:all 0.3s}
+        .logo:hover img{box-shadow:0 4px 12px rgba(255,77,166,0.25);transform:rotate(5deg)}
+        nav ul{display:flex;gap:8px;align-items:center;list-style:none;padding:0;margin:0}
+        nav ul li a{padding:8px 14px;border-radius:20px;font-weight:500;color:#555;font-size:0.9rem;transition:all 0.3s cubic-bezier(0.4,0,0.2,1);white-space:nowrap;position:relative}
+        nav ul li a::before{content:'';position:absolute;bottom:0;left:50%;width:0;height:2px;background:var(--primary);transition:all 0.3s;transform:translateX(-50%)}
+        nav ul li a:hover{background:rgba(255,77,166,0.1);color:var(--primary);transform:translateY(-2px)}
+        nav ul li a:hover::before{width:60%}
+        nav ul li a.active{background:rgba(255,77,166,0.15);color:var(--primary);font-weight:600}
+        .actions{display:flex;gap:8px;align-items:center}
+        .btn{background:linear-gradient(135deg,var(--primary),var(--primary-dark));color:#fff;padding:10px 20px;border-radius:25px;border:none;cursor:pointer;font-weight:700;font-size:0.9rem;box-shadow:0 4px 15px rgba(227,58,143,0.25);transition:all 0.3s cubic-bezier(0.4,0,0.2,1);white-space:nowrap;position:relative;overflow:hidden}
+        .btn::before{content:'';position:absolute;top:50%;left:50%;width:0;height:0;background:rgba(255,255,255,0.2);border-radius:50%;transform:translate(-50%,-50%);transition:width 0.6s,height 0.6s}
+        .btn:hover::before{width:300px;height:300px}
+        .btn:hover{transform:translateY(-3px);box-shadow:0 8px 25px rgba(227,58,143,0.35)}
+        .btn:active{transform:translateY(-1px)}
+        .btn.ghost{background:transparent;color:var(--primary);border:2px solid var(--primary);font-weight:600;font-size:0.9rem;padding:10px 20px;position:relative;overflow:hidden}
+        .btn.ghost::before{content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;background:var(--primary);transition:left 0.3s;z-index:-1}
+        .btn.ghost:hover{color:#fff;border-color:var(--primary)}
+        .btn.ghost:hover::before{left:0}
+        .hamburger{display:none;background:transparent;border:none;font-size:24px;cursor:pointer;color:#333;padding:8px;transition:transform 0.3s}
+        .hamburger:hover{transform:scale(1.1)}
+        /* Hero */
+        .hero{margin-top:0;background:linear-gradient(135deg, #ff9a9e 0%, #fecfef 50%, #ffd6ea 100%);background-size:200% 200%;animation:gradientShift 15s ease infinite;color:#fff;padding:100px 20px;border-radius:20px;position:relative;overflow:hidden;box-shadow:0 20px 60px rgba(255,77,166,0.2)}
+        @keyframes gradientShift{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
+        .hero::before{content:'';position:absolute;top:-50%;right:-50%;width:200%;height:200%;background:radial-gradient(circle,rgba(255,255,255,0.1) 1px,transparent 1px);background-size:50px 50px;animation:float 20s ease-in-out infinite}
+        .hero-inner{max-width:1200px;margin:0 auto;display:flex;gap:30px;align-items:center;position:relative;z-index:1}
+        .hero-copy{flex:1;animation:fadeInUp 0.8s ease-out}
+        .hero h1{font-size:3rem;margin-bottom:14px;line-height:1.05;letter-spacing:-0.5px;text-shadow:0 4px 18px rgba(0,0,0,0.15);animation:fadeInUp 0.8s ease-out 0.2s both}
+        .hero p{color:#fff;margin-bottom:20px;font-size:1.1rem;text-shadow:0 2px 8px rgba(0,0,0,0.1);animation:fadeInUp 0.8s ease-out 0.4s both}
+        .hero-cta{display:flex;gap:14px;flex-wrap:wrap;animation:fadeInUp 0.8s ease-out 0.6s both}
+        .hero-cta .btn{padding:14px 22px;font-size:16px;font-weight:700}
+        .hero-preview{width:420px;min-width:280px;background:rgba(255,255,255,0.15);padding:18px;border-radius:20px;backdrop-filter:blur(10px);border:2px solid rgba(255,255,255,0.3);box-shadow:0 8px 32px rgba(0,0,0,0.1);animation:slideInRight 1s ease-out 0.8s both}
+        .preview-card{background:var(--card);border-radius:16px;overflow:hidden;color:#222;box-shadow:0 12px 40px rgba(0,0,0,0.15);transition:transform 0.3s}
+        .preview-card:hover{transform:translateY(-5px) scale(1.02)}
+        .preview-card img{width:100%;height:220px;object-fit:cover;transition:transform 0.5s}
+        .preview-card:hover img{transform:scale(1.1)}
+        .preview-card .body{padding:14px}
+        /* Sections */
+        section{padding:60px 20px;position:relative}
+        .section-title{max-width:var(--max-width);margin:0 auto 30px;padding:0 20px;display:flex;justify-content:space-between;align-items:center}
+        .section-title h2{font-size:2rem;color:#333;font-weight:800;position:relative;padding-bottom:10px}
+        .section-title h2::after{content:'';position:absolute;bottom:0;left:0;width:60px;height:4px;background:linear-gradient(90deg,var(--primary),var(--primary-dark));border-radius:2px}
+        .section-title small{font-size:0.95rem;color:var(--muted);font-weight:500}
+        .grid{display:grid;gap:20px}
+        /* Packages */
+        .packages{max-width:var(--max-width);margin:0 auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:25px;padding:0 20px}
+        .card{background:var(--card);padding:30px;border-radius:20px;box-shadow:0 10px 40px rgba(0,0,0,.08);transition:all 0.4s cubic-bezier(0.4,0,0.2,1);position:relative;overflow:hidden;border:2px solid transparent}
+        .card::before{content:'';position:absolute;top:0;left:0;right:0;height:4px;background:linear-gradient(90deg,var(--primary),var(--primary-dark));transform:scaleX(0);transition:transform 0.4s}
+        .card:hover{border-color:rgba(255,77,166,0.2);transform:translateY(-8px);box-shadow:0 15px 50px rgba(255,77,166,0.2)}
+        .card:hover::before{transform:scaleX(1)}
+        .card h3{margin-bottom:12px;font-size:1.3rem;color:#333}
+        .price{font-size:2rem;color:var(--primary);font-weight:900;margin:15px 0;background:linear-gradient(135deg,var(--primary),var(--primary-dark));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+        .features{margin-top:15px;color:var(--muted);font-size:.98rem;line-height:1.8}
+        /* Templates grid */
+        .templates{max-width:var(--max-width);margin:0 auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:25px;padding:0 20px}
+        .template{background:linear-gradient(180deg,var(--card),#fff);border-radius:18px;overflow:hidden;box-shadow:0 10px 35px rgba(0,0,0,.08);display:flex;flex-direction:column;transition:all 0.4s cubic-bezier(0.4,0,0.2,1);position:relative}
+        .template::after{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,77,166,0.05),transparent);opacity:0;transition:opacity 0.4s}
+        .template:hover{transform:translateY(-10px) scale(1.02);box-shadow:0 20px 50px rgba(255,77,166,0.25)}
+        .template:hover::after{opacity:1}
+        .template img{width:100%;height:200px;object-fit:cover;transition:transform 0.5s;cursor:pointer}
+        .template:hover img{transform:scale(1.15)}
+        .template-clickable{cursor:pointer;position:relative}
+        .template-clickable::before{content:'';position:absolute;inset:0;border-radius:18px;border:3px solid transparent;transition:all 0.3s;pointer-events:none;z-index:1}
+        .template-clickable:hover::before{border-color:var(--primary);box-shadow:0 0 0 4px rgba(255,77,166,0.15)}
+        .template .meta{padding:18px;flex:1;display:flex;flex-direction:column;gap:10px}
+        .tags{display:flex;gap:8px;flex-wrap:wrap}
+        .tag{background:linear-gradient(135deg,var(--accent),rgba(255,77,166,0.1));color:var(--primary-dark);padding:6px 12px;border-radius:20px;font-weight:700;font-size:.75rem;transition:all 0.3s;border:1px solid rgba(255,77,166,0.2)}
+        .template:hover .tag{transform:scale(1.05);background:linear-gradient(135deg,var(--primary),var(--primary-dark));color:#fff;border-color:transparent}
+        /* Gallery */
+        .gallery{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:15px}
+        .gallery img{width:100%;height:180px;object-fit:cover;border-radius:15px;box-shadow:0 8px 25px rgba(227,58,143,0.1);transition:all 0.4s cubic-bezier(0.4,0,0.2,1);cursor:pointer}
+        .gallery img:hover{transform:translateY(-5px) scale(1.05);box-shadow:0 15px 40px rgba(227,58,143,0.25);border-radius:20px}
+        /* Testimonials */
+        .testimonials{max-width:var(--max-width);margin:0 auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:25px;padding:0 20px}
+        .testimonial{background:linear-gradient(135deg,#fff,#fff7fb);padding:25px;border-radius:18px;box-shadow:0 10px 35px rgba(227,58,143,0.08);transition:all 0.4s;position:relative;border:2px solid transparent}
+        .testimonial::before{content:'"';position:absolute;top:10px;left:15px;font-size:4rem;color:var(--primary);opacity:0.1;font-family:Georgia,serif;line-height:1}
+        .testimonial:hover{transform:translateY(-5px);box-shadow:0 15px 45px rgba(227,58,143,0.15);border-color:rgba(255,77,166,0.2)}
+        .testimonial p{color:var(--muted);margin-bottom:12px;font-size:0.98rem;line-height:1.7;position:relative;z-index:1}
+        .testimonial .name{font-weight:800;color:var(--primary-dark);margin-top:10px;position:relative;z-index:1}
+        /* FAQ & contact */
+        .faq{max-width:var(--max-width);margin:0 auto;padding:0 20px}
+        .faq-item{background:linear-gradient(135deg,#fff,#fff7fb);padding:20px;border-radius:16px;margin-bottom:15px;border-left:4px solid var(--primary);box-shadow:0 4px 15px rgba(0,0,0,0.04);transition:all 0.3s;cursor:pointer}
+        .faq-item:hover{border-left-width:6px;transform:translateX(5px);box-shadow:0 6px 20px rgba(255,77,166,0.15)}
+        .faq-item strong{color:#333;display:block;margin-bottom:8px;font-size:1.05rem}
+        .faq-item p{margin-top:10px;color:var(--muted);line-height:1.7}
+        .contact-form{max-width:720px;margin:0 auto;background:var(--card);padding:30px;border-radius:20px;box-shadow:0 10px 40px rgba(0,0,0,.08);border:1px solid rgba(255,77,166,0.08)}
+        .form-row{display:flex;gap:15px;margin-bottom:18px}
+        .form-row .field{flex:1;display:flex;flex-direction:column;gap:8px}
+        .contact-info-card{background:linear-gradient(135deg,#fff 0%,#fff7fb 100%);padding:30px;border-radius:20px;box-shadow:0 10px 40px rgba(0,0,0,.08);border:1px solid rgba(255,77,166,0.08);height:100%}
+        .contact-info-card h3{margin-bottom:20px;color:var(--primary);font-size:1.4rem;display:flex;align-items:center;gap:10px}
+        .contact-info-item{display:flex;align-items:flex-start;gap:15px;margin-bottom:20px;padding:15px;background:rgba(255,255,255,0.6);border-radius:12px;transition:all 0.3s}
+        .contact-info-item:hover{background:rgba(255,77,166,0.05);transform:translateX(5px)}
+        .contact-info-item .icon{width:45px;height:45px;border-radius:12px;background:linear-gradient(135deg,var(--primary),var(--primary-dark));color:#fff;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
+        .contact-info-item .content h4{margin:0 0 5px 0;font-size:1rem;color:#333}
+        .contact-info-item .content p{margin:0;color:var(--muted);font-size:0.9rem}
+        .social-buttons{display:flex;gap:12px;margin-top:20px;flex-wrap:wrap}
+        .social-btn{width:50px;height:50px;border-radius:12px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:22px;text-decoration:none;transition:all 0.3s;box-shadow:0 4px 15px rgba(0,0,0,0.1)}
+        .social-btn:hover{transform:translateY(-3px);box-shadow:0 6px 20px rgba(0,0,0,0.15)}
+        .social-btn.facebook{background:linear-gradient(135deg,#1877f2,#0866ff)}
+        .social-btn.zalo{background:linear-gradient(135deg,#0068ff,#0052cc)}
+        .social-btn.instagram{background:linear-gradient(135deg,#f09433 0%,#e6683c 25%,#dc2743 50%,#cc2366 75%,#bc1888 100%)}
+        .contact-form label{display:block;font-weight:600;color:#333;margin-bottom:8px;font-size:0.95rem}
+        input,textarea,select{padding:14px 16px;border-radius:12px;border:2px solid #e0e0e0;font-size:15px;background:#fff;transition:all 0.3s;font-family:inherit;width:100%}
+        input:focus,textarea:focus,select:focus{outline:none;border-color:var(--primary);box-shadow:0 0 0 4px rgba(255,77,166,0.1);background:#fff}
+        input::placeholder,textarea::placeholder{color:#bbb}
+        textarea{min-height:140px;resize:vertical}
+        select{cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23666' d='M6 9L1 4h10z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center;padding-right:40px}
         /* Footer */
-        footer {
-            background-color: #333;
-            color: white;
-            text-align: center;
-            padding: 20px;
-        }
-        /* Pop-up demo */
-        .popup {
-            display: none;
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background-color: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 2px 20px rgba(0,0,0,0.2);
-            z-index: 2000;
-        }
-        .popup button {
-            margin-top: 10px;
-            padding: 10px;
-            background-color: #e74c3c;
-            color: white;
-            border: none;
-            cursor: pointer;
-        }
+        footer{margin-top:40px;padding:50px 20px;background:linear-gradient(135deg,#fff,#fff7fb);border-top:2px solid rgba(255,77,166,0.1);box-shadow:0 -4px 20px rgba(0,0,0,0.02)}
+        .footer-inner{max-width:var(--max-width);margin:0 auto;display:flex;gap:30px;flex-wrap:wrap;align-items:flex-start;justify-content:space-between}
+        .footer-inner > div:first-child{font-size:1.1rem}
+        .socials{display:flex;gap:12px}
+        .muted{color:var(--muted)}
+        /* Modal */
+        .modal-backdrop{position:fixed;inset:0;background:rgba(0,0,0,.55);backdrop-filter:blur(4px);display:none;align-items:center;justify-content:center;z-index:1500}
+        .modal{background:var(--card);padding:30px;border-radius:20px;width:100%;max-width:520px;max-height:90vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,0.3);position:relative}
+        .close-x{background:transparent;border:none;font-weight:800;font-size:24px;cursor:pointer;color:#999;position:absolute;top:15px;right:15px;width:35px;height:35px;display:flex;align-items:center;justify-content:center;border-radius:50%;transition:all 0.3s}
+        .close-x:hover{background:#f0f0f0;color:#333}
+        /* Auth Modal Styling */
+        .auth-modal{background:linear-gradient(135deg,#fff 0%,#fff7fb 100%);}
+        .auth-modal h2{margin-bottom:8px;font-size:1.8rem;color:var(--primary)}
+        .auth-modal .subtitle{color:var(--muted);margin-bottom:25px;font-size:0.95rem}
+        .form-group{margin-bottom:18px}
+        .form-group label{display:block;margin-bottom:8px;font-weight:600;color:#333;font-size:0.95rem}
+        .form-group input,.form-group textarea{width:100%;padding:14px;border-radius:10px;border:2px solid #e0e0e0;font-size:15px;transition:all 0.3s;background:#fff}
+        .form-group input:focus,.form-group textarea:focus{outline:none;border-color:var(--primary);box-shadow:0 0 0 3px rgba(255,77,166,0.1)}
+        .form-group input::placeholder{color:#bbb}
+        .auth-divider{display:flex;align-items:center;margin:25px 0;text-align:center}
+        .auth-divider::before,.auth-divider::after{content:'';flex:1;height:1px;background:#e0e0e0}
+        .auth-divider span{padding:0 15px;color:var(--muted);font-size:0.9rem}
+        /* Card Builder Modal */
+        .card-builder-modal{max-width:1200px;width:95%;max-height:95vh;overflow-y:auto}
+        .card-builder-form{display:grid;grid-template-columns:1fr 1fr;gap:25px}
+        .upload-area{border:2px dashed #ddd;border-radius:10px;padding:30px;text-align:center;cursor:pointer;transition:all 0.3s}
+        .upload-area:hover{border-color:var(--primary);background:rgba(255,77,166,0.05)}
+        .upload-area img{max-width:100%;max-height:200px;margin-top:10px;border-radius:8px}
+        .preview-thumbnail{width:100px;height:100px;object-fit:cover;border-radius:8px;margin:5px}
+        .card-preview-section{background:#f8f9fa;padding:20px;border-radius:10px;min-height:300px}
+        .final-card{background:linear-gradient(135deg,#ff9a9e 0%,#fecfef 100%);padding:40px;border-radius:16px;color:#fff;text-align:center;min-height:400px;display:flex;flex-direction:column;justify-content:center;box-shadow:0 10px 30px rgba(0,0,0,0.2)}
+        .final-card img{max-width:100%;max-height:300px;border-radius:10px;margin:15px 0}
+        .final-card .qr-preview{width:150px;height:150px;background:#fff;padding:10px;border-radius:8px;margin:15px auto}
         /* Responsive */
-        @media (max-width: 768px) {
-            nav ul {
-                flex-direction: column;
-                gap: 10px;
-            }
-            .welcome-section {
-                flex-direction: column;
-                text-align: center;
-            }
-            .packages, .steps, .testimonial-grid {
-                flex-direction: column;
-            }
-            .package, .step, .testimonial {
-                width: 100%;
-            }
+        /* Tablet & Smaller Desktop */
+        @media (max-width:980px){
+            .hero h1{font-size:2.2rem}
+            .hero-preview{width:320px}
+            .container{padding:0 15px}
+            .hero{padding:80px 20px}
+            .section-title h2{font-size:2rem}
+            .packages{grid-template-columns:repeat(2,1fr);gap:20px}
+            .templates{grid-template-columns:repeat(2,1fr);gap:20px}
+            .gallery{grid-template-columns:repeat(2,1fr)}
+        }
+        
+        /* Mobile */
+        @media (max-width:760px){
+            /* Header & Navigation */
+            header{position:fixed!important;top:0!important;left:0!important;right:0!important;z-index:1000!important}
+            body{padding-top:10px}
+            nav ul{display:none}
+            nav ul.mobile-open{display:flex;flex-direction:column;position:fixed;top:0;left:0;bottom:0;width:280px;max-width:80vw;background:#fff;padding:80px 0 20px 0;box-shadow:4px 0 20px rgba(0,0,0,0.15);z-index:999;gap:0;margin:0;transform:translateX(0);transition:transform 0.3s ease-out;overflow-y:auto;animation:slideInLeft 0.3s ease-out}
+            @keyframes slideInLeft{from{transform:translateX(-100%)}to{transform:translateX(0)}}
+            nav ul.mobile-open li{width:100%;margin:0;border-bottom:1px solid rgba(255,77,166,0.1)}
+            nav ul.mobile-open li a{display:block;padding:15px 20px;border-radius:0;transition:all 0.3s;width:100%;font-size:1rem;font-weight:500}
+            nav ul.mobile-open li a:hover{background:var(--primary);color:#fff;padding-left:25px}
+            nav ul.mobile-open li:first-child{border-top:2px solid var(--primary)}
+            .mobile-menu-overlay{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.5);z-index:998;backdrop-filter:blur(4px)}
+            .mobile-menu-overlay.active{display:block}
+            .hamburger{display:block;position:relative;z-index:1001}
+            header{padding:10px 15px}
+            .logo img{width:40px;height:40px}
+            .logo div{font-size:16px}
+            .actions{gap:8px}
+            .btn{padding:10px 16px;font-size:14px}
+            .nav-wrap{position:relative}
+            
+            /* Voucher Banner */
+            #voucherBanner{padding:20px 15px;margin-top:60px}
+            #voucherBanner .container{flex-direction:column;align-items:stretch;gap:15px}
+            #voucherBanner .container > div:first-child{min-width:auto}
+            #voucherBanner .container > div:first-child > div{flex-wrap:wrap;justify-content:center}
+            #voucherCountdown{font-size:1.1rem}
+            #voucherBanner button{width:100%;padding:12px;font-size:0.9rem}
+            
+            /* Hero Section */
+            .hero{margin-top:0;padding:50px 15px;border-radius:0}
+            .hero-inner{flex-direction:column;align-items:stretch;gap:25px}
+            .hero-preview{order:-1;width:100%;padding:15px}
+            .hero-preview iframe{height:200px!important}
+            .hero h1{font-size:1.6rem;line-height:1.2;margin-bottom:12px}
+            .hero p{font-size:1rem;margin-bottom:18px}
+            .hero-cta{flex-direction:column;gap:10px}
+            .hero-cta .btn{width:100%;justify-content:center;padding:14px 20px;font-size:15px;min-height:48px}
+            .hero ul{font-size:0.9rem;padding-left:20px;margin-top:12px}
+            .hero ul li{margin-bottom:6px}
+            
+            /* Sections */
+            section{padding:40px 15px}
+            .section-title{margin-bottom:25px}
+            .section-title h2{font-size:1.8rem}
+            .section-title small{font-size:0.85rem}
+            
+            /* Templates */
+            .templates{grid-template-columns:1fr;gap:20px}
+            .template{padding:15px}
+            .template h3{font-size:1.1rem}
+            .template p{font-size:0.9rem}
+            .template img{height:200px}
+            
+            /* Packages */
+            .packages{grid-template-columns:1fr;gap:20px}
+            .card{padding:20px;margin-bottom:20px}
+            .price{font-size:2rem}
+            
+            /* Gallery */
+            .gallery{grid-template-columns:1fr;gap:15px}
+            .gallery img{height:250px;border-radius:12px}
+            
+            /* Cards */
+            .card{padding:20px;margin-bottom:20px;border-radius:15px}
+            .card h3{font-size:1.3rem;margin-bottom:12px}
+            
+            /* Testimonials */
+            .testimonial{padding:20px;margin-bottom:20px}
+            .testimonial blockquote{font-size:0.95rem;line-height:1.6}
+            .testimonial-author{font-size:0.85rem}
+            
+            /* FAQ */
+            .faq-item{padding:15px;margin-bottom:15px}
+            .faq-question{font-size:1rem;padding-right:30px}
+            .faq-answer{font-size:0.9rem;margin-top:12px;line-height:1.6}
+            
+            /* Contact */
+            #contact .container{grid-template-columns:1fr;gap:20px}
+            .contact-info-card,.contact-form{padding:20px}
+            .form-row{flex-direction:column;gap:15px}
+            .form-group input,.form-group textarea{padding:12px;font-size:15px}
+            
+            /* Card Builder */
+            .card-builder-form{grid-template-columns:1fr;gap:15px}
+            .card-builder-modal{max-width:100%;margin:0;border-radius:0;max-height:100vh;overflow-y:auto}
+            .upload-area{padding:20px;min-height:120px}
+            #cardPreviewContainer{padding:20px}
+            .final-card{padding:30px 20px;min-height:400px}
+            .final-card h1{font-size:2rem}
+            .final-card div[style*="font-size:1.6rem"]{font-size:1.2rem}
+            
+            /* Payment Modal */
+            .payment-modal{max-width:100%;margin:0;border-radius:0;max-height:100vh;overflow-y:auto;padding:20px}
+            .package-option{padding:15px}
+            .payment-method{padding:15px}
+            
+            /* Voucher Modal */
+            #voucherCodeModal .modal{max-width:100%;margin:20px;padding:20px}
+            #voucherCodeDisplay{font-size:2rem;letter-spacing:3px}
+            
+            /* Footer */
+            footer{padding:30px 15px;text-align:center}
+            footer .container{flex-direction:column;gap:20px;align-items:center}
+            footer .footer-links{flex-direction:column;gap:15px;align-items:center}
+            footer .social-links{justify-content:center}
+            
+            /* Buttons */
+            .btn{font-size:14px;padding:12px 20px}
+            .btn-choose-template{width:100%;margin-top:10px}
+            
+            /* Utilities */
+            .container{max-width:100%;padding:0 15px}
+            h2{font-size:1.8rem}
+            h3{font-size:1.3rem}
+            p{font-size:0.95rem;line-height:1.6}
+        }
+        
+        /* Small Mobile */
+        @media (max-width:480px){
+            .hero h1{font-size:1.4rem}
+            .hero p{font-size:0.9rem}
+            .hero-preview iframe{height:180px!important}
+            .section-title h2{font-size:1.5rem}
+            .card h3{font-size:1.2rem}
+            .price{font-size:1.5rem}
+            #voucherBanner{padding:15px 10px}
+            #voucherBanner .container > div:first-child > div{flex-direction:column;gap:10px}
+            #voucherCountdown{font-size:1rem}
+            .hero{padding:40px 10px}
+            section{padding:30px 10px}
+            .container{padding:0 10px}
+            .btn{padding:10px 16px;font-size:13px;min-height:44px}
+            .template img{height:180px}
+            .gallery img{height:200px}
+            .modal{padding:20px 15px}
+        }
+        
+        /* Touch-friendly improvements for mobile */
+        @media (max-width:760px){
+            a,button,input,textarea,select{-webkit-tap-highlight-color:rgba(255,77,166,0.2)}
+            button, .btn{min-height:44px;touch-action:manipulation}
+            input,textarea,select{min-height:44px;font-size:16px}
+            .faq-question{cursor:pointer;touch-action:manipulation}
+        }
+        
+        /* Landscape mobile optimization */
+        @media (max-width:760px) and (orientation:landscape){
+            .hero{padding:30px 15px}
+            .hero h1{font-size:1.5rem}
+            section{padding:30px 15px}
+            .modal{max-height:90vh}
         }
     </style>
 </head>
 <body>
-    <!-- Header -->
     <header>
-        <nav>
-            <ul>
-                <li><a href="#home">Trang chủ</a></li>
-                <li><a href="#intro">Giới thiệu</a></li>
-                <li><a href="#wedding">Thiệp cưới</a></li>
-                <li><a href="#birthday">Thiệp sinh nhật</a></li>
-                <li><a href="#tet">Thiệp lễ Tết</a></li>
-                <li><a href="#other">Khác</a></li>
-                <li><a href="#contact">Liên hệ</a></li>
-            </ul>
-        </nav>
-        <div class="auth">
-            <button id="loginBtn">Đăng nhập</button>
-            <button id="registerBtn">Đăng ký</button>
-        </div>
-    </header>
-
-    <!-- Section chào mừng với video -->
-    <section class="welcome-section">
-        <div class="welcome-text">
-            <p>Trao lời chúc – Gửi yêu thương! Tạo thiệp mừng dễ dàng chỉ với vài bước và gửi kèm tiền mừng ý nghĩa.</p>
-        </div>
-        <div class="welcome-video">
-            <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" title="Hướng dẫn tạo thiệp mừng" allowfullscreen></iframe>
-            <!-- Thay URL bằng video YouTube thực tế của bạn -->
-        </div>
-    </section>
-
-    <!-- Banner -->
-    <section class="banner" id="home">
-        <div>
-            <h1>Trao Lời Chúc – Gửi Yêu Thương</h1>
-            <p>Hàng ngàn mẫu thiệp mừng trực tuyến, dễ dàng gửi kèm tiền mừng!</p>
-            <button class="cta-button" id="ctaBtn">Tạo Thiệp Ngay</button>
-        </div>
-    </section>
-
-    <!-- Giới thiệu & Gói thiệp -->
-    <section class="intro" id="intro">
-        <h2>Giới Thiệu</h2>
-        <p>Thiệp Mừng Online là nền tảng hàng đầu Việt Nam giúp bạn tạo và gửi thiệp mừng cá nhân hóa. Với sứ mệnh "Trao lời chúc – Gửi yêu thương", chúng tôi đã phục vụ hơn 100.000 người dùng, từ thiệp cưới lãng mạn đến thiệp sinh nhật vui tươi.</p>
-        <div class="packages">
-            <div class="package">
-                <h3>Cơ Bản</h3>
-                <p>Miễn phí, mẫu đơn giản, không hiệu ứng. Phù hợp cho thiệp nhanh.</p>
-            </div>
-            <div class="package">
-                <h3>Nâng Cao</h3>
-                <p>Hiệu ứng cơ bản, nhạc nền, giá 50k. Thêm cá nhân hóa.</p>
-            </div>
-            <div class="package">
-                <h3>Cao Cấp</h3>
-                <p>Hiệu ứng 3D, upload nhạc, giá 100k. Trải nghiệm cao cấp.</p>
-            </div>
-        </div>
-    </section>
-
-    <!-- Danh mục thiệp (clickable) -->
-    <section class="categories">
-        <h2>Các Loại Danh Mục Thiệp</h2>
-        <div class="category-grid">
-            <div class="category" data-category="wedding">
-                <h3>Thiệp Cưới</h3>
-                <p>Mẫu lãng mạn với hoa hồng, lời chúc hạnh phúc vĩnh cửu.</p>
-            </div>
-            <div class="category" data-category="birthday">
-                <h3>Thiệp Sinh Nhật</h3>
-                <p>Vui tươi với màu sắc rực rỡ, chủ đề siêu anh hùng cho trẻ em.</p>
-            </div>
-            <div class="category" data-category="tet">
-                <h3>Thiệp Lễ Tết</h3>
-                <p>Truyền thống với chữ Hán, lời chúc may mắn.</p>
-            </div>
-            <div class="category" data-category="other">
-                <h3>Khác</h3>
-                <p>Tốt nghiệp, tình yêu, kỷ niệm, chia buồn.</p>
-            </div>
-        </div>
-    </section>
-
-    <!-- Testimonial (feedback khách hàng) -->
-    <section class="testimonials">
-        <h2>Feedback Khách Hàng</h2>
-        <div class="testimonial-grid">
-            <div class="testimonial">
-                <div class="stars">★★★★★</div>
-                <p>"Thiệp rất đẹp và dễ gửi! Tôi đã tặng thiệp cưới cho bạn bè và họ rất thích."</p>
-                <div class="author">- Nguyễn Thị A</div>
-            </div>
-            <div class="testimonial">
-                <div class="stars">★★★★☆</div>
-                <p>"Gói nâng cao tuyệt vời, hiệu ứng nhạc làm thiệp sinh nhật thêm sống động."</p>
-                <div class="author">- Trần Văn B</div>
-            </div>
-            <div class="testimonial">
-                <div class="stars">★★★★★</div>
-                <p>"Dịch vụ nhanh chóng, tiền mừng đến tay người nhận ngay. Sẽ dùng lại!"</p>
-                <div class="author">- Lê Thị C</div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Hướng dẫn 3 bước -->
-    <section>
-        <h2>Hướng Dẫn Nhanh 3 Bước</h2>
-        <div class="steps">
-            <div class="step">
-                <h3>Bước 1</h3>
-                <p>Chọn mẫu thiệp phù hợp.</p>
-            </div>
-            <div class="step">
-                <h3>Bước 2</h3>
-                <p>Viết lời chúc và chọn hiệu ứng.</p>
-            </div>
-            <div class="step">
-                <h3>Bước 3</h3>
-                <p>Gửi kèm tiền mừng và chia sẻ.</p>
-            </div>
-        </div>
-    </section>
-
-    <!-- Mẫu thiệp nổi bật -->
-    <section class="featured-cards">
-        <h2>Mẫu Thiệp Nổi Bật</h2>
-        <div class="filters">
-            <button class="filter-btn active" data-filter="all">Tất Cả</button>
-            <button class="filter-btn" data-filter="basic">Cơ Bản</button>
-            <button class="filter-btn" data-filter="advanced">Nâng Cao</button>
-            <button class="filter-btn" data-filter="premium">Cao Cấp</button>
-        </div>
-        <div class="card-grid" id="cardGrid">
-            <!-- Mẫu 1 -->
-            <div class="card" data-category="basic">
-                <img src="https://source.unsplash.com/300x200/?wedding-card" alt="Thiệp cưới cơ bản">
-                <div class="card-content">
-                    <h4>Thiệp Cưới Cơ Bản</h4>
-                    <p>Mẫu đơn giản với hoa hồng đỏ, lời chúc hạnh phúc.</p>
-                    <div class="price">Miễn phí</div>
-                    <button class="create-btn">Tạo thiệp từ mẫu này</button>
+        <div class="container nav-wrap" role="navigation" aria-label="Main navigation">
+            <div class="logo">
+                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Crect fill='%23ff4da6' width='160' height='160'/%3E%3Ctext x='50%25' y='50%25' text-anchor='middle' fill='white' font-size='48' font-family='Arial'%3E💝%3C/text%3E%3C/svg%3E" alt="Logo" onerror="this.src='https://via.placeholder.com/160x160/ff4da6/ffffff?text=Thiệp'">
+                <div>
+                    <div style="font-size:18px;color:var(--primary)">Thiệp Mừng Online</div>
                 </div>
             </div>
-            <!-- Mẫu 2 -->
-            <div class="card" data-category="advanced">
-                <img src="https://source.unsplash.com/300x200/?birthday-card" alt="Thiệp sinh nhật nâng cao">
-                <div class="card-content">
-                    <h4>Thiệp Sinh Nhật Nâng Cao</h4>
-                    <p>Hiệu ứng hoa nở, nhạc vui tươi, phù hợp mọi lứa tuổi.</p>
-                    <div class="price">50k</div>
-                    <button class="create-btn">Tạo thiệp từ mẫu này</button
+            <nav>
+                <ul id="mainNav">
+                    <li><a href="#home">Trang chủ</a></li>
+                    <li><a href="#intro">Giới thiệu</a></li>
+                    <li><a href="#packages">Gói & Giá</a></li>
+                    <li><a href="#templates">Mẫu</a></li>
+                    <li><a href="#gallery">Thư viện</a></li>
+                    <li><a href="#testimonials">Khách hàng</a></li>                    <li><a href="#faq">FAQ</a></li>
+                    <li><a href="#contact">Liên hệ</a></li>
+                </ul>
+            </nav>
+            <div class="actions">
+                <button class="btn ghost" id="loginBtn" aria-haspopup="dialog">Đăng nhập</button>
+                <button class="btn" id="registerBtn">Đăng ký</button>
+                <button class="hamburger" id="menuToggle" aria-label="Mở menu">☰</button>
+            </div>
+        </div>
+    </header>
+    
+    <!-- Mobile Menu Overlay -->
+    <div class="mobile-menu-overlay" id="mobileMenuOverlay"></div>
+
+    <main>
+        <!-- Voucher Banner -->
+        <div id="voucherBanner" style="position:relative;margin-top:70px;overflow:hidden;background:linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);padding:25px 20px;border-bottom:3px solid rgba(255,255,255,0.2);box-shadow:0 4px 20px rgba(0,0,0,0.1)">
+            <div style="position:absolute;top:0;left:0;right:0;bottom:0;background:url('data:image/svg+xml,%3Csvg width=\'100\' height=\'100\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cdefs%3E%3Cpattern id=\'grain\' width=\'100\' height=\'100\' patternUnits=\'userSpaceOnUse\'%3E%3Ccircle cx=\'25\' cy=\'25\' r=\'1\' fill=\'%23ffffff\' opacity=\'0.1\'/%3E%3Ccircle cx=\'75\' cy=\'75\' r=\'1\' fill=\'%23ffffff\' opacity=\'0.1\'/%3E%3C/pattern%3E%3C/defs%3E%3Crect width=\'100\' height=\'100\' fill=\'url(%23grain)\'/%3E%3C/svg%3E');opacity:0.3;animation:float 20s ease-in-out infinite"></div>
+            <div class="container" style="max-width:1200px;margin:0 auto;position:relative;z-index:1;display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap">
+                <div style="flex:1;min-width:250px">
+                    <div style="display:flex;align-items:center;gap:15px;flex-wrap:wrap">
+                        <div style="background:rgba(255,255,255,0.2);backdrop-filter:blur(10px);padding:12px 20px;border-radius:50px;border:2px solid rgba(255,255,255,0.3);animation:pulse 2s ease-in-out infinite">
+                            <div style="display:flex;align-items:center;gap:10px;color:#fff">
+                                <span style="font-size:2rem">🎁</span>
+                                <div>
+                                    <div style="font-weight:800;font-size:1.1rem;line-height:1.2">GIẢM NGAY 50%</div>
+                                    <div style="font-size:0.85rem;opacity:0.9">Cho 100 khách hàng đầu tiên</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div style="background:rgba(255,255,255,0.15);backdrop-filter:blur(10px);padding:10px 18px;border-radius:40px;border:2px solid rgba(255,255,255,0.3)">
+                            <div style="color:#fff;font-size:0.9rem;font-weight:600;text-align:center">
+                                <div style="font-size:0.75rem;opacity:0.9;margin-bottom:3px">Còn lại</div>
+                                <div id="voucherCountdown" style="font-size:1.3rem;font-weight:800;letter-spacing:2px">23:45:12</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap">
+                    <button class="btn" onclick="document.getElementById('voucherCodeModal').style.display='flex'" style="background:linear-gradient(135deg,#fff,#fff);color:var(--primary);font-weight:800;padding:12px 25px;border:none;box-shadow:0 4px 15px rgba(0,0,0,0.2);animation:float 3s ease-in-out infinite">
+                        🎫 Lấy Mã Ngay
+                    </button>
+                    <button class="btn ghost" onclick="document.getElementById('voucherBanner').style.display='none';localStorage.setItem('voucher_banner_closed','true')" style="background:rgba(255,255,255,0.1);color:#fff;border-color:rgba(255,255,255,0.3);padding:12px 20px">
+                        ✕
+                    </button>
+                </div>
+            </div>
+            <!-- Floating particles effect -->
+            <div class="voucher-particles"></div>
+        </div>
+
+        <!-- Voucher Code Modal -->
+        <div class="modal-backdrop" id="voucherCodeModal" style="display:none">
+            <div class="modal" style="max-width:500px;text-align:center">
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px">
+                    <h2 style="font-weight:800;color:var(--primary);font-size:1.8rem">🎁 Mã Giảm Giá Của Bạn</h2>
+                    <button class="close-x" onclick="document.getElementById('voucherCodeModal').style.display='none'">✕</button>
+                </div>
+                <div style="background:linear-gradient(135deg,var(--primary),var(--primary-dark));padding:30px;border-radius:20px;color:#fff;margin-bottom:20px;position:relative;overflow:hidden">
+                    <div style="position:absolute;top:-50%;right:-50%;width:200%;height:200%;background:radial-gradient(circle,rgba(255,255,255,0.1) 2px,transparent 2px);background-size:30px 30px;animation:float 20s linear infinite"></div>
+                    <div style="position:relative;z-index:1">
+                        <div style="font-size:0.9rem;opacity:0.9;margin-bottom:10px">Mã giảm giá</div>
+                        <div id="voucherCodeDisplay" style="font-size:2.5rem;font-weight:900;letter-spacing:5px;margin:15px 0;text-shadow:0 4px 10px rgba(0,0,0,0.3);font-family:'Courier New',monospace">WELCOME50</div>
+                        <div style="font-size:0.95rem;opacity:0.95">Giảm 50% cho đơn đầu tiên</div>
+                        <div style="margin-top:20px;padding:15px;background:rgba(255,255,255,0.2);border-radius:12px;font-size:0.85rem">
+                            Áp dụng đến hết: <strong id="voucherExpiry"></strong>
+                        </div>
+                    </div>
+                </div>
+                <button class="btn" onclick="copyVoucherCode(event)" style="width:100%;padding:15px;font-size:1.1rem;font-weight:700;margin-bottom:15px">
+                    📋 Copy Mã
+                </button>
+                <button class="btn ghost" onclick="document.getElementById('voucherCodeModal').style.display='none';location.hash='#templates';window.scrollTo({top:document.querySelector('#templates').offsetTop-100,behavior:'smooth'})" style="width:100%;padding:12px">
+                    Xem Mẫu Thiệp Ngay →
+                </button>
+            </div>
+        </div>
+
+        <!-- Hero -->
+        <section class="hero" id="home" aria-labelledby="hero-heading" style="background-image:linear-gradient(180deg, rgba(255,77,166,0.12), rgba(255,77,166,0.04)), linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);">
+            <div class="hero-inner container">
+                <div class="hero-copy">
+                    <h1 id="hero-heading">Tạo thiệp đẹp, chia sẻ yêu thương — Nhanh chóng & Sang trọng</h1>
+                    <p>Tùy chỉnh mẫu, chèn nhạc/video, thêm lời chúc cá nhân và gửi kèm lì xì mã / link thanh toán. Giao diện tiếng Việt, responsive và bảo mật.</p>
+                    <div class="hero-cta">
+                        <button class="btn" id="createBtn">Tạo Thiệp Ngay</button>
+                        <a href="#templates" class="btn btn-ghost btn ghost" style="background:transparent;border:2px solid rgba(255,77,166,0.12);color:#fff">Xem Mẫu</a>
+                    </div>
+                    <ul style="margin-top:14px;color:#fff5f5;list-style:disc;padding-left:22px">
+                        <li>Hơn 200 mẫu chuyên nghiệp cho mọi dịp</li>
+                        <li>Tùy chỉnh dễ dàng: ảnh, video, nhạc, animation</li>
+                        <li>Chia sẻ nhanh qua link, Zalo, Messenger, QR</li>
+                    </ul>
+                </div>
+
+                <aside class="hero-preview" aria-hidden="false">
+                    <div style="background:linear-gradient(90deg,#fff,#fff);padding:15px;border-radius:10px;box-shadow:0 4px 15px rgba(0,0,0,0.1)">
+                        <strong style="display:block;margin-bottom:12px;font-size:1.1rem;color:#333">Video hướng dẫn</strong>
+                        <div style="width:100%;border-radius:8px;overflow:hidden;background:#000;box-shadow:0 4px 15px rgba(0,0,0,0.2)">
+                            <iframe width="100%" height="315" src="https://www.youtube.com/embed/dQw4w9WgXcQ" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="display:block"></iframe>
+                        </div>
+                    </div>
+                </aside>
+            </div>
+        </section>
+
+        <!-- Giới thiệu -->
+        <section id="intro" style="background:linear-gradient(180deg,#fff7fb,#fff)">
+            <div class="section-title container">
+                <h2>Giới thiệu</h2>
+                <small class="muted">Thuận tiện — An toàn — Cá nhân hóa</small>
+            </div>
+            <div class="container card" style="margin-top:12px">
+                <p>Thiệp Mừng Online giúp hàng chục nghìn người tạo thiệp trực tuyến chuyên nghiệp. Từ thiệp cưới, sinh nhật, Tết đến thiệp doanh nghiệp — mỗi mẫu đều có tuỳ chọn nhạc nền, video chúc mừng, RSVP và tính năng gửi kèm lì xì (chuyển khoản hoặc mã quà tặng).</p>
+                <ul style="margin-top:10px;color:var(--muted);padding-left:18px">
+                    <li>Hơn 200+ mẫu thiết kế sẵn, cập nhật liên tục</li>
+                    <li>Tích hợp chia sẻ nhanh: Zalo, Messenger, QR, email</li>
+                    <li>Bảo mật dữ liệu & hỗ trợ 24/7 cho gói Premium</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Packages -->
+        <section id="packages">
+            <div class="section-title">
+                <h2>Gói & Giá</h2>
+                <small class="muted">Chọn gói phù hợp với nhu cầu</small>
+            </div>
+            <div class="packages">
+                <div class="card">
+                    <h3>Cơ Bản</h3>
+                    <div class="price">Miễn phí</div>
+                    <div class="features">
+                        - 30 mẫu cơ bản<br>
+                        - Hỗ trợ văn bản & ảnh<br>
+                        - Link công khai & QR cơ bản
+                    </div>
+                    <div style="margin-top:12px"><button class="btn ghost" style="width:100%">Bắt đầu</button></div>
+                </div>
+                <div class="card">
+                    <h3>Nâng Cao</h3>
+                    <div class="price">50.000₫ / thiệp</div>
+                    <div class="features">
+                        - 100+ mẫu premium<br>
+                        - Nhạc & hiệu ứng động<br>
+                        - Mã QR tuỳ chỉnh & RSVP
+                    </div>
+                    <div style="margin-top:12px"><button class="btn" style="width:100%">Chọn gói</button></div>
+                </div>
+                <div class="card">
+                    <h3>Cao Cấp</h3>
+                    <div class="price">Từ 2.000.000₫ / tháng</div>
+                    <div class="features">
+                        - Gói doanh nghiệp, API & in ấn<br>
+                        - Hiệu ứng 3D, video dài, hỗ trợ thiết kế<br>
+                        - Hỗ trợ 24/7 và quản lý sự kiện
+                    </div>
+                    <div style="margin-top:12px"><button class="btn" style="width:100%">Liên hệ</button></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Templates -->
+        <section id="templates" style="background:linear-gradient(180deg,#fff,#fff7fb)">
+            <div class="section-title container">
+                <h2>Mẫu Thiệp Nổi Bật</h2>
+                <small class="muted">200+ mẫu cho mọi dịp</small>
+            </div>
+            <div class="container" style="padding:0 20px;margin-bottom:20px">
+                <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center">
+                    <label style="font-weight:600;color:#333">Lọc theo loại:</label>
+                    <select id="templateFilter" style="padding:10px 15px;border-radius:20px;border:2px solid #e0e0e0;font-size:0.9rem;background:#fff;cursor:pointer;color:#555;font-weight:500;transition:all 0.3s">
+                        <option value="all">Tất cả</option>
+                        <option value="Cưới">Cưới Hỏi</option>
+                        <option value="Sinh nhật">Sinh Nhật</option>
+                        <option value="Tết">Tết</option>
+                        <option value="Tốt nghiệp">Tốt Nghiệp</option>
+                        <option value="Doanh nghiệp">Doanh Nghiệp</option>
+                        <option value="Anniversary">Tình Yêu</option>
+                    </select>
+                </div>
+            </div>
+            <div class="templates" id="templatesContainer" aria-live="polite">
+                <div class="template template-clickable" data-category="Cưới" data-template="Romance Bl/*2oom" style="cursor:pointer">
+                    <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='600'%3E%3Crect fill='%23ff9a9e' width='800' height='600'/%3E%3Ctext x='50%25' y='50%25' text-anchor='middle' fill='white' font-size='48' font-family='Arial'%3E💒 Cưới Hỏi%3C/text%3E%3C/svg%3E" alt="Thiệp cưới mẫu 1" onerror="this.src='https://via.placeholder.com/800x600/ff9a9e/ffffff?text=Cưới+Hỏi'">
+                    <div class="meta">
+                        <h4>Romance Bloom</h4>
+                        <div class="muted">Thiệp cưới — Lãng mạn</div>
+                        <div class="tags" aria-hidden="true">
+                            <span class="tag">Cưới</span><span class="tag">RSVP</span><span class="tag">Nhạc</span>
+                        </div>
+                        <div style="margin-top:auto;display:flex;gap:8px">
+                            <button class="btn btn-choose-template" data-template="Romance Bloom" style="flex:1">Chọn</button>
+                            <button class="btn ghost btn-preview-template" style="flex:1">Xem trước</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="template template-clickable" data-category="Sinh nhật" data-template="Birthday Joy" style="cursor:pointer">
+                    <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='600'%3E%3Crect fill='%23ffd6ea' width='800' height='600'/%3E%3Ctext x='50%25' y='50%25' text-anchor='middle' fill='%23e33a8f' font-size='48' font-family='Arial'%3E🎂 Sinh Nhật%3C/text%3E%3C/svg%3E" alt="Thiệp sinh nhật" onerror="this.src='https://via.placeholder.com/800x600/ffd6ea/e33a8f?text=Sinh+Nhật'">
+                    <div class="meta">
+                        <h4>Birthday Joy</h4>
+                        <div class="muted">Thiệp sinh nhật — Vui nhộn</div>
+                        <div class="tags">
+                            <span class="tag">Sinh nhật</span><span class="tag">Animation</span>
+                        </div>
+                        <div style="margin-top:auto;display:flex;gap:8px">
+                            <button class="btn btn-choose-template" data-template="Birthday Joy" style="flex:1">Chọn</button>
+                            <button class="btn ghost btn-preview-template" style="flex:1">Xem trước</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="template template-clickable" data-category="Tết" data-template="Xuân Ấm Áp" style="cursor:pointer">
+                    <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='600'%3E%3Crect fill='%23ff6b6b' width='800' height='600'/%3E%3Ctext x='50%25' y='50%25' text-anchor='middle' fill='white' font-size='48' font-family='Arial'%3E🏮 Tết%3C/text%3E%3C/svg%3E" alt="Thiệp Tết" onerror="this.src='https://via.placeholder.com/800x600/ff6b6b/ffffff?text=Tết'">
+                    <div class="meta">
+                        <h4>Xuân Ấm Áp</h4>
+                        <div class="muted">Thiệp Tết — Truyền thống</div>
+                        <div class="tags">
+                            <span class="tag">Tết</span><span class="tag">Red Pack</span>
+                        </div>
+                        <div style="margin-top:auto;display:flex;gap:8px">
+                            <button class="btn btn-choose-template" data-template="Xuân Ấm Áp" style="flex:1">Chọn</button>
+                            <button class="btn ghost btn-preview-template" style="flex:1">Xem trước</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="template template-clickable" data-category="Tốt nghiệp" data-template="Congrats Grad" style="cursor:pointer">
+                    <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='600'%3E%3Crect fill='%234ecdc4' width='800' height='600'/%3E%3Ctext x='50%25' y='50%25' text-anchor='middle' fill='white' font-size='48' font-family='Arial'%3E🎓 Tốt Nghiệp%3C/text%3E%3C/svg%3E" alt="Thiệp tốt nghiệp" onerror="this.src='https://via.placeholder.com/800x600/4ecdc4/ffffff?text=Tốt+Nghiệp'">
+                    <div class="meta">
+                        <h4>Congrats Grad</h4>
+                        <div class="muted">Tốt nghiệp — Sang trọng</div>
+                        <div class="tags">
+                            <span class="tag">Tốt nghiệp</span><span class="tag">Video</span>
+                        </div>
+                        <div style="margin-top:auto;display:flex;gap:8px">
+                            <button class="btn btn-choose-template" data-template="Congrats Grad" style="flex:1">Chọn</button>
+                            <button class="btn ghost btn-preview-template" style="flex:1">Xem trước</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="template template-clickable" data-category="Doanh nghiệp" data-template="Elegant Corporate" style="cursor:pointer">
+                    <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='600'%3E%3Crect fill='%2395a5a6' width='800' height='600'/%3E%3Ctext x='50%25' y='50%25' text-anchor='middle' fill='white' font-size='48' font-family='Arial'%3E💼 Doanh Nghiệp%3C/text%3E%3C/svg%3E" alt="Thiệp doanh nghiệp" onerror="this.src='https://via.placeholder.com/800x600/95a5a6/ffffff?text=Doanh+Nghiệp'">
+                    <div class="meta">
+                        <h4>Elegant Corporate</h4>
+                        <div class="muted">Doanh nghiệp — Chuyên nghiệp</div>
+                        <div class="tags">
+                            <span class="tag">Doanh nghiệp</span><span class="tag">Printable</span>
+                        </div>
+                        <div style="margin-top:auto;display:flex;gap:8px">
+                            <button class="btn btn-choose-template" data-template="Elegant Corporate" style="flex:1">Chọn</button>
+                            <button class="btn ghost btn-preview-template" style="flex:1">Xem trước</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="template template-clickable" data-category="Anniversary" data-template="Sweet Love" style="cursor:pointer">
+                    <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='600'%3E%3Crect fill='%23f8bbd9' width='800' height='600'/%3E%3Ctext x='50%25' y='50%25' text-anchor='middle' fill='%23e33a8f' font-size='48' font-family='Arial'%3E💕 Tình Yêu%3C/text%3E%3C/svg%3E" alt="Thiệp tình yêu" onerror="this.src='https://via.placeholder.com/800x600/f8bbd9/e33a8f?text=Tình+Yêu'">
+                    <div class="meta">
+                        <h4>Sweet Love</h4>
+                        <div class="muted">Tình yêu — Lãng mạn</div>
+                        <div class="tags">
+                            <span class="tag">Anniversary</span><span class="tag">Music</span>
+                        </div>
+                        <div style="margin-top:auto;display:flex;gap:8px">
+                            <button class="btn btn-choose-template" data-template="Sweet Love" style="flex:1">Chọn</button>
+                            <button class="btn ghost btn-preview-template" style="flex:1">Xem trước</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Gallery -->
+        <section id="gallery">
+            <div class="section-title container">
+                <h2>Thư viện mẫu & ý tưởng</h2>
+                <small class="muted">Hình ảnh thực tế từ khách hàng</small>
+            </div>
+            <div class="container" style="max-width:1100px">
+                <div class="gallery">
+                    <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='600' height='400'%3E%3Crect fill='%23ff9a9e' width='600' height='400'/%3E%3Ctext x='50%25' y='50%25' text-anchor='middle' fill='white' font-size='32'%3E💐 Mẫu 1%3C/text%3E%3C/svg%3E" alt="Mẫu thiệp 1" onerror="this.src='https://via.placeholder.com/600x400/ff9a9e/ffffff?text=Mẫu+1'">
+                    <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='600' height='400'%3E%3Crect fill='%23ffd6ea' width='600' height='400'/%3E%3Ctext x='50%25' y='50%25' text-anchor='middle' fill='%23e33a8f' font-size='32'%3E🎈 Mẫu 2%3C/text%3E%3C/svg%3E" alt="Mẫu thiệp 2" onerror="this.src='https://via.placeholder.com/600x400/ffd6ea/e33a8f?text=Mẫu+2'">
+                    <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='600' height='400'%3E%3Crect fill='%23fecfef' width='600' height='400'/%3E%3Ctext x='50%25' y='50%25' text-anchor='middle' fill='%23e33a8f' font-size='32'%3E💒 Mẫu 3%3C/text%3E%3C/svg%3E" alt="Mẫu thiệp 3" onerror="this.src='https://via.placeholder.com/600x400/fecfef/e33a8f?text=Mẫu+3'">
+                    <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='600' height='400'%3E%3Crect fill='%23ff6b6b' width='600' height='400'/%3E%3Ctext x='50%25' y='50%25' text-anchor='middle' fill='white' font-size='32'%3E🎉 Mẫu 4%3C/text%3E%3C/svg%3E" alt="Mẫu thiệp 4" onerror="this.src='https://via.placeholder.com/600x400/ff6b6b/ffffff?text=Mẫu+4'">
+                    <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='600' height='400'%3E%3Crect fill='%23f8bbd9' width='600' height='400'/%3E%3Ctext x='50%25' y='50%25' text-anchor='middle' fill='%23e33a8f' font-size='32'%3E🎁 Mẫu 5%3C/text%3E%3C/svg%3E" alt="Mẫu thiệp 5" onerror="this.src='https://via.placeholder.com/600x400/f8bbd9/e33a8f?text=Mẫu+5'">
+                    <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='600' height='400'%3E%3Crect fill='%23ff9a9e' width='600' height='400'/%3E%3Ctext x='50%25' y='50%25' text-anchor='middle' fill='white' font-size='32'%3E🌹 Mẫu 6%3C/text%3E%3C/svg%3E" alt="Mẫu thiệp 6" onerror="this.src='https://via.placeholder.com/600x400/ff9a9e/ffffff?text=Mẫu+6'">
+                </div>
+            </div>
+        </section>
+
+        <!-- Steps -->
+        <section id="howto" style="background:linear-gradient(180deg,#fff7fb,#fff)">
+            <div class="section-title container">
+                <h2>Hướng dẫn 3 bước</h2>
+                <small class="muted">Nhanh chóng & trực quan</small>
+            </div>
+            <div class="container grid" style="grid-template-columns:repeat(auto-fit,minmax(220px,1fr));margin-top:12px">
+                <div class="card">
+                    <h3>Bước 1 — Chọn mẫu</h3>
+                    <p class="muted">Lựa chọn từ bộ sưu tập hoặc tải lên ảnh riêng.</p>
+                </div>
+                <div class="card">
+                    <h3>Bước 2 — Tùy chỉnh</h3>
+                    <p class="muted">Viết lời chúc, thêm nhạc, video, chọn hiệu ứng và màu sắc.</p>
+                </div>
+                <div class="card">
+                    <h3>Bước 3 — Gửi & quản lý</h3>
+                    <p class="muted">Gửi link, in mã QR, theo dõi lượt mở và phản hồi.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Testimonials -->
+        <section id="testimonials">
+            <div class="section-title container">
+                <h2>Khách hàng nói gì</h2>
+                <small class="muted">Một vài feedback thực tế</small>
+            </div>
+            <div class="testimonials">
+                <div class="testimonial">
+                    <p>"Tạo thiệp cưới rất nhanh, khách mời RSVP tiện lợi. Giao diện dễ dùng và đẹp mắt."</p>
+                    <div class="name">— Lan, Hà Nội</div>
+                </div>
+                <div class="testimonial">
+                    <p>"Mẫu Tết sáng, phần thêm âm nhạc và QR giúp mình gửi lì xì tiện hơn rất nhiều."</p>
+                    <div class="name">— Minh, TP.HCM</div>
+                </div>
+                <div class="testimonial">
+                    <p>"Mình sử dụng gói doanh nghiệp để gửi thiệp khách hàng, chuyên nghiệp và dễ quản lý."</p>
+                    <div class="name">— Huy, Đà Nẵng</div>
+                </div>
+                <div class="testimonial">
+                    <p>"Hỗ trợ nhanh, mình đã nhận tư vấn thiết kế riêng cho sự kiện công ty."</p>
+                    <div class="name">— Thu, Hải Phòng</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- FAQ -->
+        <section id="faq">
+            <div class="section-title container">
+                <h2>FAQ — Câu hỏi thường gặp</h2>
+                <small class="muted">Trợ giúp nhanh</small>
+            </div>
+            <div class="faq">
+                <div class="faq-item">
+                    <strong>1. Tôi có thể gửi kèm tiền mừng như thế nào?</strong>
+                    <p class="muted">Bạn có thể gửi link kèm thông tin chuyển khoản, hoặc sử dụng tính năng mã quà tặng / ví điện tử (tùy gói). Hỗ trợ VNPAY/QR và thẻ ngân hàng.</p>
+                </div>
+                <div class="faq-item">
+                    <strong>2. Có chính sách hoàn tiền không?</strong>
+                    <p class="muted">Với gói trả phí, liên hệ hỗ trợ trong 48 giờ để được xem xét hoàn tiền theo điều khoản.</p>
+                </div>
+                <div class="faq-item">
+                    <strong>3. Có hỗ trợ in thiệp không?</strong>
+                    <p class="muted">Chúng tôi có đối tác in ấn — báo giá tùy số lượng, chất liệu và xử lý giao hàng.</p>
+                </div>
+                <div class="faq-item">
+                    <strong>4. Tôi có thể tải video lên không?</strong>
+                    <p class="muted">Có, với gói Nâng Cao trở lên bạn có thể tải video tối đa 200MB và nhúng YouTube/Vimeo.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact -->
+        <section id="contact" style="background:linear-gradient(180deg,#fff7fb,#fff);padding:60px 20px">
+            <div class="section-title container">
+                <h2>Liên hệ / Hỗ trợ</h2>
+                <small class="muted">Chúng tôi luôn sẵn sàng hỗ trợ bạn 24/7</small>
+            </div>
+            <div class="container" style="max-width:var(--max-width);margin:30px auto 0;display:grid;grid-template-columns:1fr 1.5fr;gap:30px">
+                <div class="contact-info-card">
+                    <h3>📞 Thông tin liên hệ</h3>
+                    
+                    <div class="contact-info-item">
+                        <div class="icon">📧</div>
+                        <div class="content">
+                            <h4>Email</h4>
+                            <p>support@thiepmungonline.vn</p>
+                        </div>
+                    </div>
+
+                    <div class="contact-info-item">
+                        <div class="icon">📱</div>
+                        <div class="content">
+                            <h4>Hotline</h4>
+                            <p>1900-1234<br><small style="color:var(--muted);font-size:0.85rem">8:00 - 21:00 hàng ngày</small></p>
+                        </div>
+                    </div>
+
+                    <div class="contact-info-item">
+                        <div class="icon">📍</div>
+                        <div class="content">
+                            <h4>Địa chỉ</h4>
+                            <p>123 Đường Vui, Quận Vui<br>TP. Hồ Chí Minh, Việt Nam</p>
+                        </div>
+                    </div>
+
+                    <div class="contact-info-item">
+                        <div class="icon">⏰</div>
+                        <div class="content">
+                            <h4>Thời gian làm việc</h4>
+                            <p>Thứ 2 - Chủ nhật<br>8:00 - 21:00</p>
+                        </div>
+                    </div>
+
+                    <div style="margin-top:25px">
+                        <h4 style="margin-bottom:12px;color:#333;font-size:1rem">Kết nối với chúng tôi</h4>
+                        <div class="social-buttons">
+                            <a href="#" class="social-btn facebook" target="_blank" aria-label="Facebook">f</a>
+                            <a href="#" class="social-btn zalo" target="_blank" aria-label="Zalo">Z</a>
+                            <a href="#" class="social-btn instagram" target="_blank" aria-label="Instagram">📷</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div>
+                    <form id="contactForm" class="contact-form" aria-label="Form liên hệ">
+                        <h3 style="margin-bottom:20px;color:var(--primary);font-size:1.3rem">📝 Gửi yêu cầu hỗ trợ</h3>
+                        
+                        <div class="form-row">
+                            <div class="field">
+                                <label for="name">Họ & tên *</label>
+                                <input id="name" name="name" required placeholder="Nguyễn Văn A">
+                            </div>
+                            <div class="field">
+                                <label for="email">Email *</label>
+                                <input id="email" name="email" type="email" required placeholder="email@domain.com">
+                            </div>
+                        </div>
+
+                        <div class="form-group" style="margin-bottom:18px">
+                            <label for="phone">Số điện thoại *</label>
+                            <input id="phone" name="phone" type="tel" required placeholder="0901234567" pattern="[0-9]{10,11}">
+                        </div>
+
+                        <div class="form-group" style="margin-bottom:18px">
+                            <label for="subject">Chủ đề</label>
+                            <select id="subject" name="subject">
+                                <option>Hỗ trợ kỹ thuật</option>
+                                <option>Gói & giá</option>
+                                <option>Đặt in thiệp</option>
+                                <option>Hợp tác & Doanh nghiệp</option>
+                                <option>Khác</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group" style="margin-bottom:20px">
+                            <label for="message">Nội dung *</label>
+                            <textarea id="message" name="message" required placeholder="Mô tả chi tiết vấn đề hoặc yêu cầu của bạn..."></textarea>
+                        </div>
+
+                        <div style="display:flex;gap:15px;align-items:center;flex-wrap:wrap">
+                            <button type="submit" class="btn" style="padding:14px 28px;font-size:1rem">✉️ Gửi yêu cầu</button>
+                            <div class="muted" style="font-size:0.9rem;flex:1">
+                                <span style="color:#4caf50">✓</span> Phản hồi trong 24-48 giờ
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="footer-inner">
+            <div>
+                <div style="font-weight:800;color:var(--primary)">Thiệp Mừng Online</div>
+                <div class="muted" style="margin-top:6px">© 2025 Thiệp Mừng Online. All rights reserved.</div>
+            </div>
+            <div style="text-align:right" class="muted">Chính sách bảo mật · Điều khoản sử dụng</div>
+        </div>
+    </footer>
+
+    <!-- Modals -->
+    <div class="modal-backdrop" id="modalBackdrop" aria-hidden="true">
+        <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+                <div id="modalTitle" style="font-weight:800">Đăng nhập</div>
+                <button class="close-x" id="closeModal" aria-label="Đóng">✕</button>
+            </div>
+            <div id="modalBody">
+                <!-- login form injected here -->
+                <form id="loginForm">
+                    <div style="margin-bottom:10px">
+                        <label for="uemail">Email</label>
+                        <input id="uemail" name="uemail" type="email" required placeholder="email@domain.com">
+                    </div>
+                    <div style="margin-bottom:10px">
+                        <label for="upass">Mật khẩu</label>
+                        <input id="upass" name="upass" type="password" required placeholder="Mật khẩu">
+                    </div>
+                    <div style="display:flex;gap:8px;align-items:center">
+                        <button class="btn" type="submit">Đăng nhập</button>
+                        <button class="btn ghost" type="button" id="toRegister">Chuyển sang Đăng ký</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Card Builder Modal -->
+    <div class="modal-backdrop" id="cardBuilderModal" style="display:none">
+        <div class="modal card-builder-modal" role="dialog" aria-modal="true">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px">
+                <h2 id="cardBuilderTitle" style="font-weight:800;color:var(--primary)">Tạo Thiệp Mừng</h2>
+                <button class="close-x" id="closeCardBuilder" aria-label="Đóng">✕</button>
+            </div>
+            <form id="cardBuilderForm" class="card-builder-form">
+                <div style="overflow-y:auto;max-height:80vh;padding-right:10px">
+                    <div style="margin-bottom:15px;padding:15px;background:linear-gradient(135deg,#fff7fb,#fff);border-radius:12px;border:2px solid var(--primary)">
+                        <label style="display:block;margin-bottom:8px;font-weight:700;color:var(--primary);font-size:1.1rem">Mẫu thiệp đã chọn</label>
+                        <div id="selectedTemplateName" style="padding:12px;background:#fff;border-radius:8px;font-weight:700;color:var(--primary-dark);font-size:1.05rem;text-align:center"></div>
+                    </div>
+                    
+                    <div style="display:grid;grid-template-columns:1fr 1fr;gap:15px;margin-bottom:15px">
+                <div>
+                            <label style="display:block;margin-bottom:5px;font-weight:600;color:#333">Tên người gửi *</label>
+                            <input type="text" id="senderName" required placeholder="Nguyễn Văn A" style="width:100%;padding:12px;border-radius:8px;border:2px solid #e0e0e0;transition:all 0.3s" onfocus="this.style.borderColor='var(--primary)'" onblur="this.style.borderColor='#e0e0e0'">
+                    </div>
+                        <div>
+                            <label style="display:block;margin-bottom:5px;font-weight:600;color:#333">Tên người nhận *</label>
+                            <input type="text" id="recipientName" required placeholder="Nguyễn Thị B" style="width:100%;padding:12px;border-radius:8px;border:2px solid #e0e0e0;transition:all 0.3s" onfocus="this.style.borderColor='var(--primary)'" onblur="this.style.borderColor='#e0e0e0'">
+                    </div>
+                    </div>
+                    
+                    <div style="margin-bottom:15px">
+                        <label style="display:block;margin-bottom:5px;font-weight:600;color:#333">Lời chúc *</label>
+                        <textarea id="cardMessage" required rows="4" placeholder="Nhập lời chúc của bạn..." style="width:100%;padding:12px;border-radius:8px;border:2px solid #e0e0e0;resize:vertical;font-family:inherit;transition:all 0.3s" onfocus="this.style.borderColor='var(--primary)'" onblur="this.style.borderColor='#e0e0e0'"></textarea>
+                    </div>
+                    
+                    <div style="margin-bottom:15px">
+                        <label style="display:block;margin-bottom:5px;font-weight:600;color:#333">Ngày sự kiện</label>
+                        <input type="date" id="eventDate" style="width:100%;padding:12px;border-radius:8px;border:2px solid #e0e0e0;transition:all 0.3s" onfocus="this.style.borderColor='var(--primary)'" onblur="this.style.borderColor='#e0e0e0'">
+                    </div>
+                    
+                    <div style="margin-bottom:15px">
+                        <label style="display:block;margin-bottom:5px;font-weight:600;color:#333">📷 Upload ảnh (JPG, PNG)</label>
+                        <div class="upload-area" id="imageUploadArea" onclick="document.getElementById('imageInput').click()" style="cursor:pointer;transition:all 0.3s" onmouseover="this.style.borderColor='var(--primary)';this.style.background='rgba(255,77,166,0.05)'" onmouseout="this.style.borderColor='#ddd';this.style.background=''">
+                            <div style="font-size:1.2rem">📷</div>
+                            <div style="margin-top:8px;font-weight:600;color:var(--primary)">Click để chọn ảnh</div>
+                            <div style="font-size:0.85rem;color:var(--muted);margin-top:4px">Hoặc kéo thả ảnh vào đây</div>
+                            <div id="imagePreview" style="margin-top:10px"></div>
+                            <input type="file" id="imageInput" accept="image/*" style="display:none">
+                        </div>
+                    </div>
+                    
+                    <div style="margin-bottom:15px">
+                        <label style="display:block;margin-bottom:5px;font-weight:600;color:#333">🎬 Upload Video (MP4, WebM) - Tối đa 50MB</label>
+                        <div class="upload-area" id="videoUploadArea" onclick="document.getElementById('videoInput').click()" style="cursor:pointer;transition:all 0.3s" onmouseover="this.style.borderColor='var(--primary)';this.style.background='rgba(255,77,166,0.05)'" onmouseout="this.style.borderColor='#ddd';this.style.background=''">
+                            <div style="font-size:1.2rem">🎬</div>
+                            <div style="margin-top:8px;font-weight:600;color:var(--primary)">Click để chọn video</div>
+                            <div style="font-size:0.85rem;color:var(--muted);margin-top:4px">Video sẽ tự động phát trên thiệp</div>
+                            <div id="videoPreview" style="margin-top:10px"></div>
+                            <input type="file" id="videoInput" accept="video/*" style="display:none">
+                        </div>
+                    </div>
+                    
+                    <div style="margin-bottom:15px">
+                        <label style="display:block;margin-bottom:5px;font-weight:600;color:#333">🔲 Upload QR Code (Thiệp Online)</label>
+                        <div class="upload-area" id="qrUploadArea" onclick="document.getElementById('qrInput').click()" style="cursor:pointer;transition:all 0.3s" onmouseover="this.style.borderColor='var(--primary)';this.style.background='rgba(255,77,166,0.05)'" onmouseout="this.style.borderColor='#ddd';this.style.background=''">
+                            <div style="font-size:1.2rem">🔲</div>
+                            <div style="margin-top:8px;font-weight:600;color:var(--primary)">Click để chọn QR Code</div>
+                            <div style="font-size:0.85rem;color:var(--muted);margin-top:4px">QR code để người nhận quét và xem thiệp</div>
+                            <div id="qrPreview" style="margin-top:10px"></div>
+                            <input type="file" id="qrInput" accept="image/*" style="display:none">
+                        </div>
+                    </div>
+                    
+                    <div style="margin-bottom:15px">
+                        <label style="display:block;margin-bottom:5px;font-weight:600;color:#333">🎵 Nhạc nền (MP3, WAV) - Tùy chọn</label>
+                        <div class="upload-area" id="audioUploadArea" onclick="document.getElementById('audioInput').click()" style="cursor:pointer;transition:all 0.3s" onmouseover="this.style.borderColor='var(--primary)';this.style.background='rgba(255,77,166,0.05)'" onmouseout="this.style.borderColor='#ddd';this.style.background=''">
+                            <div style="font-size:1.2rem">🎵</div>
+                            <div style="margin-top:8px;font-weight:600;color:var(--primary)">Click để chọn nhạc</div>
+                            <div style="font-size:0.85rem;color:var(--muted);margin-top:4px">Nhạc sẽ tự động phát khi mở thiệp</div>
+                            <div id="audioPreview" style="margin-top:10px"></div>
+                            <input type="file" id="audioInput" accept="audio/*" style="display:none">
+                        </div>
+                    </div>
+                    
+                    <div style="margin-bottom:15px">
+                        <label style="display:block;margin-bottom:8px;font-weight:600;color:#333">✨ Hiệu ứng thiệp</label>
+                        <select id="cardEffect" style="width:100%;padding:12px;border-radius:8px;border:2px solid #e0e0e0;background:#fff;cursor:pointer">
+                            <option value="elegant">Trang nghiêm & Thanh lịch</option>
+                            <option value="festive">Lễ hội & Vui nhộn</option>
+                            <option value="romantic">Lãng mạn & Nhẹ nhàng</option>
+                            <option value="modern">Hiện đại & Năng động</option>
+                        </select>
+                    </div>
+                </div>
+                <div>
+                    <label style="display:block;margin-bottom:10px;font-weight:700;color:#333;font-size:1.1rem">✨ Xem trước thiệp</label>
+                    <div class="card-preview-section" id="cardPreviewContainer" style="min-height:500px;border-radius:12px;overflow:hidden;position:relative">
+                        <div style="text-align:center;color:#999;padding:60px 20px;display:flex;align-items:center;justify-content:center;height:100%;flex-direction:column">
+                            <div style="font-size:3rem;margin-bottom:15px">💝</div>
+                            <div>Preview sẽ hiển thị ở đây...</div>
+                            <div style="font-size:0.85rem;color:#bbb;margin-top:8px">Nhập thông tin để xem preview</div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+            <div style="display:flex;gap:10px;margin-top:20px;justify-content:flex-end">
+                <button class="btn ghost" id="cancelCardBuilder">Hủy</button>
+                <button class="btn" id="createCardBtn">Tạo Thiệp</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Payment Modal - Chọn gói & Thanh toán -->
+    <div class="modal-backdrop" id="paymentModal" style="display:none">
+        <div class="modal" role="dialog" aria-modal="true" style="max-width:700px">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px">
+                <h2 style="font-weight:800;color:var(--primary)">💳 Chọn Gói & Thanh Toán</h2>
+                <button class="close-x" id="closePaymentModal" aria-label="Đóng">✕</button>
+            </div>
+            <div id="paymentContent">
+                <!-- Step 1: Chọn gói -->
+                <div id="selectPackageStep">
+                    <p style="margin-bottom:20px;color:var(--muted)">Chọn gói dịch vụ để sử dụng mẫu thiệp này:</p>
+                    <div id="paymentPackages" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:15px;margin-bottom:25px">
+                        <div class="package-option" data-package="free" data-price="0" style="padding:20px;border:2px solid #e0e0e0;border-radius:15px;cursor:pointer;transition:all 0.3s;background:#fff">
+                            <h3 style="color:var(--primary);margin-bottom:10px">Cơ Bản</h3>
+                            <div style="font-size:1.8rem;font-weight:900;color:var(--primary);margin-bottom:15px">Miễn phí</div>
+                            <ul style="font-size:0.9rem;color:var(--muted);line-height:1.8;list-style:none;padding:0">
+                                <li>✓ 30 mẫu cơ bản</li>
+                                <li>✓ Hỗ trợ văn bản & ảnh</li>
+                                <li>✓ Link công khai</li>
+                            </ul>
+                        </div>
+                        <div class="package-option" data-package="premium" data-price="50000" style="padding:20px;border:2px solid #e0e0e0;border-radius:15px;cursor:pointer;transition:all 0.3s;background:#fff;position:relative">
+                            <div style="position:absolute;top:-10px;right:-10px;background:var(--primary);color:#fff;padding:5px 15px;border-radius:20px;font-size:0.75rem;font-weight:700">PHỔ BIẾN</div>
+                            <h3 style="color:var(--primary);margin-bottom:10px">Nâng Cao</h3>
+                            <div style="font-size:1.8rem;font-weight:900;color:var(--primary);margin-bottom:15px">50.000₫</div>
+                            <ul style="font-size:0.9rem;color:var(--muted);line-height:1.8;list-style:none;padding:0">
+                                <li>✓ 100+ mẫu premium</li>
+                                <li>✓ Nhạc & hiệu ứng</li>
+                                <li>✓ QR tuỳ chỉnh & RSVP</li>
+                            </ul>
+                        </div>
+                        <div class="package-option" data-package="enterprise" data-price="2000000" style="padding:20px;border:2px solid #e0e0e0;border-radius:15px;cursor:pointer;transition:all 0.3s;background:#fff">
+                            <h3 style="color:var(--primary);margin-bottom:10px">Cao Cấp</h3>
+                            <div style="font-size:1.3rem;font-weight:900;color:var(--primary);margin-bottom:15px">2.000.000₫<small style="font-size:0.8rem;color:var(--muted)">/tháng</small></div>
+                            <ul style="font-size:0.9rem;color:var(--muted);line-height:1.8;list-style:none;padding:0">
+                                <li>✓ Gói doanh nghiệp</li>
+                                <li>✓ Hiệu ứng 3D, video</li>
+                                <li>✓ Hỗ trợ 24/7</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div style="text-align:center;padding:20px;background:#f8f9fa;border-radius:12px;margin-bottom:20px">
+                        <p style="margin-bottom:10px;font-weight:600;color:#333">Mẫu đã chọn: <span id="selectedTemplateForPayment" style="color:var(--primary)"></span></p>
+                        <p style="font-size:0.9rem;color:var(--muted)">Sau khi thanh toán, bạn sẽ được chuyển đến form tạo thiệp</p>
+                    </div>
+                    <button class="btn" id="proceedToPaymentBtn" style="width:100%;padding:15px;font-size:1rem;display:none">Tiếp tục thanh toán</button>
+                </div>
+                
+                <!-- Step 2: Form thanh toán -->
+                <div id="paymentFormStep" style="display:none">
+                    <div style="margin-bottom:25px;padding:20px;background:linear-gradient(135deg,#fff7fb,#fff);border-radius:15px;border:2px solid var(--primary)">
+                        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+                            <span style="font-weight:600">Gói đã chọn:</span>
+                            <span id="selectedPackageName" style="color:var(--primary);font-weight:700"></span>
+                        </div>
+                        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+                            <span style="font-weight:600">Số tiền:</span>
+                            <span id="paymentAmount" style="font-size:1.5rem;color:var(--primary);font-weight:900"></span>
+                        </div>
+                        <div style="display:flex;justify-content:space-between;align-items:center">
+                            <span style="font-weight:600">Mẫu thiệp:</span>
+                            <span id="paymentTemplateName" style="color:#333;font-weight:600"></span>
+                        </div>
+                    </div>
+                    
+                    <div style="margin-bottom:20px">
+                        <label style="display:block;margin-bottom:10px;font-weight:600;color:#333">Thông tin thanh toán</label>
+                        <input type="text" id="payerName" placeholder="Họ và tên người thanh toán *" required style="width:100%;padding:12px;border:2px solid #e0e0e0;border-radius:10px;margin-bottom:12px;font-size:0.95rem">
+                        <input type="email" id="payerEmail" placeholder="Email *" required style="width:100%;padding:12px;border:2px solid #e0e0e0;border-radius:10px;margin-bottom:12px;font-size:0.95rem">
+                        <input type="tel" id="payerPhone" placeholder="Số điện thoại *" required pattern="[0-9]{10,11}" style="width:100%;padding:12px;border:2px solid #e0e0e0;border-radius:10px;margin-bottom:12px;font-size:0.95rem">
+                    </div>
+                    
+                    <div style="margin-bottom:20px">
+                        <label style="display:block;margin-bottom:15px;font-weight:600;color:#333">Phương thức thanh toán</label>
+                        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px">
+                            <div class="payment-method" data-method="vnpay" style="padding:15px;border:2px solid #e0e0e0;border-radius:12px;cursor:pointer;text-align:center;transition:all 0.3s;background:#fff">
+                                <div style="font-size:2rem;margin-bottom:8px">🏦</div>
+                                <div style="font-weight:600;font-size:0.9rem">VNPay</div>
+                            </div>
+                            <div class="payment-method" data-method="momo" style="padding:15px;border:2px solid #e0e0e0;border-radius:12px;cursor:pointer;text-align:center;transition:all 0.3s;background:#fff">
+                                <div style="font-size:2rem;margin-bottom:8px">📱</div>
+                                <div style="font-weight:600;font-size:0.9rem">MoMo</div>
+                            </div>
+                            <div class="payment-method" data-method="bank" style="padding:15px;border:2px solid #e0e0e0;border-radius:12px;cursor:pointer;text-align:center;transition:all 0.3s;background:#fff">
+                                <div style="font-size:2rem;margin-bottom:8px">💳</div>
+                                <div style="font-weight:600;font-size:0.9rem">Chuyển khoản</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div id="paymentMethodDetails" style="display:none;margin-bottom:20px;padding:15px;background:#f8f9fa;border-radius:12px">
+                        <!-- Payment method details will be shown here -->
+                    </div>
+                    
+                    <div style="display:flex;gap:10px">
+                        <button class="btn ghost" id="backToPackageBtn" style="flex:1">← Quay lại</button>
+                        <button class="btn" id="confirmPaymentBtn" style="flex:2;padding:15px;font-size:1rem">💳 Xác nhận thanh toán</button>
+                    </div>
+                </div>
+                
+                <!-- Step 3: Thanh toán thành công -->
+                <div id="paymentSuccessStep" style="display:none;text-align:center;padding:40px 20px">
+                    <div style="font-size:5rem;margin-bottom:20px;animation:pulse 1s">✅</div>
+                    <h2 style="color:var(--primary);margin-bottom:15px">Thanh toán thành công!</h2>
+                    <p style="color:var(--muted);margin-bottom:30px">Cảm ơn bạn đã thanh toán. Bây giờ bạn có thể tạo thiệp của mình.</p>
+                    <button class="btn" id="goToCardBuilderBtn" style="padding:15px 40px;font-size:1.1rem">Tạo Thiệp Ngay →</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Final Card Preview Modal -->
+    <div class="modal-backdrop" id="finalCardModal" style="display:none">
+        <div class="modal" role="dialog" aria-modal="true" style="max-width:600px">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px">
+                <h2 style="font-weight:800;color:var(--primary)">Thiệp Mừng Của Bạn</h2>
+                <button class="close-x" id="closeFinalCard" aria-label="Đóng">✕</button>
+            </div>
+            <div id="finalCardContainer" class="final-card">
+                <!-- Final card will be rendered here -->
+            </div>
+            <div style="display:flex;gap:10px;margin-top:20px;justify-content:center">
+                <button class="btn" id="downloadCardBtn">📥 Tải Thiệp</button>
+                <button class="btn ghost" id="shareCardBtn">🔗 Chia Sẻ</button>
+            </div>
+        </div>
+    </div>
+    <!-- Floating social buttons -->
+<div id="floatingSocials" style="position:fixed;bottom:30px;right:30px;display:flex;flex-direction:column;gap:15px;z-index:2000">
+    <a href="https://www.facebook.com/YourPage" target="_blank" aria-label="Facebook" style="display:flex;align-items:center;justify-content:center;width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,#1877f2,#0866ff);color:#fff;font-size:26px;text-decoration:none;box-shadow:0 8px 25px rgba(24,119,242,0.4);transition:all 0.3s;animation:float 3s ease-in-out infinite" onmouseover="this.style.transform='translateY(-5px) scale(1.1)';this.style.boxShadow='0 12px 35px rgba(24,119,242,0.5)'" onmouseout="this.style.transform='';this.style.boxShadow='0 8px 25px rgba(24,119,242,0.4)'">
+        f
+    </a>
+    <a href="https://zalo.me/YourZaloID" target="_blank" aria-label="Zalo" style="display:flex;align-items:center;justify-content:center;width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,#0068ff,#0052cc);color:#fff;font-size:26px;text-decoration:none;box-shadow:0 8px 25px rgba(0,104,255,0.4);transition:all 0.3s;animation:float 3s ease-in-out infinite 0.5s" onmouseover="this.style.transform='translateY(-5px) scale(1.1)';this.style.boxShadow='0 12px 35px rgba(0,104,255,0.5)'" onmouseout="this.style.transform='';this.style.boxShadow='0 8px 25px rgba(0,104,255,0.4)'">
+        Z
+    </a>
+</div>
+
+
+    <script>
+        // Basic interactivity: menu, modal, contact form
+        const menuToggle = document.getElementById('menuToggle');
+        const mainNav = document.getElementById('mainNav');
+        // Mobile Menu Toggle
+        const mobileMenuOverlay = document.getElementById('mobileMenuOverlay');
+        
+        function closeMobileMenu() {
+            mainNav?.classList.remove('mobile-open');
+            mobileMenuOverlay?.classList.remove('active');
+            menuToggle.innerHTML = '☰';
+        }
+        
+        function openMobileMenu() {
+            mainNav?.classList.add('mobile-open');
+            mobileMenuOverlay?.classList.add('active');
+            menuToggle.innerHTML = '✕';
+        }
+        
+        menuToggle?.addEventListener('click', () => {
+            if(mainNav?.classList.contains('mobile-open')) {
+                closeMobileMenu();
+            } else {
+                openMobileMenu();
+            }
+        });
+        
+        // Close menu when clicking overlay
+        mobileMenuOverlay?.addEventListener('click', () => {
+            closeMobileMenu();
+        });
+        
+        // Close menu when clicking a menu link
+        const menuLinks = mainNav?.querySelectorAll('a');
+        menuLinks?.forEach(link => {
+            link.addEventListener('click', () => {
+                closeMobileMenu();
+            });
+        });
+        
+        // Close menu on window resize to desktop size
+        window.addEventListener('resize', () => {
+            if(window.innerWidth > 760 && mainNav?.classList.contains('mobile-open')) {
+                closeMobileMenu();
+            }
+        });
+
+        // Modal logic
+        const modalBackdrop = document.getElementById('modalBackdrop');
+        const loginBtn = document.getElementById('loginBtn');
+        const registerBtn = document.getElementById('registerBtn');
+        const closeModal = document.getElementById('closeModal');
+        const modalTitle = document.getElementById('modalTitle');
+        const modalBody = document.getElementById('modalBody');
+
+        function openModal(mode='login'){
+            modalBackdrop.style.display = 'flex';
+            modalBackdrop.setAttribute('aria-hidden','false');
+            const modalElement = modalBackdrop.querySelector('.modal');
+            modalElement.classList.add('auth-modal');
+            
+            if(mode==='login'){
+                modalTitle.textContent = 'Đăng nhập';
+                modalBody.innerHTML = `
+                    <h2>Đăng nhập</h2>
+                    <p class="subtitle">Chào mừng trở lại! 👋</p>
+                    <form id="loginForm">
+                        <div class="form-group">
+                            <label for="uemail">Email *</label>
+                            <input id="uemail" name="uemail" type="email" required placeholder="email@domain.com">
+                        </div>
+                        <div class="form-group">
+                            <label for="upass">Mật khẩu *</label>
+                            <input id="upass" name="upass" type="password" required placeholder="Nhập mật khẩu">
+                        </div>
+                        <div style="margin-bottom:20px;text-align:right">
+                            <a href="#" style="color:var(--primary);font-size:0.9rem;text-decoration:none">Quên mật khẩu?</a>
+                        </div>
+                        <button class="btn" type="submit" style="width:100%;padding:14px;margin-bottom:15px">Đăng nhập</button>
+                        <div class="auth-divider">
+                            <span>hoặc</span>
+                        </div>
+                        <button class="btn ghost" type="button" id="toRegisterBtn" style="width:100%;padding:14px">Tạo tài khoản mới</button>
+                    </form>`;
+                document.getElementById('toRegisterBtn').addEventListener('click', ()=>openModal('register'));
+                document.getElementById('loginForm').addEventListener('submit', (e)=>{
+                    e.preventDefault();
+                    alert('Đăng nhập demo — tính năng thực tế chưa được triển khai.');
+                    closeModalFunc();
+                });
+            } else {
+                modalTitle.textContent = 'Đăng ký';
+                modalBody.innerHTML = `
+                    <h2>Đăng ký</h2>
+                    <p class="subtitle">Tạo tài khoản mới để bắt đầu! 🎉</p>
+                    <form id="registerForm">
+                        <div class="form-group">
+                            <label for="rname">Họ & tên *</label>
+                            <input id="rname" name="rname" required placeholder="Nguyễn Văn A">
+                        </div>
+                        <div class="form-group">
+                            <label for="remail">Email *</label>
+                            <input id="remail" name="remail" type="email" required placeholder="email@domain.com">
+                        </div>
+                        <div class="form-group">
+                            <label for="rphone">Số điện thoại *</label>
+                            <input id="rphone" name="rphone" type="tel" required placeholder="0901234567" pattern="[0-9]{10,11}">
+                        </div>
+                        <div class="form-group">
+                            <label for="rpass">Mật khẩu *</label>
+                            <input id="rpass" name="rpass" type="password" required placeholder="Tối thiểu 6 ký tự">
+                        </div>
+                        <button class="btn" type="submit" style="width:100%;padding:14px;margin-bottom:15px">Đăng ký</button>
+                        <div class="auth-divider">
+                            <span>hoặc</span>
+                        </div>
+                        <button class="btn ghost" type="button" id="toLoginBtn" style="width:100%;padding:14px">Đã có tài khoản? Đăng nhập</button>
+                    </form>`;
+                document.getElementById('toLoginBtn').addEventListener('click', ()=>openModal('login'));
+                document.getElementById('registerForm').addEventListener('submit', (e)=>{
+                    e.preventDefault();
+                    alert('Đăng ký demo — tính năng thực tế chưa được triển khai.');
+                    closeModalFunc();
+                });
+            }
+        }
+        function closeModalFunc(){
+            modalBackdrop.style.display = 'none';
+            modalBackdrop.setAttribute('aria-hidden','true');
+        }
+        loginBtn?.addEventListener('click', ()=>openModal('login'));
+        registerBtn?.addEventListener('click', ()=>openModal('register'));
+        closeModal?.addEventListener('click', closeModalFunc);
+        modalBackdrop?.addEventListener('click', (e)=>{ if(e.target===modalBackdrop) closeModalFunc(); });
+
+        // CTA buttons
+        document.getElementById('createBtn')?.addEventListener('click', ()=> {
+            location.hash = '#templates';
+            const target = document.querySelector('#templates');
+            if(target) window.scrollTo({top: target.offsetTop - 80, behavior:'smooth'});
+        });
+
+        // Contact form (demo validation)
+        document.getElementById('contactForm')?.addEventListener('submit', (e)=>{
+            e.preventDefault();
+            const name = document.getElementById('name').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const phone = document.getElementById('phone').value.trim();
+            const message = document.getElementById('message').value.trim();
+            if(!name || !email || !phone || !message){
+                alert('Vui lòng điền đầy đủ thông tin (họ tên, email, số điện thoại, nội dung).');
+                return;
+            }
+            if(!/^[0-9]{10,11}$/.test(phone)){
+                alert('Số điện thoại không hợp lệ. Vui lòng nhập 10-11 chữ số.');
+                return;
+            }
+            alert('Cảm ơn ' + name + '! Yêu cầu của bạn đã được gửi. Chúng tôi sẽ liên hệ qua số ' + phone + ' trong 24-48 giờ.');
+            e.target.reset();
+        });
+
+        // Template Filter Function
+        function filterTemplates(category){
+            const templates = document.querySelectorAll('.template');
+            templates.forEach(template => {
+                if(category === 'all' || template.getAttribute('data-category') === category){
+                    template.style.display = 'flex';
+                    template.style.animation = 'fadeInUp 0.4s ease-out';
+                } else {
+                    template.style.display = 'none';
+                }
+            });
+        }
+
+        // Add event listener for template filter
+        document.getElementById('templateFilter')?.addEventListener('change', function(){
+            filterTemplates(this.value);
+        });
+
+        // Accessibility: close nav on resize large
+        window.addEventListener('resize', ()=> {
+            if(window.innerWidth > 760) mainNav.style.display = '';
+        });
+
+        // Scroll Reveal Animation
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+        
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if(entry.isIntersecting) {
+                    entry.target.classList.add('animated');
+                }
+            });
+        }, observerOptions);
+
+        // Observe elements on load
+        document.addEventListener('DOMContentLoaded', () => {
+            const animateElements = document.querySelectorAll('.card, .template, .testimonial, .faq-item, .gallery img, section');
+            animateElements.forEach((el, index) => {
+                el.classList.add('animate-on-scroll');
+                el.style.transitionDelay = `${index * 0.1}s`;
+                observer.observe(el);
+            });
+        });
+
+        // Payment & Card Builder Logic
+        let selectedTemplate = '';
+        let selectedPackage = null;
+        let selectedPaymentMethod = null;
+        let uploadedImage = null;
+        let uploadedVideo = null;
+        let uploadedAudio = null;
+        let uploadedQR = null;
+        let paymentCompleted = false;
+
+        // Check if user already paid (from localStorage)
+        function checkPaymentStatus() {
+            const savedPayment = localStorage.getItem('thiep_payment_' + selectedTemplate);
+            if(savedPayment) {
+                const paymentData = JSON.parse(savedPayment);
+                if(paymentData.completed) {
+                    paymentCompleted = true;
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        // Function để mở form tạo thiệp khi click button "Chọn"
+        function handleTemplateChoose(e) {
+            if(e) {
+                e.preventDefault();
+                e.stopPropagation();
+            }
+            
+            const btn = e?.currentTarget || e?.target?.closest('.btn-choose-template') || document.querySelector('.btn-choose-template[data-template="' + selectedTemplate + '"]');
+            if(!btn) {
+                console.error('Button not found!');
+                return;
+            }
+            
+            selectedTemplate = btn.getAttribute('data-template');
+            if(!selectedTemplate) {
+                console.error('Template name not found on button:', btn);
+                alert('Lỗi: Không tìm thấy tên mẫu thiệp!');
+                return;
+            }
+            
+            console.log('✓ Template selected:', selectedTemplate);
+            console.log('✓ Opening card builder...');
+            
+            // Mở thẳng form tạo thiệp
+            try {
+                openCardBuilder();
+                console.log('✓ Card builder opened successfully');
+            } catch(error) {
+                console.error('✗ Error opening card builder:', error);
+                alert('Lỗi khi mở form tạo thiệp: ' + error.message);
+            }
+        }
+
+        // Event delegation - xử lý click vào button "Chọn", ảnh thiệp, hoặc toàn bộ card
+        document.addEventListener('click', function(e) {
+            let target = e.target;
+            let templateElement = null;
+            let templateName = null;
+            
+            // Kiểm tra click vào button "Chọn"
+            let btn = target.closest('.btn-choose-template');
+            if(btn) {
+                templateName = btn.getAttribute('data-template');
+                if(templateName) {
+                    e.preventDefault();
+                    e.stopImmediatePropagation();
+                    console.log('✓ Button "Chọn" clicked:', templateName);
+                    selectedTemplate = templateName;
+                    openCardBuilder();
+                    return false;
+                }
+            }
+            
+            // Kiểm tra click vào ảnh thiệp hoặc card thiệp
+            templateElement = target.closest('.template-clickable');
+            if(templateElement) {
+                // Không xử lý nếu click vào button
+                if(target.closest('button')) {
+                    return;
+                }
+                
+                templateName = templateElement.getAttribute('data-template');
+                if(templateName) {
+                    e.preventDefault();
+                    e.stopImmediatePropagation();
+                    console.log('✓ Template card/image clicked:', templateName);
+                    selectedTemplate = templateName;
+                    openCardBuilder();
+                    return false;
+                }
+            }
+        }, true); // Capture phase - bắt trước các listener khác
+
+        // Payment Modal Functions
+        function openPaymentModal() {
+            const modal = document.getElementById('paymentModal');
+            if(!modal) {
+                console.error('Payment modal not found!');
+                alert('Lỗi: Không tìm thấy form thanh toán. Vui lòng tải lại trang.');
+                return;
+            }
+            
+            modal.style.display = 'flex';
+            modal.style.alignItems = 'center';
+            modal.style.justifyContent = 'center';
+            
+            // Reset payment flow
+            const selectStep = document.getElementById('selectPackageStep');
+            const formStep = document.getElementById('paymentFormStep');
+            const successStep = document.getElementById('paymentSuccessStep');
+            const proceedBtn = document.getElementById('proceedToPaymentBtn');
+            
+            if(selectStep) selectStep.style.display = 'block';
+            if(formStep) formStep.style.display = 'none';
+            if(successStep) successStep.style.display = 'none';
+            if(proceedBtn) proceedBtn.style.display = 'none';
+            
+            const templateNameEl = document.getElementById('selectedTemplateForPayment');
+            if(templateNameEl) templateNameEl.textContent = selectedTemplate || 'Mẫu thiệp';
+            
+            // Reset selections
+            document.querySelectorAll('.package-option').forEach(opt => opt.classList.remove('selected'));
+            document.querySelectorAll('.payment-method').forEach(method => method.classList.remove('selected'));
+            selectedPackage = null;
+            selectedPaymentMethod = null;
+        }
+
+        // Close payment modal
+        document.getElementById('closePaymentModal')?.addEventListener('click', () => {
+            document.getElementById('paymentModal').style.display = 'none';
+        });
+        
+        // Close payment modal on backdrop click
+        document.getElementById('paymentModal')?.addEventListener('click', (e) => {
+            if(e.target.id === 'paymentModal') {
+                document.getElementById('paymentModal').style.display = 'none';
+            }
+        });
+
+        // Package selection
+        document.querySelectorAll('.package-option').forEach(option => {
+            option.addEventListener('click', function() {
+                document.querySelectorAll('.package-option').forEach(opt => opt.classList.remove('selected'));
+                this.classList.add('selected');
+                selectedPackage = {
+                    name: this.getAttribute('data-package'),
+                    price: parseInt(this.getAttribute('data-price'))
+                };
+                document.getElementById('proceedToPaymentBtn').style.display = 'block';
+            });
+        });
+
+        // Proceed to payment form
+        document.getElementById('proceedToPaymentBtn')?.addEventListener('click', function() {
+            if(!selectedPackage) {
+                alert('Vui lòng chọn một gói dịch vụ!');
+                return;
+            }
+            
+            // Update payment form
+            const packageNames = {
+                'free': 'Cơ Bản',
+                'premium': 'Nâng Cao',
+                'enterprise': 'Cao Cấp'
+            };
+            
+            document.getElementById('selectedPackageName').textContent = packageNames[selectedPackage.name];
+            document.getElementById('paymentAmount').textContent = selectedPackage.price === 0 ? 'Miễn phí' : selectedPackage.price.toLocaleString('vi-VN') + '₫';
+            document.getElementById('paymentTemplateName').textContent = selectedTemplate;
+            
+            // Show payment form, hide package selection
+            document.getElementById('selectPackageStep').style.display = 'none';
+            document.getElementById('paymentFormStep').style.display = 'block';
+        });
+
+        // Back to package selection
+        document.getElementById('backToPackageBtn')?.addEventListener('click', function() {
+            document.getElementById('selectPackageStep').style.display = 'block';
+            document.getElementById('paymentFormStep').style.display = 'none';
+        });
+
+        // Payment method selection
+        document.querySelectorAll('.payment-method').forEach(method => {
+            method.addEventListener('click', function() {
+                document.querySelectorAll('.payment-method').forEach(m => m.classList.remove('selected'));
+                this.classList.add('selected');
+                selectedPaymentMethod = this.getAttribute('data-method');
+                
+                // Show payment method details
+                const detailsDiv = document.getElementById('paymentMethodDetails');
+                detailsDiv.style.display = 'block';
+                
+                const methodDetails = {
+                    'vnpay': '<p style="margin:0;font-size:0.9rem;color:var(--muted)">Bạn sẽ được chuyển đến trang thanh toán VNPay. Thanh toán nhanh chóng và an toàn.</p>',
+                    'momo': '<p style="margin:0;font-size:0.9rem;color:var(--muted)">Quét QR code bằng ứng dụng MoMo để thanh toán ngay.</p>',
+                    'bank': '<p style="margin:0;font-size:0.9rem;color:var(--muted)">Chuyển khoản đến:<br><strong style="color:var(--primary)">STK: 1234567890</strong><br>Ngân hàng: Vietcombank<br>Nội dung: ' + selectedTemplate + '</p>'
+                };
+                
+                detailsDiv.innerHTML = methodDetails[selectedPaymentMethod];
+            });
+        });
+
+        // Confirm payment
+        document.getElementById('confirmPaymentBtn')?.addEventListener('click', function() {
+            const payerName = document.getElementById('payerName').value.trim();
+            const payerEmail = document.getElementById('payerEmail').value.trim();
+            const payerPhone = document.getElementById('payerPhone').value.trim();
+            
+            if(!payerName || !payerEmail || !payerPhone) {
+                alert('Vui lòng điền đầy đủ thông tin thanh toán!');
+                return;
+            }
+            
+            if(!selectedPaymentMethod) {
+                alert('Vui lòng chọn phương thức thanh toán!');
+                return;
+            }
+            
+            // Validate phone
+            if(!/^[0-9]{10,11}$/.test(payerPhone)) {
+                alert('Số điện thoại không hợp lệ!');
+                return;
+            }
+            
+            // Simulate payment processing
+            this.disabled = true;
+            this.textContent = 'Đang xử lý...';
+            
+            setTimeout(() => {
+                // Save payment to localStorage
+                const paymentData = {
+                    template: selectedTemplate,
+                    package: selectedPackage.name,
+                    amount: selectedPackage.price,
+                    method: selectedPaymentMethod,
+                    payer: { name: payerName, email: payerEmail, phone: payerPhone },
+                    date: new Date().toISOString(),
+                    completed: true
+                };
+                localStorage.setItem('thiep_payment_' + selectedTemplate, JSON.stringify(paymentData));
+                
+                // Show success step
+                document.getElementById('paymentFormStep').style.display = 'none';
+                document.getElementById('paymentSuccessStep').style.display = 'block';
+                paymentCompleted = true;
+                
+                // Tự động mở form tạo thiệp sau 2 giây
+                setTimeout(() => {
+                    document.getElementById('paymentModal').style.display = 'none';
+                    openCardBuilder();
+                }, 2000);
+            }, 2000);
+        });
+
+        // Go to card builder after payment success
+        document.getElementById('goToCardBuilderBtn')?.addEventListener('click', function() {
+            document.getElementById('paymentModal').style.display = 'none';
+            openCardBuilder();
+        });
+
+        // Open card builder function
+        function openCardBuilder() {
+            console.log('Opening card builder...');
+            
+            const modal = document.getElementById('cardBuilderModal');
+            if(!modal) {
+                console.error('✗ Card builder modal not found!');
+                alert('Lỗi: Không tìm thấy form tạo thiệp. Vui lòng tải lại trang.');
+                return;
+            }
+            
+            console.log('✓ Modal found, setting template:', selectedTemplate);
+            
+            // Set template name
+            const templateNameEl = document.getElementById('selectedTemplateName');
+            if(templateNameEl) {
+                templateNameEl.textContent = selectedTemplate || 'Mẫu thiệp';
+            } else {
+                console.warn('Template name element not found');
+            }
+            
+            // Show modal backdrop (cardBuilderModal chính là backdrop)
+            modal.style.display = 'flex';
+            modal.style.alignItems = 'center';
+            modal.style.justifyContent = 'center';
+            modal.style.position = 'fixed';
+            modal.style.inset = '0';
+            modal.style.zIndex = '2000';
+            modal.style.backgroundColor = 'rgba(0,0,0,0.6)';
+            modal.style.backdropFilter = 'blur(4px)';
+            
+            // Reset form fields
+            const senderName = document.getElementById('senderName');
+            const recipientName = document.getElementById('recipientName');
+            const cardMessage = document.getElementById('cardMessage');
+            const eventDate = document.getElementById('eventDate');
+            const cardEffect = document.getElementById('cardEffect');
+            
+            if(senderName) senderName.value = '';
+            if(recipientName) recipientName.value = '';
+            if(cardMessage) cardMessage.value = '';
+            if(eventDate) eventDate.value = '';
+            if(cardEffect) cardEffect.value = 'elegant';
+            
+            // Reset uploads
+                uploadedImage = null;
+            uploadedVideo = null;
+            uploadedAudio = null;
+                uploadedQR = null;
+            
+            const imagePreview = document.getElementById('imagePreview');
+            const videoPreview = document.getElementById('videoPreview');
+            const audioPreview = document.getElementById('audioPreview');
+            const qrPreview = document.getElementById('qrPreview');
+            if(imagePreview) imagePreview.innerHTML = '';
+            if(videoPreview) videoPreview.innerHTML = '';
+            if(audioPreview) audioPreview.innerHTML = '';
+            if(qrPreview) qrPreview.innerHTML = '';
+            
+                // Update preview after modal is shown
+            setTimeout(() => {
+                if(typeof updatePreview === 'function') {
+                    updatePreview();
+                    console.log('✓ Preview updated');
+                } else {
+                    console.warn('updatePreview function not found');
+                }
+            }, 200);
+            
+            console.log('✓ Card builder opened successfully for template:', selectedTemplate);
+            
+            // Scroll to top nếu cần
+            window.scrollTo({top: 0, behavior: 'smooth'});
+        }
+
+        // Close card builder
+        function closeCardBuilder() {
+            const modal = document.getElementById('cardBuilderModal');
+            if(modal) {
+                modal.style.display = 'none';
+                console.log('Card builder closed');
+            }
+        }
+        
+        document.getElementById('closeCardBuilder')?.addEventListener('click', closeCardBuilder);
+        document.getElementById('cancelCardBuilder')?.addEventListener('click', closeCardBuilder);
+        
+        // Close on backdrop click
+        document.getElementById('cardBuilderModal')?.addEventListener('click', function(e) {
+            if(e.target.id === 'cardBuilderModal') {
+                closeCardBuilder();
+            }
+        });
+
+        // Image upload
+        document.getElementById('imageInput')?.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if(file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    uploadedImage = e.target.result;
+                    document.getElementById('imagePreview').innerHTML = `<img src="${uploadedImage}" class="preview-thumbnail" alt="Uploaded image">`;
+                    updatePreview();
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // QR upload
+        document.getElementById('qrInput')?.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if(file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    uploadedQR = e.target.result;
+                    document.getElementById('qrPreview').innerHTML = `<img src="${uploadedQR}" class="preview-thumbnail" alt="QR Code" style="max-width:150px;max-height:150px;border-radius:8px">`;
+                    updatePreview();
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // Video upload
+        document.getElementById('videoInput')?.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if(file) {
+                if(file.size > 50 * 1024 * 1024) {
+                    alert('Video không được vượt quá 50MB!');
+                    return;
+                }
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    uploadedVideo = e.target.result;
+                    document.getElementById('videoPreview').innerHTML = `
+                        <video controls style="max-width:100%;max-height:200px;border-radius:8px;margin-top:10px">
+                            <source src="${uploadedVideo}" type="${file.type}">
+                        </video>
+                        <div style="font-size:0.85rem;color:var(--primary);margin-top:5px">✓ Video đã tải lên</div>
+                    `;
+                    updatePreview();
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // Audio upload
+        document.getElementById('audioInput')?.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if(file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    uploadedAudio = e.target.result;
+                    document.getElementById('audioPreview').innerHTML = `
+                        <audio controls style="width:100%;margin-top:10px">
+                            <source src="${uploadedAudio}" type="${file.type}">
+                        </audio>
+                        <div style="font-size:0.85rem;color:var(--primary);margin-top:5px">✓ Nhạc đã tải lên</div>
+                    `;
+                    updatePreview();
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // Real-time preview update với bố cục trang nghiêm
+        function updatePreview() {
+            const senderName = document.getElementById('senderName')?.value || 'Tên người gửi';
+            const recipientName = document.getElementById('recipientName')?.value || 'Tên người nhận';
+            const message = document.getElementById('cardMessage')?.value || 'Lời chúc...';
+            const eventDate = document.getElementById('eventDate')?.value;
+            const cardEffect = document.getElementById('cardEffect')?.value || 'elegant';
+
+            const preview = document.getElementById('cardPreviewContainer');
+            if(!preview) return;
+
+            // Xác định style dựa trên hiệu ứng
+            const effectStyles = {
+                elegant: {
+                    bg: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                    accent: '#fff',
+                    font: 'serif'
+                },
+                festive: {
+                    bg: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
+                    accent: '#fff',
+                    font: 'sans-serif'
+                },
+                romantic: {
+                    bg: 'linear-gradient(135deg, #fa709a 0%, #fee140 100%)',
+                    accent: '#fff',
+                    font: 'cursive'
+                },
+                modern: {
+                    bg: 'linear-gradient(135deg, #30cfd0 0%, #330867 100%)',
+                    accent: '#fff',
+                    font: 'sans-serif'
+                }
+            };
+
+            const style = effectStyles[cardEffect] || effectStyles.elegant;
+
+            let previewHTML = `
+                <div class="final-card" style="
+                    min-height:500px;
+                    background:${style.bg};
+                    padding:50px 40px;
+                    border-radius:20px;
+                    color:${style.accent};
+                    text-align:center;
+                    display:flex;
+                    flex-direction:column;
+                    justify-content:center;
+                    box-shadow:0 20px 60px rgba(0,0,0,0.3);
+                    position:relative;
+                    overflow:hidden;
+                    font-family:${style.font}, Georgia, serif;
+                ">
+                    ${uploadedVideo ? `
+                        <video autoplay loop muted playsinline style="position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;opacity:0.3;z-index:0">
+                            <source src="${uploadedVideo}" type="video/mp4">
+                        </video>
+                        <div style="position:relative;z-index:1">
+                    ` : '<div style="position:relative;z-index:1">'}
+                    
+                    <div style="font-size:3.5rem;margin-bottom:20px;animation:float 3s ease-in-out infinite">💝</div>
+                    <h1 style="font-size:2.5rem;margin-bottom:25px;font-weight:800;text-shadow:0 4px 10px rgba(0,0,0,0.2);letter-spacing:2px">CHÚC MỪNG</h1>
+                    
+                    ${uploadedImage ? `
+                        <div style="margin:25px 0">
+                            <img src="${uploadedImage}" style="max-width:100%;max-height:250px;border-radius:15px;box-shadow:0 10px 30px rgba(0,0,0,0.3);border:4px solid rgba(255,255,255,0.3)">
+                        </div>
+                    ` : ''}
+                    
+                    <div style="font-size:1.6rem;margin:30px 0;line-height:1.8;font-weight:600;text-shadow:0 2px 8px rgba(0,0,0,0.2);padding:0 20px">
+                        ${message.replace(/\n/g, '<br>')}
+                    </div>
+                    
+                    <div style="font-size:1.8rem;margin-top:35px;font-weight:800;text-shadow:0 2px 8px rgba(0,0,0,0.2);letter-spacing:1px">
+                        ${recipientName}
+                    </div>
+                    
+                    ${eventDate ? `
+                        <div style="font-size:1.1rem;margin-top:15px;opacity:0.95;font-style:italic">
+                            ${new Date(eventDate).toLocaleDateString('vi-VN', {year:'numeric', month:'long', day:'numeric'})}
+                        </div>
+                    ` : ''}
+                    
+                    ${uploadedQR ? `
+                        <div style="margin:35px 0;padding:20px;background:rgba(255,255,255,0.2);backdrop-filter:blur(10px);border-radius:15px;display:inline-block">
+                            <div style="font-size:0.9rem;margin-bottom:10px;font-weight:600">Quét QR để xem thiệp online</div>
+                            <img src="${uploadedQR}" style="width:150px;height:150px;background:#fff;padding:10px;border-radius:10px;box-shadow:0 5px 15px rgba(0,0,0,0.2)">
+                        </div>
+                    ` : ''}
+                    
+                    <div style="margin-top:40px;font-size:1.1rem;opacity:0.9;font-style:italic;border-top:2px solid rgba(255,255,255,0.3);padding-top:20px">
+                        Với tình cảm chân thành<br>
+                        <span style="font-weight:700;font-size:1.2rem">${senderName}</span>
+                    </div>
+                    
+                    ${uploadedAudio ? `
+                        <div style="margin-top:20px;opacity:0.8">
+                            <audio autoplay loop style="width:100%;max-width:300px">
+                                <source src="${uploadedAudio}" type="audio/mpeg">
+                            </audio>
+                        </div>
+                    ` : ''}
+                    </div>
+                </div>
+            `;
+            preview.innerHTML = previewHTML;
+        }
+
+        // Listen to form inputs
+        ['senderName', 'recipientName', 'cardMessage', 'eventDate', 'cardEffect'].forEach(id => {
+            const element = document.getElementById(id);
+            if(element) {
+                element.addEventListener('input', updatePreview);
+                element.addEventListener('change', updatePreview);
+            }
+        });
+
+        // Create card
+        document.getElementById('createCardBtn')?.addEventListener('click', function() {
+            const form = document.getElementById('cardBuilderForm');
+            if(!form.checkValidity()) {
+                form.reportValidity();
+                return;
+            }
+
+            // Sử dụng cùng HTML từ updatePreview nhưng với kích thước lớn hơn cho final card
+            updatePreview();
+            const previewContent = document.getElementById('cardPreviewContainer').innerHTML;
+            
+            // Tạo final card với bố cục đẹp hơn
+            document.getElementById('finalCardContainer').innerHTML = previewContent.replace('min-height:500px', 'min-height:600px');
+            
+            // Close builder, show final card
+            document.getElementById('cardBuilderModal').style.display = 'none';
+            const finalModal = document.getElementById('finalCardModal');
+            finalModal.style.display = 'flex';
+            finalModal.style.alignItems = 'center';
+            finalModal.style.justifyContent = 'center';
+        });
+
+        // Close final card modal
+        document.getElementById('closeFinalCard')?.addEventListener('click', () => {
+            document.getElementById('finalCardModal').style.display = 'none';
+        });
+
+        // Download card
+        document.getElementById('downloadCardBtn')?.addEventListener('click', function() {
+            const cardHTML = `
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Thiệp Mừng - ${selectedTemplate}</title>
+    <style>
+        body { 
+            margin: 0; padding: 40px; font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);
+            color: white;
+            display: flex; justify-content: center; align-items: center;
+            min-height: 100vh;
+        }
+        .card { 
+            background: rgba(255,255,255,0.1); 
+            padding: 40px; border-radius: 20px;
+            text-align: center; max-width: 600px;
+            backdrop-filter: blur(10px);
+        }
+        img { max-width: 100%; border-radius: 12px; margin: 15px 0; }
+        .qr-preview { background: white; padding: 15px; border-radius: 10px; display: inline-block; margin: 20px 0; }
+        @media print { body { background: white; } .card { background: white; color: black; } }
+    </style>
+</head>
+<body>
+    <div class="card">
+        ${document.getElementById('finalCardContainer').innerHTML}
+    </div>
+</body>
+</html>
+            `;
+            const blob = new Blob([cardHTML], {type: 'text/html'});
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `thiep-mung-${Date.now()}.html`;
+            a.click();
+            URL.revokeObjectURL(url);
+            alert('Thiệp đã được tải xuống! Mở file HTML và in thành PDF hoặc chia sẻ.');
+        });
+
+        // Share card
+        document.getElementById('shareCardBtn')?.addEventListener('click', function() {
+            const shareText = `Tôi vừa tạo thiệp mừng "${selectedTemplate}" trên Thiệp Mừng Online! 🎉`;
+            if(navigator.share) {
+                navigator.share({title: 'Thiệp Mừng', text: shareText, url: window.location.href});
+            } else {
+                navigator.clipboard.writeText(shareText + ' ' + window.location.href).then(() => {
+                    alert('Đã copy link chia sẻ vào clipboard!');
+                });
+            }
+        });
+
+        // Voucher Banner Functions
+        // Set voucher expiry date (24 hours from now)
+        const voucherExpiryDate = new Date();
+        voucherExpiryDate.setHours(voucherExpiryDate.getHours() + 24);
+        
+        // Update expiry display
+        const voucherExpiryEl = document.getElementById('voucherExpiry');
+        if(voucherExpiryEl) {
+            voucherExpiryEl.textContent = voucherExpiryDate.toLocaleDateString('vi-VN', {
+                day: 'numeric',
+                month: 'long',
+                year: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+        }
+
+        // Voucher Countdown Timer
+        function updateVoucherCountdown() {
+            const countdownEl = document.getElementById('voucherCountdown');
+            if(!countdownEl) return;
+            
+            const now = new Date().getTime();
+            const distance = voucherExpiryDate.getTime() - now;
+            
+            if(distance < 0) {
+                countdownEl.textContent = 'Đã hết hạn';
+                return;
+            }
+            
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+            
+            countdownEl.textContent = 
+                String(hours).padStart(2, '0') + ':' + 
+                String(minutes).padStart(2, '0') + ':' + 
+                String(seconds).padStart(2, '0');
+        }
+
+        // Update countdown every second
+        setInterval(updateVoucherCountdown, 1000);
+        updateVoucherCountdown(); // Initial call
+
+        // Copy Voucher Code
+        function copyVoucherCode(e) {
+            const code = 'WELCOME50';
+            navigator.clipboard.writeText(code).then(() => {
+                const btn = e?.target || document.querySelector('button[onclick*="copyVoucherCode"]');
+                if(btn) {
+                    const originalText = btn.innerHTML;
+                    btn.innerHTML = '✅ Đã Copy!';
+                    btn.style.background = 'linear-gradient(135deg, #4caf50, #45a049)';
+                    btn.style.color = '#fff';
+                    
+                    setTimeout(() => {
+                        btn.innerHTML = originalText;
+                        btn.style.background = '';
+                        btn.style.color = '';
+                    }, 2000);
+                }
+                
+                // Show notification
+                showNotification('✓ Đã copy mã giảm giá: ' + code);
+            }).catch(() => {
+                alert('Mã giảm giá: ' + code + '\n\nVui lòng copy thủ công!');
+            });
+        }
+
+        // Show notification
+        function showNotification(message) {
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position:fixed;
+                top:100px;
+                right:20px;
+                background:linear-gradient(135deg,var(--primary),var(--primary-dark));
+                color:#fff;
+                padding:15px 25px;
+                border-radius:12px;
+                box-shadow:0 8px 25px rgba(0,0,0,0.2);
+                z-index:3000;
+                animation:slideInRight 0.3s ease-out;
+                font-weight:600;
+            `;
+            notification.textContent = message;
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.style.animation = 'slideOutRight 0.3s ease-out';
+                setTimeout(() => notification.remove(), 300);
+            }, 3000);
+        }
+
+        // Close voucher modal on backdrop click
+        document.getElementById('voucherCodeModal')?.addEventListener('click', function(e) {
+            if(e.target.id === 'voucherCodeModal') {
+                this.style.display = 'none';
+            }
+        });
+
+        // Create floating particles for voucher banner
+        function createVoucherParticles() {
+            const particlesContainer = document.querySelector('.voucher-particles');
+            if(!particlesContainer) return;
+            
+            // Create 15 particles
+            for(let i = 0; i < 15; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'voucher-particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 20 + 's';
+                particle.style.animationDuration = (15 + Math.random() * 10) + 's';
+                particle.style.width = (4 + Math.random() * 6) + 'px';
+                particle.style.height = particle.style.width;
+                particlesContainer.appendChild(particle);
+            }
+        }
+
+        // Initialize particles when DOM is ready
+        if(document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', createVoucherParticles);
+        } else {
+            createVoucherParticles();
+        }
+
+        // Check if banner should be shown
+        const banner = document.getElementById('voucherBanner');
+        if(banner && localStorage.getItem('voucher_banner_closed') === 'true') {
+            banner.style.display = 'none';
+        } else if(banner) {
+            // Auto-show voucher banner after 2 seconds
+            setTimeout(() => {
+                banner.style.animation = 'slideInDown 0.5s ease-out';
+            }, 2000);
+        }
+    </script>
+</body>
+</html>
+
+

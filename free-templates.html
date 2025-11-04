@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>30 Mẫu Thiệp Miễn Phí - Thiệp Mừng Online</title>
+    <meta name="description" content="Khám phá 30 mẫu thiệp miễn phí đẹp nhất cho mọi dịp: cưới hỏi, sinh nhật, Tết, tốt nghiệp, doanh nghiệp, tình yêu">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root{
+            --primary:#ff4da6;
+            --primary-dark:#e33a8f;
+            --accent:#ffd6ea;
+            --bg:#fff7fb;
+            --card:#ffffff;
+            --muted:#666;
+            --max-width:1400px;
+        }
+        *{box-sizing:border-box;margin:0;padding:0}
+        html{font-size:16px;scroll-behavior:smooth}
+        body{font-family:Inter, Arial, Helvetica, sans-serif;background:linear-gradient(180deg,#fff7fb,#ffeef5);color:#222;line-height:1.6;overflow-x:hidden}
+        a{color:inherit;text-decoration:none}
+        
+        @keyframes fadeInUp{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
+        @keyframes fadeIn{from{opacity:0}to{opacity:1}}
+        @keyframes slideInLeft{from{transform:translateX(-100%)}to{transform:translateX(0)}}
+        @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+        @keyframes gradientShift{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
+        @keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.05)}}
+        
+        /* Header */
+        header{position:fixed;top:0;left:0;right:0;background:rgba(255,255,255,0.95);backdrop-filter:blur(10px);box-shadow:0 4px 20px rgba(255,77,166,0.08);z-index:1000;border-bottom:2px solid rgba(255,77,166,0.06);animation:slideInDown 0.5s ease-out}
+        @keyframes slideInDown{from{transform:translateY(-100%)}to{transform:translateY(0)}}
+        body{padding-top:10px}
+        .container{max-width:var(--max-width);margin:0 auto;padding:0 20px}
+        .nav-wrap{display:flex;align-items:center;justify-content:space-between;height:70px}
+        .logo{display:flex;align-items:center;gap:10px;font-weight:800;transition:transform 0.3s}
+        .logo:hover{transform:scale(1.05)}
+        .logo img{height:42px;width:42px;border-radius:12px;object-fit:cover;border:2px solid rgba(255,77,166,0.2);box-shadow:0 2px 8px rgba(255,77,166,0.15);transition:all 0.3s}
+        .logo:hover img{box-shadow:0 4px 12px rgba(255,77,166,0.25);transform:rotate(5deg)}
+        nav ul{display:flex;gap:8px;align-items:center;list-style:none;padding:0;margin:0}
+        nav ul li a{padding:8px 14px;border-radius:20px;font-weight:500;color:#555;font-size:0.9rem;transition:all 0.3s cubic-bezier(0.4,0,0.2,1);white-space:nowrap;position:relative}
+        nav ul li a::before{content:'';position:absolute;bottom:0;left:50%;width:0;height:2px;background:var(--primary);transition:all 0.3s;transform:translateX(-50%)}
+        nav ul li a:hover{background:rgba(255,77,166,0.1);color:var(--primary);transform:translateY(-2px)}
+        nav ul li a:hover::before{width:60%}
+        nav ul li a.active{background:rgba(255,77,166,0.15);color:var(--primary);font-weight:600}
+        .actions{display:flex;gap:8px;align-items:center}
+        .btn{background:linear-gradient(135deg,var(--primary),var(--primary-dark));color:#fff;padding:10px 20px;border-radius:25px;border:none;cursor:pointer;font-weight:700;font-size:0.9rem;box-shadow:0 4px 15px rgba(227,58,143,0.25);transition:all 0.3s cubic-bezier(0.4,0,0.2,1);white-space:nowrap;position:relative;overflow:hidden}
+        .btn::before{content:'';position:absolute;top:50%;left:50%;width:0;height:0;background:rgba(255,255,255,0.2);border-radius:50%;transform:translate(-50%,-50%);transition:width 0.6s,height 0.6s}
+        .btn:hover::before{width:300px;height:300px}
+        .btn:hover{transform:translateY(-3px);box-shadow:0 8px 25px rgba(227,58,143,0.35)}
+        .btn:active{transform:translateY(-1px)}
+        .btn.ghost{background:transparent;color:var(--primary);border:2px solid var(--primary);font-weight:600;font-size:0.9rem;padding:10px 20px;position:relative;overflow:hidden}
+        .btn.ghost::before{content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;background:var(--primary);transition:left 0.3s;z-index:-1}
+        .btn.ghost:hover{color:#fff;border-color:var(--primary)}
+        .btn.ghost:hover::before{left:0}
+        .hamburger{display:none;background:transparent;border:none;font-size:24px;cursor:pointer;color:#333;padding:8px;transition:transform 0.3s}
+        .hamburger:hover{transform:scale(1.1)}
+        
+        /* Hero Section */
+        .hero-section{background:linear-gradient(135deg,#ff9a9e 0%,#fecfef 50%,#ffd6ea 100%);background-size:200% 200%;animation:gradientShift 15s ease infinite;padding:80px 20px 60px;text-align:center;position:relative;overflow:hidden;margin-bottom:60px}
+        .hero-section::before{content:'';position:absolute;top:0;left:0;right:0;bottom:0;background:radial-gradient(circle,rgba(255,255,255,0.1) 1px,transparent 1px);background-size:50px 50px;animation:float 20s ease-in-out infinite}
+        .hero-content{position:relative;z-index:1;max-width:800px;margin:0 auto;animation:fadeInUp 0.8s ease-out}
+        .hero-badge{display:inline-block;padding:10px 28px;background:rgba(255,255,255,0.9);border-radius:50px;color:var(--primary);font-size:0.95rem;font-weight:700;margin-bottom:25px;box-shadow:0 4px 15px rgba(0,0,0,0.1);animation:pulse 2s ease-in-out infinite}
+        .hero-title{font-size:3.5rem;font-weight:900;color:#fff;margin-bottom:20px;text-shadow:0 4px 18px rgba(0,0,0,0.15);line-height:1.1}
+        .hero-subtitle{font-size:1.3rem;color:#fff;margin-bottom:30px;text-shadow:0 2px 8px rgba(0,0,0,0.1)}
+        .hero-cta{display:flex;gap:15px;justify-content:center;flex-wrap:wrap}
+        .hero-cta .btn{padding:16px 32px;font-size:1.1rem}
+        
+        /* Filter Section */
+        .filter-section{max-width:var(--max-width);margin:0 auto 40px;padding:0 20px;display:flex;justify-content:center;align-items:center;gap:15px;flex-wrap:wrap}
+        .filter-section label{font-weight:700;color:#333;font-size:1.1rem}
+        .filter-select{padding:14px 24px;border-radius:25px;border:2px solid var(--primary);font-size:1rem;background:#fff;cursor:pointer;color:#555;font-weight:500;transition:all 0.3s;box-shadow:0 2px 10px rgba(255,77,166,0.1);min-width:200px}
+        .filter-select:hover{border-color:var(--primary-dark);box-shadow:0 4px 15px rgba(255,77,166,0.2)}
+        
+        /* Templates Grid */
+        .templates-section{padding:0 20px 80px;max-width:var(--max-width);margin:0 auto}
+        .templates-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:30px;margin-top:40px}
+        .template-card{background:#fff;border-radius:20px;overflow:hidden;box-shadow:0 4px 20px rgba(0,0,0,0.08);transition:all 0.3s cubic-bezier(0.4,0,0.2,1);cursor:pointer;position:relative;animation:fadeInUp 0.6s ease-out}
+        .template-card::before{content:'';position:absolute;top:0;left:0;right:0;height:4px;background:linear-gradient(90deg,var(--primary),var(--primary-dark));opacity:0;transition:opacity 0.3s}
+        .template-card:hover{transform:translateY(-10px);box-shadow:0 12px 40px rgba(255,77,166,0.2)}
+        .template-card:hover::before{opacity:1}
+        .template-image{width:100%;height:220px;object-fit:cover;transition:transform 0.5s;background:linear-gradient(135deg,#ffd6ea,#fff)}
+        .template-card:hover .template-image{transform:scale(1.1)}
+        .template-content{padding:20px}
+        .template-title{font-size:1.3rem;font-weight:800;color:#333;margin-bottom:8px}
+        .template-category{color:var(--muted);font-size:0.9rem;margin-bottom:12px;display:flex;align-items:center;gap:5px}
+        .template-tags{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:15px}
+        .template-tag{background:linear-gradient(135deg,#fff7fb,#ffeef5);color:var(--primary);padding:6px 12px;border-radius:15px;font-size:0.75rem;font-weight:600;border:1px solid rgba(255,77,166,0.2)}
+        .template-actions{display:flex;gap:10px;margin-top:15px}
+        .template-actions .btn{flex:1;padding:12px;font-size:0.9rem;text-align:center}
+        .free-badge{position:absolute;top:15px;right:15px;background:linear-gradient(135deg,#4caf50,#66bb6a);color:#fff;padding:6px 14px;border-radius:20px;font-size:0.75rem;font-weight:700;box-shadow:0 2px 10px rgba(76,175,80,0.3);z-index:2}
+        
+        /* Card Builder Modal */
+        .modal-backdrop{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.6);backdrop-filter:blur(4px);z-index:2000;align-items:center;justify-content:center;padding:20px}
+        .modal{background:#fff;border-radius:20px;padding:30px;max-width:900px;width:100%;max-height:90vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,0.3)}
+        .close-x{background:none;border:none;font-size:28px;cursor:pointer;color:#999;transition:color 0.3s;padding:0;width:32px;height:32px;display:flex;align-items:center;justify-content:center}
+        .close-x:hover{color:#333}
+        .card-builder-form{display:grid;grid-template-columns:1fr 1fr;gap:15px}
+        .card-builder-form > div:last-child{grid-column:1/-1}
+        .form-group{display:flex;flex-direction:column}
+        .form-group label{margin-bottom:8px;font-weight:600;color:#333}
+        .form-group input,.form-group textarea,.form-group select{padding:12px;border-radius:8px;border:2px solid #e0e0e0;font-size:1rem;transition:border-color 0.3s;font-family:inherit}
+        .form-group input:focus,.form-group textarea:focus,.form-group select:focus{outline:none;border-color:var(--primary)}
+        .form-group textarea{min-height:120px;resize:vertical}
+        .upload-area{border:2px dashed var(--primary);border-radius:12px;padding:30px;text-align:center;cursor:pointer;transition:all 0.3s;background:#fff7fb}
+        .upload-area:hover{border-color:var(--primary-dark);background:#ffeef5}
+        .preview-section{margin-top:30px;padding:30px;background:linear-gradient(135deg,#fff7fb,#fff);border-radius:15px;border:2px solid var(--primary)}
+        .preview-card{max-width:500px;margin:0 auto;background:#fff;padding:40px;border-radius:15px;box-shadow:0 8px 30px rgba(0,0,0,0.1);min-height:400px}
+        
+        /* Footer */
+        footer{margin-top:40px;padding:50px 20px;background:linear-gradient(135deg,#fff,#fff7fb);border-top:2px solid rgba(255,77,166,0.1);box-shadow:0 -4px 20px rgba(0,0,0,0.02)}
+        .footer-inner{max-width:var(--max-width);margin:0 auto;display:flex;gap:30px;flex-wrap:wrap;align-items:flex-start;justify-content:space-between}
+        .footer-inner > div:first-child{font-size:1.1rem}
+        .muted{color:var(--muted)}
+        
+        /* Mobile */
+        @media (max-width:760px){
+            header{padding:10px 15px}
+            .logo img{width:35px;height:35px}
+            nav ul{display:none}
+            nav ul.mobile-open{display:flex;flex-direction:column;position:fixed;top:0;left:0;bottom:0;width:280px;max-width:80vw;background:#fff;padding:80px 20px 20px;box-shadow:4px 0 20px rgba(0,0,0,0.15);z-index:999;transform:translateX(0);animation:slideInLeft 0.3s ease-out;overflow-y:auto}
+            nav ul.mobile-open li{width:100%;margin:0;border-bottom:1px solid rgba(255,77,166,0.1)}
+            nav ul.mobile-open li a{display:block;padding:15px 20px;border-radius:0;width:100%}
+            .hamburger{display:block;z-index:1001}
+            .mobile-menu-overlay{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.5);z-index:998;backdrop-filter:blur(4px)}
+            .mobile-menu-overlay.active{display:block}
+            .hero-title{font-size:2rem}
+            .hero-subtitle{font-size:1rem}
+            .templates-grid{grid-template-columns:1fr;gap:20px}
+            .filter-section{flex-direction:column;align-items:stretch}
+            .filter-select{width:100%}
+            .card-builder-form{grid-template-columns:1fr}
+            .modal{padding:20px;margin:10px}
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container nav-wrap" role="navigation" aria-label="Main navigation">
+            <div class="logo">
+                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Crect fill='%23ff4da6' width='160' height='160'/%3E%3Ctext x='50%25' y='50%25' text-anchor='middle' fill='white' font-size='48' font-family='Arial'%3E💝%3C/text%3E%3C/svg%3E" alt="Logo" onerror="this.src='https://via.placeholder.com/160x160/ff4da6/ffffff?text=Thiệp'">
+                <div>
+                    <div style="font-size:18px;color:var(--primary)">Thiệp Mừng Online</div>
+                </div>
+            </div>
+            <nav>
+                <ul id="mainNav">
+                    <li><a href="index.html">Trang chủ</a></li>
+                    <li><a href="packages.html">Gói & Giá</a></li>
+                    <li><a href="free-templates.html">Mẫu Thiệp</a></li>            
+                    <li><a href="contact.html">Liên hệ</a></li>
+                </ul>
+            </nav>
+            <div class="actions">
+                <button class="btn ghost" id="loginBtn" aria-haspopup="dialog">Đăng nhập</button>
+                <button class="btn" id="registerBtn">Đăng ký</button>
+                <button class="hamburger" id="menuToggle" aria-label="Mở menu">☰</button>
+            </div>
+        </div>
+    </header>
+    
+    <!-- Mobile Menu Overlay -->
+    <div class="mobile-menu-overlay" id="mobileMenuOverlay"></div>
+
+    <main>
+        <section class="hero-section">
+            <div class="hero-content">
+                <div class="hero-badge">✨ HOÀN TOÀN MIỄN PHÍ</div>
+                <h1 class="hero-title">30 Mẫu Thiệp Miễn Phí</h1>
+                <p class="hero-subtitle">Khám phá bộ sưu tập mẫu thiệp đẹp nhất cho mọi dịp - Tạo thiệp ngay không cần đăng ký!</p>
+                <div class="hero-cta">
+                    <button class="btn" onclick="document.querySelector('#templatesSection').scrollIntoView({behavior:'smooth'})">Xem Tất Cả Mẫu</button>
+                </div>
+            </div>
+        </section>
+
+        <section class="filter-section">
+            <label for="categoryFilter">Lọc theo loại:</label>
+            <select id="categoryFilter" class="filter-select">
+                <option value="all">Tất cả (30 mẫu)</option>
+                <option value="Cưới">Cưới Hỏi</option>
+                <option value="Sinh nhật">Sinh Nhật</option>
+                <option value="Tết">Tết</option>
+                <option value="Tốt nghiệp">Tốt Nghiệp</option>
+                <option value="Doanh nghiệp">Doanh Nghiệp</option>
+                <option value="Anniversary">Tình Yêu</option>
+            </select>
+        </section>
+
+        <section id="templatesSection" class="templates-section">
+            <div class="templates-grid" id="templatesGrid">
+                <!-- 30 templates sẽ được thêm bằng JavaScript -->
+            </div>
+        </section>
+    </main>
+
+    <!-- Card Builder Modal -->
+    <div class="modal-backdrop" id="cardBuilderModal">
+        <div class="modal">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px">
+                <h2 style="font-weight:800;color:var(--primary)">Tạo Thiệp Mừng</h2>
+                <button class="close-x" id="closeCardBuilder" aria-label="Đóng">✕</button>
+            </div>
+            <form id="cardBuilderForm" class="card-builder-form">
+                <div style="grid-column:1/-1;padding:15px;background:linear-gradient(135deg,#fff7fb,#fff);border-radius:12px;border:2px solid var(--primary);margin-bottom:15px">
+                    <label style="display:block;margin-bottom:8px;font-weight:700;color:var(--primary);font-size:1.1rem">Mẫu thiệp đã chọn</label>
+                    <div id="selectedTemplateName" style="padding:12px;background:#fff;border-radius:8px;font-weight:700;color:var(--primary-dark);font-size:1.05rem;text-align:center"></div>
+                </div>
+                
+                <div>
+                    <div class="form-group">
+                        <label>Tên người gửi *</label>
+                        <input type="text" id="senderName" required placeholder="Nguyễn Văn A">
+                    </div>
+                </div>
+                <div>
+                    <div class="form-group">
+                        <label>Tên người nhận *</label>
+                        <input type="text" id="receiverName" required placeholder="Trần Thị B">
+                    </div>
+                </div>
+                
+                <div style="grid-column:1/-1">
+                    <div class="form-group">
+                        <label>Lời chúc *</label>
+                        <textarea id="cardMessage" required placeholder="Nhập lời chúc của bạn..."></textarea>
+                    </div>
+                </div>
+                
+                <div style="grid-column:1/-1">
+                    <label style="display:block;margin-bottom:10px;font-weight:600;color:#333">Tải ảnh lên</label>
+                    <div class="upload-area" onclick="document.getElementById('uploadImage').click()">
+                        <input type="file" id="uploadImage" accept="image/*" style="display:none">
+                        <div>📷 Chọn ảnh hoặc kéo thả vào đây</div>
+                    </div>
+                </div>
+                
+                <div style="grid-column:1/-1">
+                    <div class="preview-section">
+                        <h3 style="margin-bottom:15px;color:var(--primary);font-weight:800">Xem trước</h3>
+                        <div id="cardPreviewContainer">
+                            <div class="preview-card" id="cardPreview">
+                                <div style="text-align:center;padding:20px">
+                                    <p style="color:#999">Xem trước sẽ hiển thị ở đây</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div style="grid-column:1/-1;display:flex;gap:15px;margin-top:20px">
+                    <button type="submit" class="btn" style="flex:1;padding:16px;font-size:1.1rem">✨ Tạo Thiệp</button>
+                    <button type="button" class="btn ghost" id="closeCardBuilderBtn" style="padding:16px">Hủy</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Mobile Menu Toggle
+        const menuToggle = document.getElementById('menuToggle');
+        const mainNav = document.getElementById('mainNav');
+        const mobileMenuOverlay = document.getElementById('mobileMenuOverlay');
+        
+        function closeMobileMenu() {
+            mainNav?.classList.remove('mobile-open');
+            mobileMenuOverlay?.classList.remove('active');
+            menuToggle.innerHTML = '☰';
+        }
+        
+        function openMobileMenu() {
+            mainNav?.classList.add('mobile-open');
+            mobileMenuOverlay?.classList.add('active');
+            menuToggle.innerHTML = '✕';
+        }
+        
+        menuToggle?.addEventListener('click', () => {
+            if(mainNav?.classList.contains('mobile-open')) {
+                closeMobileMenu();
+            } else {
+                openMobileMenu();
+            }
+        });
+        
+        // Close menu when clicking overlay
+        mobileMenuOverlay?.addEventListener('click', () => {
+            closeMobileMenu();
+        });
+        
+        // Close menu when clicking a menu link
+        const menuLinks = mainNav?.querySelectorAll('a');
+        menuLinks?.forEach(link => {
+            link.addEventListener('click', () => {
+                closeMobileMenu();
+            });
+        });
+        
+        // Close menu on window resize to desktop size
+        window.addEventListener('resize', () => {
+            if(window.innerWidth > 760 && mainNav?.classList.contains('mobile-open')) {
+                closeMobileMenu();
+            }
+        });
+
+        // 30 Free Templates Data
+        const freeTemplates = [
+            {id:1,name:"Romance Bloom",category:"Cưới",tags:["Cưới","RSVP","Nhạc"],color:"#ff9a9e"},
+            {id:2,name:"Birthday Joy",category:"Sinh nhật",tags:["Sinh nhật","Animation"],color:"#ffd6ea"},
+            {id:3,name:"Xuân Ấm Áp",category:"Tết",tags:["Tết","Red Pack"],color:"#ff6b6b"},
+            {id:4,name:"Congrats Grad",category:"Tốt nghiệp",tags:["Tốt nghiệp","Video"],color:"#4ecdc4"},
+            {id:5,name:"Elegant Corporate",category:"Doanh nghiệp",tags:["Doanh nghiệp","Printable"],color:"#95a5a6"},
+            {id:6,name:"Sweet Love",category:"Anniversary",tags:["Anniversary","Music"],color:"#f8bbd9"},
+            {id:7,name:"Wedding Dream",category:"Cưới",tags:["Cưới","Elegant"],color:"#e1bee7"},
+            {id:8,name:"Birthday Party",category:"Sinh nhật",tags:["Sinh nhật","Fun"],color:"#ffe0b2"},
+            {id:9,name:"Lunar New Year",category:"Tết",tags:["Tết","Traditional"],color:"#ff5252"},
+            {id:10,name:"Achievement",category:"Tốt nghiệp",tags:["Tốt nghiệp","Success"],color:"#81c784"},
+            {id:11,name:"Business Card",category:"Doanh nghiệp",tags:["Doanh nghiệp","Professional"],color:"#90caf9"},
+            {id:12,name:"Forever Yours",category:"Anniversary",tags:["Anniversary","Romantic"],color:"#f48fb1"},
+            {id:13,name:"Garden Wedding",category:"Cưới",tags:["Cưới","Garden"],color:"#c5e1a5"},
+            {id:14,name:"Cake Celebration",category:"Sinh nhật",tags:["Sinh nhật","Cake"],color:"#ffb74d"},
+            {id:15,name:"Tet Celebration",category:"Tết",tags:["Tết","Festival"],color:"#ef5350"},
+            {id:16,name:"Graduation Day",category:"Tốt nghiệp",tags:["Tốt nghiệp","Diploma"],color:"#26a69a"},
+            {id:17,name:"Company Event",category:"Doanh nghiệp",tags:["Doanh nghiệp","Corporate"],color:"#78909c"},
+            {id:18,name:"Love Story",category:"Anniversary",tags:["Anniversary","Story"],color:"#ce93d8"},
+            {id:19,name:"Royal Wedding",category:"Cưới",tags:["Cưới","Luxury"],color:"#ba68c8"},
+            {id:20,name:"Happy Birthday",category:"Sinh nhật",tags:["Sinh nhật","Joy"],color:"#ffccbc"},
+            {id:21,name:"Spring Festival",category:"Tết",tags:["Tết","Spring"],color:"#ff7043"},
+            {id:22,name:"Master Degree",category:"Tốt nghiệp",tags:["Tốt nghiệp","Master"],color:"#00897b"},
+            {id:23,name:"Team Building",category:"Doanh nghiệp",tags:["Doanh nghiệp","Team"],color:"#546e7a"},
+            {id:24,name:"Valentine",category:"Anniversary",tags:["Anniversary","Valentine"],color:"#ec407a"},
+            {id:25,name:"Beach Wedding",category:"Cưới",tags:["Cưới","Beach"],color:"#80deea"},
+            {id:26,name:"Kids Party",category:"Sinh nhật",tags:["Sinh nhật","Kids"],color:"#fff59d"},
+            {id:27,name:"New Year Wish",category:"Tết",tags:["Tết","Wish"],color:"#e57373"},
+            {id:28,name:"PhD Celebration",category:"Tốt nghiệp",tags:["Tốt nghiệp","PhD"],color:"#00897b"},
+            {id:29,name:"Product Launch",category:"Doanh nghiệp",tags:["Doanh nghiệp","Launch"],color:"#64b5f6"},
+            {id:30,name:"Marriage",category:"Anniversary",tags:["Anniversary","Marriage"],color:"#f06292"}
+        ];
+
+        // Render Templates
+        function renderTemplates(category = 'all') {
+            const grid = document.getElementById('templatesGrid');
+            const filtered = category === 'all' 
+                ? freeTemplates 
+                : freeTemplates.filter(t => t.category === category);
+            
+            grid.innerHTML = filtered.map(template => `
+                <div class="template-card" data-category="${template.category}" data-template="${template.name}">
+                    <div class="free-badge">MIỄN PHÍ</div>
+                    <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='600'%3E%3Crect fill='${encodeURIComponent(template.color)}' width='800' height='600'/%3E%3Ctext x='50%25' y='50%25' text-anchor='middle' fill='white' font-size='48' font-family='Arial'%3E${encodeURIComponent(template.name)}%3C/text%3E%3C/svg%3E" 
+                         alt="${template.name}" 
+                         class="template-image"
+                         onerror="this.src='https://via.placeholder.com/800x600/${template.color.replace('#','')}/ffffff?text=${encodeURIComponent(template.name)}'">
+                    <div class="template-content">
+                        <h3 class="template-title">${template.name}</h3>
+                        <div class="template-category">📁 ${template.category}</div>
+                        <div class="template-tags">
+                            ${template.tags.map(tag => `<span class="template-tag">${tag}</span>`).join('')}
+                        </div>
+                        <div class="template-actions">
+                            <button class="btn btn-choose-template" data-template="${template.name}">Chọn Mẫu</button>
+                            <button class="btn ghost btn-preview-template" data-template="${template.name}">Xem Trước</button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+            
+            // Add event listeners
+            document.querySelectorAll('.btn-choose-template').forEach(btn => {
+                btn.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    openCardBuilder(this.getAttribute('data-template'));
+                });
+            });
+            
+            document.querySelectorAll('.template-card').forEach(card => {
+                card.addEventListener('click', function(e) {
+                    if (!e.target.closest('button')) {
+                        openCardBuilder(this.getAttribute('data-template'));
+                    }
+                });
+            });
+        }
+
+        // Filter Handler
+        document.getElementById('categoryFilter')?.addEventListener('change', function() {
+            renderTemplates(this.value);
+        });
+
+        // Card Builder
+        let selectedTemplate = '';
+        
+        function openCardBuilder(templateName) {
+            selectedTemplate = templateName;
+            document.getElementById('selectedTemplateName').textContent = templateName;
+            document.getElementById('cardBuilderModal').style.display = 'flex';
+            document.getElementById('cardBuilderForm').reset();
+            updatePreview();
+        }
+        
+        function closeCardBuilder() {
+            document.getElementById('cardBuilderModal').style.display = 'none';
+        }
+        
+        document.getElementById('closeCardBuilder')?.addEventListener('click', closeCardBuilder);
+        document.getElementById('closeCardBuilderBtn')?.addEventListener('click', closeCardBuilder);
+        document.getElementById('cardBuilderModal')?.addEventListener('click', function(e) {
+            if (e.target === this) closeCardBuilder();
+        });
+        
+        // Update Preview
+        function updatePreview() {
+            const senderName = document.getElementById('senderName').value || 'Người gửi';
+            const receiverName = document.getElementById('receiverName').value || 'Người nhận';
+            const message = document.getElementById('cardMessage').value || 'Lời chúc của bạn...';
+            
+            document.getElementById('cardPreview').innerHTML = `
+                <div style="text-align:center;padding:30px">
+                    <h1 style="color:var(--primary);font-size:2.5rem;margin-bottom:20px">${selectedTemplate}</h1>
+                    <div style="margin:30px 0;font-size:1.3rem;color:#333">
+                        <div style="margin-bottom:15px"><strong>Gửi:</strong> ${senderName}</div>
+                        <div style="margin-bottom:15px"><strong>Đến:</strong> ${receiverName}</div>
+                    </div>
+                    <div style="font-size:1.1rem;line-height:1.8;color:#555;margin-top:30px;padding:20px;background:#fff7fb;border-radius:10px">
+                        ${message}
+                    </div>
+                </div>
+            `;
+        }
+        
+        document.getElementById('senderName')?.addEventListener('input', updatePreview);
+        document.getElementById('receiverName')?.addEventListener('input', updatePreview);
+        document.getElementById('cardMessage')?.addEventListener('input', updatePreview);
+        
+        // Form Submit
+        document.getElementById('cardBuilderForm')?.addEventListener('submit', function(e) {
+            e.preventDefault();
+            alert(`🎉 Thiệp "${selectedTemplate}" đã được tạo thành công!\n\nGửi: ${document.getElementById('senderName').value}\nĐến: ${document.getElementById('receiverName').value}\n\nChức năng lưu và chia sẻ sẽ được tích hợp sau.`);
+            closeCardBuilder();
+        });
+        
+        // Image Upload Preview
+        document.getElementById('uploadImage')?.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    updatePreview();
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+        
+        // Initialize
+        renderTemplates();
+    </script>
+</body>
+</html>
+
