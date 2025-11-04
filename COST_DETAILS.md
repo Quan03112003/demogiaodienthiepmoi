@@ -1,5 +1,22 @@
 # 📋 Chi Tiết Công Việc - Frontend Angular & Backend .NET
 
+## ⚠️ LƯU Ý QUAN TRỌNG
+
+### **Thanh Toán:**
+- ❌ **CHƯA TÍCH HỢP thanh toán thật** (VNPay, MoMo, Casso.vn)
+- ✅ Chỉ làm **MOCK payment** - User điền form, lưu vào database
+- ✅ **Admin xác nhận thanh toán THỦ CÔNG** sau khi khách chuyển khoản
+- ✅ Hiển thị thông tin chuyển khoản (STK, ngân hàng) cho khách
+
+### **Đăng Nhập/Đăng Ký:**
+- ✅ **ĐƠN GIẢN** - Không dùng JWT phức tạp
+- ✅ Chỉ check username/password trong database
+- ✅ Lưu user info vào localStorage (frontend)
+- ✅ Session đơn giản hoặc check trong database (backend)
+- ❌ Không có refresh token, OAuth, Social login
+
+---
+
 ## 🎨 FRONTEND ANGULAR - 3.000.000 VNĐ
 
 ### **Bao gồm những gì:**
@@ -42,17 +59,19 @@
   - Chọn hiệu ứng
   - Validation form
   
-- ✅ **Payment Component** - Modal thanh toán
+- ✅ **Payment Component** - Modal thanh toán (MOCK - Chưa tích hợp thật)
   - Chọn gói (Free, Premium, Enterprise)
-  - Form thanh toán
-  - Chọn phương thức thanh toán
-  - Mock payment flow (chưa tích hợp thật)
+  - Form thanh toán đơn giản
+  - Hiển thị thông tin chuyển khoản (STK, ngân hàng)
+  - **Mock payment** - Chỉ lưu vào database, chưa tích hợp VNPay/MoMo/Casso
+  - Admin xác nhận thanh toán thủ công sau
   
-- ✅ **Auth Components** - Đăng nhập/Đăng ký
-  - Login modal
-  - Register modal
-  - Form validation
-  - Auth service (call API)
+- ✅ **Auth Components** - Đăng nhập/Đăng ký ĐƠN GIẢN
+  - Login modal (form đơn giản)
+  - Register modal (form đơn giản)
+  - Form validation cơ bản
+  - Auth service (call API đơn giản)
+  - **Lưu ý:** Không dùng JWT phức tạp, chỉ session đơn giản hoặc localStorage
 
 **Thời gian:** 16-20 giờ
 
@@ -69,11 +88,11 @@
   - `getOrderById(id)` - Lấy chi tiết đơn
   - `getMyOrders()` - Lấy đơn của user
   
-- ✅ **AuthService** - Xử lý đăng nhập/đăng ký
-  - `login(credentials)` - Đăng nhập
-  - `register(userData)` - Đăng ký
-  - `logout()` - Đăng xuất
-  - Token management (localStorage)
+- ✅ **AuthService** - Xử lý đăng nhập/đăng ký ĐƠN GIẢN
+  - `login(credentials)` - Đăng nhập (call API, lưu vào localStorage)
+  - `register(userData)` - Đăng ký (call API)
+  - `logout()` - Đăng xuất (xóa localStorage)
+  - **Lưu ý:** Đơn giản, không dùng JWT phức tạp, chỉ lưu user info vào localStorage
   
 - ✅ **FileUploadService** - Upload files
   - Upload ảnh
@@ -92,9 +111,9 @@
 ---
 
 #### **4. Admin Panel (500.000 VNĐ)**
-- ✅ **Admin Login** - Trang đăng nhập admin
-  - Login form
-  - Auth guard
+- ✅ **Admin Login** - Trang đăng nhập admin ĐƠN GIẢN
+  - Login form (username/password đơn giản)
+  - **Lưu ý:** Auth guard đơn giản, chỉ check localStorage
   
 - ✅ **Admin Dashboard** - Bảng điều khiển
   - Thống kê cơ bản (số đơn, doanh thu)
@@ -125,6 +144,7 @@
 ---
 
 ### **KHÔNG bao gồm:**
+- ❌ **Tích hợp thanh toán thật** (VNPay, MoMo, Casso.vn) - Chỉ mock
 - ❌ Thiết kế UI/UX mới (dùng lại HTML hiện tại)
 - ❌ Advanced animations phức tạp
 - ❌ PWA (Progressive Web App)
@@ -132,6 +152,7 @@
 - ❌ Advanced admin features (charts, reports phức tạp)
 - ❌ Multi-language support
 - ❌ Social login (Google, Facebook)
+- ❌ JWT Token authentication phức tạp (chỉ đơn giản)
 
 ---
 
@@ -232,10 +253,11 @@
   - Cập nhật thông tin đơn
 - ✅ `DELETE /api/orders/{id}` - Xóa đơn hàng (Admin)
 
-##### **UsersController** (nếu cần)
-- ✅ `POST /api/users/register` - Đăng ký
-- ✅ `POST /api/users/login` - Đăng nhập
-- ✅ `GET /api/users/me` - Lấy thông tin user hiện tại
+##### **UsersController** - Đăng nhập/Đăng ký ĐƠN GIẢN
+- ✅ `POST /api/users/register` - Đăng ký (tạo user, hash password)
+- ✅ `POST /api/users/login` - Đăng nhập (check password, trả về user info)
+- ✅ `GET /api/users/me` - Lấy thông tin user hiện tại (nếu cần)
+- ⚠️ **Lưu ý:** Đơn giản, không dùng JWT, chỉ trả về user info sau khi login thành công
 
 **Thời gian:** 12-15 giờ
 
@@ -266,11 +288,21 @@
 
 ---
 
-#### **5. Authentication & Authorization (400.000 VNĐ)**
-- ✅ JWT Token authentication (nếu cần)
-- ✅ Password hashing (BCrypt)
-- ✅ Role-based authorization (Admin/User)
-- ✅ Middleware xử lý auth
+#### **5. Authentication & Authorization ĐƠN GIẢN (300.000 VNĐ)**
+- ✅ **Đăng nhập/Đăng ký đơn giản:**
+  - Password hashing cơ bản (BCrypt)
+  - Check username/password
+  - Trả về user info (không dùng JWT phức tạp)
+  - Session đơn giản hoặc chỉ check trong database
+  
+- ✅ **Role-based đơn giản:**
+  - Check role (Admin/User) trong database
+  - Middleware đơn giản để check admin
+  
+- ⚠️ **KHÔNG bao gồm:**
+  - JWT Token phức tạp
+  - Refresh token
+  - OAuth, Social login
 
 **Thời gian:** 4-6 giờ (nếu cần)
 
@@ -288,19 +320,21 @@
 ---
 
 ### **Tổng thời gian Backend:**
-- **Tối thiểu:** 42 giờ
-- **Trung bình:** 48 giờ
-- **Với mức giá:** 83.000 VNĐ/giờ → **~4.000.000 VNĐ** ✅
+- **Tối thiểu:** 40 giờ
+- **Trung bình:** 46 giờ
+- **Với mức giá:** 87.000 VNĐ/giờ → **~4.000.000 VNĐ** ✅
+- **Lưu ý:** Đã giảm authentication từ 400k → 300k (đơn giản hơn)
 
 ---
 
 ### **KHÔNG bao gồm:**
-- ❌ Tích hợp thanh toán thật (VNPay, MoMo, Casso.vn)
+- ❌ **Tích hợp thanh toán thật** (VNPay, MoMo, Casso.vn) - Chỉ mock, admin xác nhận thủ công
 - ❌ Generate PDF thiệp
 - ❌ Email notifications (SendGrid, Mailgun)
-- ❌ Advanced authentication (OAuth, Social login)
+- ❌ **JWT Token authentication phức tạp** - Chỉ đăng nhập/đăng ký đơn giản
+- ❌ OAuth, Social login
 - ❌ Real-time notifications (SignalR)
-- ❌ Advanced admin features (Reports, Analytics)
+- ❌ Advanced admin features (Reports, Analytics phức tạp)
 - ❌ Caching (Redis)
 - ❌ Background jobs (Hangfire, Quartz)
 - ❌ API rate limiting nâng cao
